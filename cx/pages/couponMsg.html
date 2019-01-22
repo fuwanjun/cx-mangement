@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>优惠券统计</title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+	<style>
+		.cancel {
+			position: absolute;
+			top: -10px;
+			right: -10px;
+			width: 30px;
+			height: 30px;
+			background-color: #ffffff;
+			border-radius: 50%;
+			box-shadow: 0 0 2px gray;
+			cursor: pointer;
+		}
+
+		.cancel>i {
+			padding-top: 3px;
+
+			font-size: 30px;
+			line-height: 36px;
+			color: gray;
+		}
+
+
+		.details_box td {
+			width: 50% !important;
+
+		}
+		.expressList{
+			position: absolute;
+			width: 80px;
+			left: 50%;
+			margin-left: -40px;
+			top: 38px;
+			background-color: #f1f1f1;
+			z-index: 9999;
+			border-radius: 3px;
+			overflow: hidden;
+			display: none;
+		}
+		.expressList li{
+			padding: 10px 0;
+			text-align: center;
+
+		}
+		.expressList li:hover{
+			background-color:rgba(0,125,208,.7);
+			color: #fff;
+		}
+
+		.showExpress{
+			display: inline-block;
+			width: 72px;
+		}
+		.vip-score,.vip-balance,.order-num,.order-price{
+			display: flex;
+			justify-content: center;
+		}
+		tbody tr td{
+			text-align: center;
+		}
+		.head-pic{
+			width:50px;
+			height:50px;
+			-webkit-border-radius: 50%;
+			-moz-border-radius: 50%;
+			border-radius: 50%;
+			overflow: hidden;
+		}
+		.head-pic img{
+			width:100%;
+			height:100%;
+		}
+		.layui-form-select dl{
+			padding:0;
+		}
+		.layui-input-block{
+			margin-left:56px;
+		}
+		.layui-form-label{
+			padding:0;
+			width:auto;
+			line-height: 36px;
+		}
+		.head-pic{
+			width:50px;
+			height:50px;
+			margin-right:10px;
+		}
+		.head-name{
+			line-height: 50px;
+		}
+		.layui-table, .layui-table-view{
+			margin-bottom:0;
+		}
+		#total{
+			display: flex;
+			justify-content:space-around;
+			background: #c2c2c2;
+			padding:10px 0;
+			font-weight: bold;
+			font-size:16px;
+			color: #333;
+		}
+	</style>
+
+</head>
+
+<body>
+<form class="layui-form layui-row" action="" style="display: flex">
+	<!--<div class="layui-form-item">-->
+		<!--<label class="layui-form-label">用户名：</label>-->
+		<!--<div class="layui-input-block">-->
+			<!--<input type="text" id="criticalWord" name="title" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">-->
+		<!--</div>-->
+	<!--</div>-->
+	<div class="layui-form-item" style="display: flex;">
+		<label class="layui-form-label" style="margin-left: 20px;">时间：</label>
+		<div class="layui-input-block" style="margin-left: 0px;">
+			<input id="test5" type="text" name="title" required  lay-verify="required" placeholder="开始时间" autocomplete="off" class="layui-input">
+		</div>
+		<p style="line-height: 38px;font-size: 16px;margin: 0 10px;">~</p>
+		<div class="layui-input-block" style="margin-left: 0px;">
+			<input id="test6" type="text" name="title" required  lay-verify="required" placeholder="结束时间" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<!--<div class="layui-form-item" style="display: flex;">-->
+		<!--<label class="layui-form-label" style="margin-left: 20px;">状态：</label>-->
+		<!--<div class="layui-input-block" style="margin-left: 0px;">-->
+			<!--<select name="" id="state">-->
+				<!--<option value="">全部</option>-->
+				<!--<option value="1">已通过</option>-->
+				<!--<option value="-1">未通过</option>-->
+				<!--<option value="0">待审核</option>-->
+			<!--</select>-->
+		<!--</div>-->
+
+	<!--</div>-->
+	<button id="search" style="margin-left: 20px;" type="button" class="layui-btn">搜索</button>
+</form>
+	<!-- 下面是一些第二行的东西 -->
+	<div class="layui-row">
+		<div class="layui-inline  orderManage" style="margin-top:10px">
+			优惠券统计
+		</div>
+		<div class="layui-inline" style="float:right;margin-right:30px;margin-top:10px">
+			<!--<button class="layui-btn layui-btn-normal" style="margin-right:30px;" id="zhuanyi">转移空托盘</button>
+			<button class="layui-btn  layui-btn-normal" id="xinzhengrenwu">新增任务</button>-->
+		</div>
+	</div>
+
+	<!-- 下面是第三行表格 -->
+
+
+	<table class="layui-table" id="orderList" lay-skin="line" align="center">
+		<thead>
+			<tr align="center">
+				<th width="300px">优惠券</th>
+				<th>使用次数</th>
+				<!--<th>充值金额</th>-->
+				<!--<th>赠送金额</th>-->
+				<!--<th>消费金额</th>-->
+				<!--<th>优惠券消费金额</th>-->
+				<!--<th>订单次数</th>-->
+			</tr>
+		</thead>
+		<tbody>
+
+		</tbody>
+	</table>
+	<div id="total">
+		<p></p>
+		<p>优惠券使用次数：<span id="count"></span></p>
+	</div>
+	<!-- 这个下面是分页 -->
+	<div id="page"></div>
+	<button id="excel" class="layui-btn layui-btn-primary" type="button">导出EXCEL表格</button>
+	<div class="bg">
+
+	</div>
+
+</body>
+
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script>
+	$(function(){
+        getCouponMsg(1);
+	});
+
+//	查询
+$("#search").click(function(){
+	var startTime=$("#test5").val();
+	var endTime=$("#test6").val();
+//	var name=$("#criticalWord").val();
+    getCouponMsg(1,startTime,endTime);
+});
+
+//	导出
+$("#excel").click(function(){
+	var startTime=$("#test5").val();
+	var endTime=$("#test6").val();
+//	var userName=$("#criticalWord").val();
+	window.open(globalUrl+"stat/goodsSales/exportCouponStat?startTime="+startTime+"&endTime="+endTime);
+});
+
+//	获取用户数据
+function getCouponMsg(page,startTime,endTime){
+    $.ajax({
+        url: globalUrl + "/stat/goodsSales/getCouponStatList",
+        type: "get",
+        data:{
+			pageNum:page,
+            startTime:startTimeCinfg(startTime),
+            endTime:endTimeCinfg(endTime)
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("token", $.cookie("token"));
+        },
+        crossDomain: true,
+		success:function(data){
+			console.log(data);
+			if(data.code==0){
+                layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+                    var element = layui.element;
+                    var laydate = layui.laydate;
+                    var laypage = layui.laypage
+                        , layer = layui.layer;
+                    var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+                $("#orderList tbody").html("");
+			    for(var i=0;i<data.data.list.length;i++){
+			        var couponName=data.data.list[i].remark?data.data.list[i].remark:"";
+			        var useCount=data.data.list[i].couponNum?data.data.list[i].couponNum:0;
+			        var item='<tr>' +
+								'<td>'+couponName+'</td>' +
+								'<td>'+useCount+'</td>' +
+							 '</tr>';
+                    $(item).appendTo($("#orderList tbody"))
+				}
+                total(startTime,endTime);
+                    laydate.render({
+                        elem:'#test5',
+                        type:'date'
+                    });
+                    laydate.render({
+                        elem:'#test6',
+                        type:'date'
+                    });
+				    laypage.render({
+						elem:'page',
+						count:data.data.total,
+						limit:data.data.pageSize,
+						curr:page,
+						jump:function(obj,first){
+							if(!first){
+                                getUsersMsg(obj.curr,startTime,endTime);
+							}
+						}
+					})
+				})
+			}
+		}
+	})
+}
+
+//	总计
+function total(startTime,endTime){
+    $.ajax({
+        url: globalUrl + "/stat/goodsSales/getCouponUnified",
+        type: "get",
+        data:{
+//            userName:userName,
+            startTime:startTimeCinfg(startTime),
+            endTime:endTimeCinfg(endTime)
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("token", $.cookie("token"));
+        },
+        crossDomain: true,
+		success:function(data){
+			$("#count").html(data.data.couponNum);
+		}
+	})
+}
+
+</script>
+
+</html>

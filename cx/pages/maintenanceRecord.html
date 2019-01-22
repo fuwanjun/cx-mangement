@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title></title>
+    <meta charset='utf-8'>
+    <meta name='renderer' content='webkit'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black'>
+    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <meta name='format-detection' content='telephone=no'>
+    <link rel="stylesheet" href="../resource/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+    <link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+
+
+    <style>
+        .cancel {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 2px gray;
+            cursor: pointer;
+        }
+
+        .cancel>i {
+            padding-top: 3px;
+
+            font-size: 30px;
+            line-height: 36px;
+            color: gray;
+
+        }
+
+
+        .details_box td {
+            width: 50% !important;
+
+        }
+
+        .newadd {
+            height: 100%;
+
+
+        }
+
+        .scroll {
+            height: 450px;
+            overflow-y: auto;
+            padding: 30px;
+
+        }
+
+        .topBackground {
+            background-color: #f2f2f2;
+            padding: 20px;
+            padding-bottom: 5px;
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <form class="layui-form   layui-row" style="float: left; " id="search">
+
+
+        <section class="topBackground">
+            <div class="layui-row">
+                <div class="layui-form-item   layui-inline " style="width: 20%;">
+
+                    <button class="layui-btn" name="user" style="float: left;" type="button">处理人</button>
+                    <div class="layui-input-inline">
+                        <select name="quiz2">
+                            <option value="所有">所有</option>
+
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item   layui-inline " style="width: 20%;">
+
+                    <button class="layui-btn" name="user" style="float: left;" type="button">状态</button>
+                    <div class="layui-input-inline">
+                        <select name="quiz2">
+                            <option value="">所有</option>
+                            <option value="杭州">未处理</option>
+
+                            <option value="宁波">处理中</option>
+                            <option value="宁波">已处理</option>
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <div class="layui-form-item   layui-inline" style="width: 47%; ">
+
+                    <div class="layui-inline" id="riqiBox" style="float:left;margin:0">
+
+                        <button class="layui-btn" id="searchBtn" name="user" style="float: left; min-width:80px" type="button">按时间段</button>
+
+                        <div class="" id="timeList_box" style="display:none">
+                            <div>按时间段</div>
+                            <div>按天</div>
+                            <div>按周</div>
+                            <div>按月</div>
+                            <div>最近7天</div>
+                            <div>最近15天</div>
+                            <div>最近30天</div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="layui-input-inline  total  total0" style="width: 36%; display:block;">
+                        <input type="text" class="layui-input" id="test5" placeholder="请选择开始时间">
+                    </div>
+                    <div class="layui-input-inline total total0" style="width: 1%;     line-height: 38px;display:block;">
+                        ~
+
+                    </div>
+
+                    <div class="layui-input-inline total total0" style="width: 36%;display:block;">
+                        <input type="text" class="layui-input" id="test6" placeholder="请选择结束时间">
+                    </div>
+
+                    <div class="layui-input-inline  total total1" style="width: 36%;display:none;">
+                        <input type="text" class="layui-input" id="test1" placeholder="请选择日期">
+                    </div>
+
+                    <div class="layui-input-inline  total total2" style="width: 36%;display:none;">
+                        <input type="text" class="layui-input" id="test2" placeholder="请选择日期">
+                    </div>
+
+                    <div class="layui-input-inline  total total3" style="width: 36%;display:none;">
+                        <input type="text" class="layui-input" id="test3" placeholder="请选择月份">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+    </form>
+
+    <!-- 下面是一些第二行的东西 -->
+
+    <div class="layui-row">
+
+        <div class="layui-inline  orderManage" style="margin-top:10px">
+            维修记录
+        </div>
+
+        <div class="layui-inline " style="margin-top:10px;float: right;">
+            <button class="layui-btn layui-btn-normal  newAddweixiu" id="">新增维修记录</button>
+        </div>
+
+    </div>
+
+    <!-- 下面是第三行表格 -->
+    <table class="layui-table" lay-skin="line" align="center">
+
+        <thead>
+            <tr align="center">
+                <th>报警类型</th>
+                <th>机器人编号</th>
+                <th>报警时间</th>
+                <th>故障原因</th>
+                <th>处理人</th>
+                <th>处理结束时间</th>
+                <th>当前状态</th>
+                <th>补充说明</th>
+                <th>操作</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>机器人死机</td>
+                <td>GK254</td>
+                <td>2018.01.15 09:32:25</td>
+                <td>待填写</td>
+                <td>待填写</td>
+                <td>无</td>
+                <td>
+                    未处理
+                </td>
+                <td>
+                    无
+                </td>
+                <td class="tdEdit">编辑</td>
+
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- 这个下面是分页 -->
+
+    <div class="你好" id="demo7"></div>
+
+    <!-- 下面是背景的颜色 -->
+
+    <!-- 阴影 -->
+    <div class="bg" style="display:none">
+        <!-- 弹框容器 -->
+        <div class="Container" style="padding:0">
+            <!-- 取消事件 -->
+            <div class="cancel">
+                <i class="layui-icon"> &#x1007;</i>
+            </div>
+
+            <!-- 报警信息的阴影 -->
+            <div class="bombBox  baojing_shadow">
+                <section style="padding:30px;padding-bottom:0px">
+
+                    <div class="tip">
+                        编辑报警信息
+                    </div>
+
+                    <div class="newNumberBox">
+                        报警类型：机器人死机
+                    </div>
+
+                    <div class="newNumberBox">
+                        故障原因
+                    </div>
+                    <div class="newNumberBox_inputBox">
+
+                        <div class="layui-form">
+                            <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="newNumberBox">
+                        处理人
+                    </div>
+                    <div class="newNumberBox_inputBox">
+
+                        <div class="layui-form">
+                            <select name="interest" lay-filter="aihao">
+
+                                <option value="1" selected="">管理人A</option>
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="newNumberBox">
+                        当前状态
+                    </div>
+                    <div class="newNumberBox_inputBox">
+
+                        <div class="layui-form">
+                            <select name="interest" lay-filter="aihao">
+
+                                <option value="未处理" selected="">未处理</option>
+                                <option value="处理中" selected="">处理中</option>
+                                <option value="已处理" selected="">已处理</option>
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="newNumberBox">
+                        补充说明
+                    </div>
+                    <div class="newNumberBox_inputBox">
+
+                        <div class="layui-form">
+                            <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                        </div>
+                    </div>
+
+
+
+                </section>
+
+
+                <div class="form_box  cancerOrsure" style="margin-top:30px;">
+
+                    <div>
+                        <button class="layui-btn   layui-btn-primary  layui-btn-lg   layui-btn-fluid" id="baojingCancer">取消</button>
+                    </div>
+                    <div style="flex:1">
+
+                    </div>
+                    <div>
+                        <button class="layui-btn layui-btn-lg   layui-btn-fluid" id="baojingSure">确认</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 点击新增维修记录 -->
+            <div class="bombBox  newAddweixiu_shadow">
+
+                <div class="tip" style="margin-top:30px;">
+                    编辑报警信息
+                </div>
+
+                <section class="scroll">
+
+                    <div class="newNumberBox">
+                        *报警类型
+                    </div>
+                    <div class="newNumberBox_inputBox">
+
+                        <div class="layui-form">
+                            <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="newNumberBox">
+                        *机器人编号
+                    </div>
+                    <div class="newNumberBox_inputBox">
+
+                        <div class="layui-form">
+                            <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                        </div>
+                    </div>
+
+
+                    <div class="newNumberBox">
+                        *报警时间
+                    </div>
+                    <div class="newNumberBox_inputBox">
+
+                        <div class="layui-form">
+                            <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="newNumberBox">
+                        故障原因
+                    </div>
+                    <div class="newNumberBox_inputBox">
+
+                        <div class="layui-form">
+                            <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                        </div>
+                    </div>
+
+
+
+                    <div class="newNumberBox">
+                        处理人
+                    </div>
+                    <div class="newNumberBox_inputBox">
+
+                        <div class="layui-form">
+                            <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="newNumberBox">
+                        处理结束时间
+                    </div>
+                    <div class="newNumberBox_inputBox">
+
+                        <div class="layui-form">
+                            <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                        </div>
+                    </div>
+
+
+
+                    <div class="newNumberBox">
+                        当前状态
+                    </div>
+                    <div class="newNumberBox_inputBox">
+
+                        <div class="layui-form">
+                            <select name="interest" lay-filter="aihao">
+                                <option value="未处理" selected="">未处理</option>
+                                <option value="处理中" selected="">处理中</option>
+                                <option value="已处理" selected="">已处理</option>
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <div class="newNumberBox">
+                        补充说明
+                    </div>
+                    <div class="newNumberBox_inputBox">
+
+                        <div class="layui-form">
+                            <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                        </div>
+                    </div>
+
+
+                </section>
+
+
+                <div class="form_box  cancerOrsure" style="margin-top:30px;">
+
+                    <div>
+                        <button class="layui-btn   layui-btn-primary  layui-btn-lg   layui-btn-fluid" id="newAddweixiuCancer">取消</button>
+                    </div>
+                    <div style="flex:1">
+
+                    </div>
+                    <div>
+                        <button class="layui-btn layui-btn-lg   layui-btn-fluid" id="newAddweixiuSure">确认</button>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+
+    </div>
+</body>
+<script src='./js/jquery.min.js'></script>
+
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+
+<script type="text/javascript">
+    layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+        var element = layui.element;
+        var laydate = layui.laydate;
+        var laypage = layui.laypage
+            , layer = layui.layer;
+
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+        //时间选择器
+        laydate.render({
+            elem: '#test5',
+            type: 'date'
+        })
+
+        laydate.render({
+            elem: '#test1'
+        });
+
+        laydate.render({
+            elem: '#test2'
+        });
+
+
+        laydate.render({
+            elem: '#test3', type: 'month'
+        });
+
+
+        //时间选择器
+        laydate.render({
+            elem: '#test6',
+            type: 'date'
+        })
+
+
+        //  这个是分页的设置 
+        laypage.render({
+            elem: 'demo7',
+            limits: [8, 12, 16]
+            , count: 100
+            , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+            , jump: function (obj) {
+                console.log(obj)
+            }
+        });
+
+
+
+    });
+
+
+
+    $("#riqiBox").mouseover(function () {
+
+        $("#timeList_box").show()
+
+    })
+
+    $("#riqiBox").mouseout(function () {
+
+        $("#timeList_box").hide()
+    })
+
+
+    $("#timeList_box div").live("click", function () {
+        $("#timeList_box").hide()
+
+
+        var index = $(this).index()
+
+        $(".total").hide()
+        $(".total" + index).show()
+        var text = $(this).text()
+
+        $("#searchBtn").text(text)
+
+    })
+
+
+    //下面是关于弹框的一些操作
+
+    function alertMsg(type, msg) {
+        var icon = '';
+        switch (true) {
+            case (type == ('success')):
+                icon = '&#x1005;';
+                break;
+            case (type == ('error')):
+                icon = '&#x1007;';
+                break;
+        }
+        layer.open({
+            type: 1,
+            title: false,
+            closeBtn: false,
+            area: ['400px', '200px'],
+            shade: 0.5,
+            id: 'LAY_layuipro',
+            btnAlign: 'c',
+            moveType: 1,
+            content: `<div style="text-align: center">
+              <i class="layui-icon" style="line-height: 150px;font-size: 100px; color: #000000;">` +
+                icon + `</i>  
+              <p style="font-size: 22px">` + msg + `</p>
+            </div>`,
+            time: 2000,
+        });
+    };
+
+    // 显示弹框阴影
+    function showBG(DOM) {
+        // parent.ableBtn();
+        $('.bombBox').hide();
+        $(DOM).fadeIn();
+        $('.bg').fadeIn();
+        // parent.disableBtn();
+    };
+
+    // 隐藏弹框阴影
+    function hideBG() {
+        $('.bg').fadeOut();
+        // parent.ableBtn();
+        $('.bombBox').fadeOut();
+    };
+
+    // 两个dom节点，插好按钮和取消按钮
+    $('.cancel ,.cancelDelete').live('click', function () {
+        hideBG();
+        parent.ableBtn()
+    });
+
+    // 点击新增维修记录
+    $(".newAddweixiu").live("click", function () {
+
+        showBG(".newAddweixiu_shadow")
+        parent.disableBtn()
+
+    })
+
+
+    $("#newAddweixiuCancer").live("click", function () {
+
+        hideBG()
+        parent.ableBtn()
+    })
+
+    $("#newAddweixiuSure").live("click", function () {
+
+        hideBG()
+        alertMsg("success", "操作成功")
+        parent.ableBtn()
+    })
+
+
+
+    // 点击编辑报警信息
+    $(".tdEdit").live("click", function () {
+        showBG(".baojing_shadow")
+        parent.disableBtn()
+    })
+
+    $("#baojingCancer").live("click", function () {
+        hideBG()
+        parent.ableBtn()
+    })
+
+    $("#baojingSure").live("click", function () {
+        hideBG()
+        parent.ableBtn()
+
+        alertMsg("success", "操作成功")
+    })
+
+</script>
+
+</html>

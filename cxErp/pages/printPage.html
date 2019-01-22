@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单详情</title>
+    <style>
+        .orderMsg,.btn-box{
+            width:1000px;
+            margin:50px auto;
+            border:1px solid #000;
+        }
+        .line{
+            display: flex;
+        }
+        .item{
+            padding:20px 10px;
+            border:1px solid #000;
+            text-align: center;
+        }
+        .flex1{
+            flex:1;
+        }
+        .flex2{
+            flex:2;
+        }
+        .flex3{
+            flex:3;
+        }
+        .flex6{
+            flex:6;
+        }
+        .flex95{
+            flex:0.95;
+        }
+        .layui-btn {
+            display: inline-block;
+            height: 38px;
+            line-height: 38px;
+            padding: 0 18px;
+            background-color: #1E9FFF;
+            color: #fff;
+            white-space: nowrap;
+            text-align: center;
+            font-size: 14px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="orderMsg">
+    <div class="line">
+        <div class="item flex1">客户姓名</div>
+        <div class="item flex2" id="name">伏</div>
+        <div class="item flex1">订单号</div>
+        <div class="item flex3" id="orderNo">123</div>
+    </div>
+    <div class="line">
+        <div class="item flex1">客户电话</div>
+        <div class="item flex2" id="userPhone">188</div>
+        <div class="item flex1">客户地址</div>
+        <div class="item flex3" id="userAddress">新北</div>
+    </div>
+    <div class="line">
+        <div class="item flex1">衣物名称</div>
+        <div class="item flex2">价格</div>
+        <div class="item flex1">差价</div>
+        <div class="item flex3">颜色</div>
+    </div>
+    <div class="goods">
+        <div class="line">
+            <div class="item flex1">衬衫</div>
+            <div class="item flex2">50</div>
+            <div class="item flex1">10</div>
+            <div class="item flex3">白色</div>
+        </div>
+        <!--<div class="line">-->
+            <!--<div class="item flex1">衬衫</div>-->
+            <!--<div class="item flex2">50</div>-->
+            <!--<div class="item flex1">10</div>-->
+            <!--<div class="item flex3">白色</div>-->
+        <!--</div>-->
+        <!--<div class="line">-->
+            <!--<div class="item flex1">衬衫</div>-->
+            <!--<div class="item flex2">50</div>-->
+            <!--<div class="item flex1">10</div>-->
+            <!--<div class="item flex3">白色</div>-->
+        <!--</div>-->
+        <!--<div class="line">-->
+            <!--<div class="item flex1">衬衫</div>-->
+            <!--<div class="item flex2">50</div>-->
+            <!--<div class="item flex1">10</div>-->
+            <!--<div class="item flex3">白色</div>-->
+        <!--</div>-->
+    </div>
+    <div class="line">
+        <div class="item flex1">衣物总件数</div>
+        <div class="item flex2" id="allNum"></div>
+        <div class="item flex1">衣物总价格</div>
+        <div class="item flex3" id="allPrice"></div>
+    </div>
+    <div class="line">
+        <div class="item flex1">瑕疵</div>
+        <div class="item flex2">衣物有少量破洞</div>
+        <div class="item flex1">洗后效果</div>
+        <div class="item flex3">洗后会有褶皱</div>
+    </div>
+</div>
+<div id="shareImg">
+    <canvas id="tableImg" width="750" height="1200"></canvas>
+    <img src="" alt="">
+</div>
+<div class="btn-box" style="border: none;">
+    <button class="layui-btn" style="float: right;">发送信息</button>
+</div>
+</body>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script>
+    var orderNo=$.cookie("orderNo");
+    $(function(){
+        $.ajax({
+            url:globalUrl+"api/work/sortSubmit;jsessionid=" + $.cookie("token"),
+            type:'get',
+            data:{orderNo:orderNo},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success:function(data){
+                console.log(data);
+                if(data.status==200){
+                    var allPrice=0;
+                    $("#name").html(data.data.address.userName);
+                    $("#orderNo").html(orderNo);
+                    $("#userPhone").html(data.data.address.phone);
+                    $("#userAddress").html(data.data.address.region+data.data.address.detailAddress);
+
+                    $(".goods").html("");
+                    for(var i=0;i<data.data.washItems.length;i++){
+                        var price=data.data.washItems[i].afterPrice?data.data.washItems[i].afterPrice:data.data.washItems[i].beforePrice;
+                        var clothesName=data.data.washItems[i].afterName?data.data.washItems[i].afterName:data.data.washItems[i].beforeName;
+                        var onePrice=parseFloat(data.data.washItems[i].afterPrice)?parseFloat(data.data.washItems[i].afterPrice):0;
+                        allPrice+=onePrice;
+                        var item='<div class="line">'+
+                                    '<div class="item flex1">'+clothesName+'</div>'+
+                                    '<div class="item flex2">'+price+'</div>'+
+                                    '<div class="item flex1">'+data.data.washItems[i].fillPrice+'</div>'+
+                                    '<div class="item flex3">'+data.data.washItems[i].colour+'</div>'+
+                                 '</div>';
+                        $(item).appendTo($(".goods"));
+                    }
+                    $("#allNum").html(data.data.washItems.length);
+                    $("#allPrice").html(allPrice);
+                }
+            }
+
+        })
+    });
+    var html2canvas={
+        canvas:document.getElementById("tableImg"),
+        ctx:canvas.getContext("2d"),
+        saveImage:function(){
+            this.canvas.width=windowPro.innerWidth*2;
+            this.canvas.height=windowPro.innerHeight*2-4.8*bastFontSize;
+            this.ctx.fillStyle="#0c3e78";
+            this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
+        }
+    }
+</script>
+</html>

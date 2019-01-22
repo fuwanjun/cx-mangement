@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+
+
+
+	<style>
+		.cancel {
+			position: absolute;
+			top: -10px;
+			right: -10px;
+			width: 30px;
+			height: 30px;
+			background-color: #ffffff;
+			border-radius: 50%;
+			box-shadow: 0 0 2px gray;
+			cursor: pointer;
+		}
+
+		.cancel>i {
+			padding-top: 3px;
+
+			font-size: 30px;
+			line-height: 36px;
+			color: gray;
+		}
+
+
+		.details_box td {
+			width: 50% !important;
+
+		}
+		.goodsImg{
+			width: 50px;
+			height: 50px;
+		}
+		.colorLi{
+			/*padding: 3px 10px;*/
+			margin: 12px;
+			border: 1px solid #ddd;
+			height: 26px;
+			width: 90px;
+			
+			display: flex;
+			flex-direction: row;
+			text-align: center;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+		}
+		.closedCity,.openedCity{
+			border:1px solid #f1f1f1;
+			padding: 10px 15px;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			height: 300px;
+			overflow-y: auto;
+			
+		}
+		.closedCity{
+			margin-bottom: 10px;
+		}
+		.close{
+			display: none;
+			width: 18px;
+			height: 18px;
+			background:#fff url("img/deleteIcon.png") center/100% 100% no-repeat;
+			position: absolute;
+			top: -8px;
+			right: -8px;
+		}
+		.open{
+			display: none;
+			width: 18px;
+			height: 18px;
+			background:#fff url("img/addIcon.png") center/100% 100% no-repeat;
+			position: absolute;
+			top: -8px;
+			right: -8px;
+		}
+		.mask{
+			position: fixed;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			background-color: rgba(0,0,0,.4);
+			display: none;
+		}
+		.addSort{
+			display: block;
+			width: 100%;
+			height: 100%;
+		}
+		.bombBox{
+			position: absolute;
+			margin-left: -270px;
+			top: 260px;
+			left: 50%;
+			background-color: #fff;
+			width: 540px;
+		}
+		.layui-form-item{
+			width: 60%;
+		}
+		.bombBoxTitle{
+			width: 80px;
+			text-align:right;
+			margin-top: 15px;
+		}
+		.bombBox>.layui-form-item>.layui-form-label {
+			padding: 9px 0;
+		}
+		.funBtn{
+			width: 100%;
+		    text-align: right;
+		    padding: 0 24px;
+		}
+		.sureBtn_change{
+			display: none;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<form class="layui-form   layui-row" style="float: left; " id="search">
+
+		<div class="layui-row">
+
+			<div class="layui-inline" style="float:right;margin:10px 0">
+				<button class="layui-btn  layui-btn-normal" type="button" id="xinzhengrenwu">新增城市</button>
+				<!--<button class="layui-btn layui-btn-danger" id="zhuanyi">删除全部</button>-->
+			</div>
+		</div>
+	</form>
+	<!-- 下面是一些第二行的东西 -->
+	<div class="layui-row">
+
+		<div class="layui-inline  orderManage" style="margin:15px 0">
+			未开放城市列表
+		</div>
+
+		
+		<div class="layui-form-item   layui-inline " style="width: 240px;float: right;">
+
+			<div class="layui-input-inline" style="margin:0; width: 192px;">
+				<input type="text" name="closed_city" id="closed_city" placeholder="输入未开放城市名称" autocomplete="off" class="layui-input">
+			</div>
+			<button class="layui-btn closedSearch" name="user" type="button">搜索</button>
+
+		</div>
+	</div>
+	<!-- 下面是第三行表格 -->
+	<div class="closedCity">
+		<!--<div class="colorLi">
+			黑
+		</div>-->
+	</div>
+	<div class="layui-row">
+
+		<div class="layui-inline  orderManage" style="margin:15px 0">
+			开放城市列表
+		</div>
+
+		
+		<div class="layui-form-item   layui-inline " style="width: 240px;float: right;">
+
+			<div class="layui-input-inline" style="width: 192px;margin: 0;">
+				<input type="text" name="opened_city" id="opened_city" placeholder="输入开放城市名称" autocomplete="off" class="layui-input">
+			</div>
+			<button class="layui-btn openedSearch" name="user" type="button">搜索</button>
+
+		</div>
+	</div>
+	<!-- 下面是第三行表格 -->
+	<div class="openedCity">
+		<!--<div class="colorLi">
+			黑
+		</div>-->
+	</div>
+	
+	<div class="mask body">
+		<div class="addSort">
+			<div class="layui-row">
+				<form class="layui-form bombBox" id="addForm">
+					<div class="layui-form-item">
+						<p class="bombBoxTitle">增加城市</p>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">城市名称</label>
+						<div class="layui-input-block">
+							<input class="layui-input city_name" type="text" value="" placeholder="请输入城市名称" autocomplete="off">
+							<input type="hidden" name="city_id" id="city_id" value="" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">排序号值</label>
+						<div class="layui-input-block">
+							<input class="layui-input sort" type="text" value="" placeholder="请输入数字" autocomplete="off">
+						</div>
+					</div>
+					<div class="layui-form-item layui-inline">
+					    <label class="layui-form-label">是否开放</label>
+					    <div class="layui-input-block">
+					      <input type="radio" name="status" value="0" title="是" checked="">
+					      <input type="radio" name="status" value="1" title="否">
+					    </div>
+					</div>
+					<div class="layui-form-item funBtn">
+						<button class="layui-btn layui-btn-sm sureBtn_add" type="button">确定新增</button>
+						<button class="layui-btn layui-btn-sm sureBtn_change" type="button">确定修改</button>
+						<button class="layui-btn layui-btn-sm layui-btn-primary cancelBtn_add" type="button">取消</button>
+					</div>
+					<span class="layui-layer-setwin">
+						<a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"></a>
+					</span>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+
+<script type="text/javascript">
+	var para={};
+	layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+		var element = layui.element
+		,laydate = layui.laydate
+		,laypage = layui.laypage
+		, layer = layui.layer
+		,form=layui.form;
+
+		var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句	
+		getClosedCity();
+		getOpenedCity();
+		function getClosedCity(){
+			var str="";
+			$.ajax({
+				type:"get",
+				url:globalUrl+"city/selectClosedCity",
+				async:true,
+				data:para,
+				beforeSend: function (xhr) {
+	                xhr.setRequestHeader("token", $.cookie("token"));
+	            },
+	            crossDomain: true,
+				success:function(res){
+					$.each(res.data, function(index,value) {
+						str+='<div data-id="'+value.id+'" class="colorLi" ondblclick="change(this);"><div>'+value.cityName+'</div><span class="open"></span></div>'
+					});
+					$(".closedCity").html(str);
+					//initData();
+				},
+				error:function(err){
+					
+				}
+			});
+		}
+		function getOpenedCity(){
+			var str="";
+			$.ajax({
+				type:"get",
+				url:globalUrl+"city/selectOpenCity",
+				async:true,
+				data:para,
+				beforeSend: function (xhr) {
+	                xhr.setRequestHeader("token", $.cookie("token"));
+	            },
+	            crossDomain: true,
+				success:function(res){
+					$.each(res.data, function(index,value) {
+						str+='<div data-id="'+value.id+'" class="colorLi" ondblclick="change(this);"><div>'+value.cityName+'</div><span class="close"></span></div>'
+					});
+					$(".openedCity").html(str);
+					//initData();
+
+				},
+				error:function(err){
+					
+				}
+			});
+		}
+				
+		$(".closedSearch").click(function(){
+			para={};
+			var cityName=$("#closed_city").val();
+			if(cityName==""){
+				para.cityName='';
+			}else{
+				para.cityName=cityName;
+			}
+			getClosedCity();
+		})
+		$(".openedSearch").click(function(){
+			para={};
+			var cityName=$("#opened_city").val();
+			if(cityName==""){
+				para.cityName='';
+			}else{
+				para.cityName=cityName;
+			}
+			getOpenedCity();
+		})
+		
+		$(".closedCity .colorLi").live("mouseenter",function(){
+			$(".open").hide();
+			$(this).children(".open").show();
+		})
+		$(".closedCity .colorLi").live("mouseleave",function(){
+			$(".open").hide();
+		})
+		
+		$(".openedCity .colorLi").live("mouseenter",function(){
+			$(".close").hide();
+			$(this).children(".close").show();
+		})
+		$(".openedCity .colorLi").live("mouseleave",function(){
+			$(".close").hide();
+		})
+		//将未开放的城市开放
+		$(".closedCity .open").live("click",function(){
+			var id=$(this).parent().attr("data-id");
+			$.ajax({
+				type:"post",
+				url:globalUrl+"city/openCityById",
+				async:true,
+				beforeSend: function (xhr) {
+	                xhr.setRequestHeader("token", $.cookie("token"));
+	            },
+	            crossDomain: true,
+				data:{cityId:id},
+				success:function(res){
+					console.log(res);
+					layer.msg("操作成功!",{time:2000})
+					getOpenedCity();
+					getClosedCity();
+				},
+				error:function(err){
+					console.log(err)
+				}
+			});
+		})
+		//将开放的城市转化为未开放
+		$(".openedCity .close").live("click",function(){
+			var id=$(this).parent().attr("data-id");
+			$.ajax({
+				type:"post",
+				url:globalUrl+"city/closeCityById",
+				async:true,
+				beforeSend: function (xhr) {
+	                xhr.setRequestHeader("token", $.cookie("token"));
+	            },
+	            crossDomain: true,
+				data:{cityId:id},
+				success:function(res){
+					console.log(res);
+					layer.msg("操作成功!",{time:2000})
+					getOpenedCity();
+					getClosedCity();
+				},
+				error:function(err){
+					console.log(err)
+				}
+			});
+		})
+		function formVerify(){
+			var reg=/^[0-9]*$/;
+			var city_name=$(".city_name").val();
+			var sort=$(".sort").val();
+			var bol=true;
+			if(city_name==""){
+				layer.msg("请输入城市名",{time:2000});
+				bol=false;
+				return false;
+			}
+			if(sort==""){
+				layer.msg("请输入排序号值",{time:2000});
+				bol=false;
+				return false;
+			}else if(!reg.test(sort)){
+				layer.msg("请输入数字",{time:2000});
+				bol=false;
+				return false;
+			}
+			return bol;
+			//var status=$("input[name=status]:checked").val();
+		}
+		function addCity(){
+			var data={cityName:$(".city_name").val(),status:$("input[name=status]:checked").val(),sort:$(".sort").val()}
+			$.ajax({
+				type:"post",
+				url:globalUrl+"city/putCity",
+				async:true,
+				data:data,
+				beforeSend: function (xhr) {
+	                xhr.setRequestHeader("token", $.cookie("token"));
+	            },
+	            crossDomain: true,
+				success:function(res){
+					document.getElementById("addForm").reset();
+					$(".mask").fadeOut();
+					if(data.sort==0){
+						getOpenedCity();
+					}else{
+						getClosedCity();
+					}
+				},
+				error:function(err){
+					console.log(err)
+				}
+			});
+		}
+		function updateCity(){
+			var cityId=$("#city_id").val();
+			var data={cityName:$(".city_name").val(),status:$("input[name=status]:checked").val(),sort:$(".sort").val(),id:cityId};
+			$.ajax({
+				type:"post",
+				url:globalUrl+"city/updateCity",
+				async:true,
+				data:data,
+				beforeSend: function (xhr) {
+	                xhr.setRequestHeader("token", $.cookie("token"));
+	            },
+	            crossDomain: true,
+				success:function(res){
+					document.getElementById("addForm").reset();
+					$(".city_name").removeAttr("readonly");
+					form.render();
+					$(".mask").fadeOut();
+					getOpenedCity();
+					getClosedCity();
+				},
+				error:function(err){
+					console.log(err)
+				}
+			});
+		}
+		$("#xinzhengrenwu").click(function () {
+			$(".mask").fadeIn();
+		})
+		$(".mask .layui-layer-close").click(function(){
+			$(".mask").fadeOut()
+		})
+		$(".cancelBtn_add").click(function(){
+			$(".mask").fadeOut()
+		})
+		//新增
+		$(".sureBtn_add").click(function(){
+			if(formVerify()){
+				addCity();
+			}
+			return false;
+		})
+		//修改
+		$(".sureBtn_change").click(function(){
+			if(formVerify()){
+				updateCity();
+			}
+			return false;
+		})
+		//双击修改 为什么检测不到啊
+		function change(obj){
+			var id=$(obj).attr("data-id");
+			alert(id)
+		}
+		
+	});
+	function change(obj){
+		var id=$(obj).attr("data-id");
+		$(".mask").fadeIn();
+		//alert(id)
+		layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+			var element = layui.element
+			,laydate = layui.laydate
+			,laypage = layui.laypage
+			, layer = layui.layer
+			,form=layui.form;
+			$.ajax({
+				type:"get",
+				url:globalUrl+"city/getCityById",
+				async:true,
+				data:{cityId:id},
+				beforeSend: function (xhr) {
+	                xhr.setRequestHeader("token", $.cookie("token"));
+	            },
+	            crossDomain: true,
+				success:function(res){
+					$("#city_id").val(res.data.id);
+					$(".city_name").val(res.data.cityName);
+					$(".city_name").attr("readonly","readonly");
+					$(".sort").val(res.data.sort);
+					if(res.data.status==0){
+						$("input[name=status]").removeAttr("checked")
+						$("input[name=status]").eq(0).prop("checked",true);
+					}else{
+						$("input[name=status]").removeAttr("checked")
+						$("input[name=status]").eq(1).prop("checked",true);
+					}
+					$(".sureBtn_add").hide();
+					$(".sureBtn_change").show();
+					
+					form.render();
+				},
+				error:function(err){
+					console.log(err)
+				}
+			});
+		});
+	}
+	
+	
+
+
+</script>
+
+</html>

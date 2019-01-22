@@ -1,0 +1,156 @@
+.layui-row {
+	width: 100%;
+	height: 100%;
+}
+
+.layui-colla-title {
+	padding: 0;
+	text-align: center;
+}
+
+.layui-colla-title {
+	min-width: 75px;
+}
+
+.operating {
+	margin: 0 0 0 7px;
+	cursor: pointer;
+}
+
+.tableContainer {
+	border: 1px solid #f2f2f2;
+	padding: 0 20px;
+	margin-top: 30px;
+}
+
+.discountType {
+	margin-left: 150px;
+}
+
+.searchContainer {
+	display: flex;
+	justify-content: space-between;
+	background-color: rgba(242, 242, 242, 1);
+	mar: 10px 20px;
+}
+
+/* 左侧选中 */
+
+.selectedStatus {
+	color: rgba(229, 28, 35, 1);
+	background-color: #FFFFF2E3;
+}
+
+.input {
+	padding: 0 19px;
+}
+
+.input>div {
+	width: 32%;
+}
+
+label {
+	padding: 0;
+}
+
+.layui-input-inline {
+	width: 70%;
+}
+
+.form {
+	height: 50px;
+	padding-top: 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.layui-form-switch {
+	box-sizing: content-box;
+}
+
+td {
+	text-align: center;
+}
+
+.layui-table th {
+	text-align: center;
+	border-collapse: collapse;
+	border: 1px solid #E6E6E6;
+}
+
+customSelect {
+	position: relative;
+	top: 2px;
+}
+
+.customItem>td {
+	padding: 3px;
+}
+
+#pageBtn {
+	display: flex;
+	justify-content: center;
+}
+
+.changeTable {
+	padding: 20px;
+	background-color: #F2F2F2;
+}
+
+.changeTable>button {
+	background-color: rgb(255, 255, 255);
+}
+
+
+/* 父元素50% */
+
+.changeItems {
+	width: 49%;
+	height: 50px;
+}
+
+.changeGroupContainer {
+	height: 170px;
+	overflow-y: auto;
+}
+
+.changeGroupContainer::-webkit-scrollbar {
+	width: 4px;
+	height: 4px;
+}
+
+.changeGroupContainer::-webkit-scrollbar-thumb {
+	border-radius: 5px;
+	-webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+	background: rgba(0, 0, 0, 0.2);
+}
+
+.changeGroupContainer::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+	border-radius: 0;
+	background: rgba(0, 0, 0, 0.1);
+}
+
+
+.bombBox>.layui-form-item>.layui-form-label {
+	padding: 9px 0;
+}
+
+.submitBtn {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+.submitBtn>button {
+	width: auto;
+	text-align: center;
+	min-width: 92px;
+}
+
+.spaceBetween {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}

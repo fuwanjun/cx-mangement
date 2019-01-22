@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+
+
+
+	<style>
+		.goodsImg{
+			width: 50px;
+			height: 50px;
+		}
+		body{
+			background-color: #fff;
+		}
+		.headlabel{
+			width: 12px;
+			height: 18px;
+			background-color: #1194d6;
+			display: inline-block;
+			vertical-align: middle;
+			margin-right: 10px;
+		}
+		.layui-form-label{
+			width:100px;
+		}
+		.layui-form-item .layui-input-inline.address{
+			width:250px;
+		}
+		.tableResponse{
+			height: 120px;
+			overflow-y: auto;
+		}
+		.attachment{
+			border: 1px solid #999;
+			border-radius: 4px;
+			width: 80px;
+			display: inline-block;
+		}
+		.attachmentNumber{
+			width:30px;
+			border: none;
+			outline: none;
+		}
+		.attachment span{
+			padding: 0px 6px;
+		}
+		.layui-table[lay-skin=line] td{
+			border-width: 1px;
+		}
+		#searchBrand,#searchEffect,#searchSpot{
+			outline: none;
+			border-radius: 8px;
+			height: 27px;
+			padding:4px 6px;		
+		}
+		.brandContent{
+			display: flex;
+			flex-wrap: wrap;
+		}
+		.brandLi{
+			padding: 10px;
+			font-size: 16px;
+			color: #333;
+			margin: 10px;
+			border: 1px solid #ddd;
+			height: 45px;
+			background-color: #fff;
+			position: relative;
+		}
+		.brandLi-active{
+			background-color: #aaa;
+		}
+		.nameOperation{
+			display: none;
+		}
+		.brandOperation{
+			display: none;
+		}
+		.colorOperation{
+			display: none;
+		}
+		.spotOperation{
+			display: none;
+		}
+		.effectOperation{
+			display: none;
+		}
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+		}
+		input[type="number"]{
+			-moz-appearance: textfield;
+		}
+		.brandLi:active{
+			background: #f00;
+			color: #fff;
+		}
+		.brandLi i{
+			font-size:20px;
+			position: absolute;
+			top:-10px;
+			right:-10px;
+			color: #999;
+		}
+		.brandLi i:active{
+			color: #f00;
+		}
+		.photos{
+			display: none;
+		}
+		.spot-active{
+			background: #f00;
+			color: #fff;
+		}
+		.colorLi {
+			margin: 12px;
+			border: 1px solid #ddd;
+			height: 26px;
+			width: 90px;
+			display: flex;
+			flex-direction: row;
+			text-align: center;
+			align-items: center;
+			justify-content: center;
+		}
+		.colorLi_child {
+			width: 45px;
+			height: 26px;
+			line-height: 26px;
+		}
+		.printCode{
+			display: flex;
+			justify-content: space-between;
+		}
+		.printCode .mainCode{
+			width:40%;
+			height:100%;
+		}
+		.printCode .codeNum{
+			width:50%;
+			height:100%;
+			font-size:20px;
+		}
+		.code2{
+			margin-top:40px;
+		}
+	</style>
+</head>
+<body>
+	<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this">分拣</li>
+	    <li>反拣处理</li>
+	  </ul>
+	  <div class="layui-tab-content" style="height: 100px;">
+	    <div class="layui-tab-item layui-show">
+	    	<form class="layui-form layui-row" style="float: left; " id="search1">
+				<div class="layui-row">
+					<div class="layui-inline  orderManage" style="margin-top:10px">
+						<span class="headlabel"></span>代加工录入
+					</div>
+				</div>
+			</form>
+			<!-- 下面是一些第二行的东西 -->
+			<form class="layui-form">		
+				<div class="layui-form-item">
+				    <div class="layui-inline">
+				      <label class="layui-form-label">加盟店</label>
+				      <div class="layui-input-inline">
+						  <select name="" id="shopName" lay-filter="shop">
+							  <option value="">1</option>
+						  </select>
+				        <!--<input id="joinName" type="text" class="layui-input">-->
+				      </div>
+				    </div>
+					<div class="layui-inline">
+						<label class="layui-form-label">联系人</label>
+						<div class="layui-input-inline">
+							<input id="joinUser"  type="text" readonly class="layui-input">
+						</div>
+					</div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">联系电话</label>
+				      <div class="layui-input-inline">
+				        <input id="joinPhone"  type="number" readonly class="layui-input">
+				      </div>
+				    </div>
+					<div class="layui-inline">
+						<label class="layui-form-label">区域</label>
+						<div class="layui-input-inline">
+							<input id="area"  type="text" readonly class="layui-input">
+						</div>
+					</div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">门店地址</label>
+				      <div class="layui-input-inline address">
+				        <input id="joinAddress" type="text" readonly class="layui-input">
+				      </div>
+				    </div>
+					<div class="layui-inline">
+						<label class="layui-form-label">订单号</label>
+						<div class="layui-input-inline address" style="width: 190px;">
+							<input id="orderNo" type="text" readonly class="layui-input">
+						</div>
+					</div>
+				    <!--<div class="layui-inline" style="display: none;">-->
+				      <!--<label class="layui-form-label">录入时间</label>-->
+				      <!--<div class="layui-input-inline">-->
+				        <!--<input id="joinEntryTime" readonly type="text" class="layui-input">-->
+				      <!--</div>-->
+				    <!--</div>-->
+				    <div class="layui-inline" style="width: 100%;">
+					  <button style="margin-top: 10px;" type="button"  class="layui-btn layui-btn-normal" id="entry">确认店铺</button>
+					  <button style="margin-top: 10px; float: right;" type="button" id="ok" class="layui-btn layui-btn-normal">分拣完成</button>
+				    </div>
+				  </div>
+				
+			</form>
+			<!-- 下面是第三行表格 -->
+			<table class="layui-table" lay-skin="line" align="center" id="table1">
+				<thead>
+					<tr align="center">
+						<th>衣物名称</th>
+						<th>价格</th>
+						<th width="200px">原条码</th>
+						<th>附件</th>
+						<th>品牌</th>
+						<th>颜色</th>
+						<th width="300px">瑕疵</th>
+						<th width="300px">洗后效果</th>
+						<td>拍照</td>
+						<td>条码号</td>
+						<td>删除</td>
+						<td>打印条码</td>
+					</tr>
+				</thead>
+				<tbody></tbody>
+
+			</table>
+			<button type="button" class="layui-btn" id="addClothesItem" style="display: none;">新增衣物</button>
+			<!-- 这个下面是分页 -->
+			<div id="demo7"></div>
+			<!--选择衣物名称-->
+			<div class="nameOperation">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>衣物名称
+						</div>
+						<div class="layui-inline layui-input-inline" style="margin-left:10px;margin-top:10px">
+							<input type="text" class="" name="searchBrand" id="searchName" placeholder="输入品牌名称" value="" />
+							<button class="layui-btn layui-btn-normal layui-btn-xs" id="searchNameBtn" type="button">搜索关键词</button>
+						</div>
+					</div>
+				</form>
+				<div id="clothesName" class="brandContent" style="margin:8px 5px;background-color: #f1f1f1;overflow: scroll"></div>
+				<div class="layui-row" style="padding: 8px 5px;">
+					<input type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addBrand" id="inName" value="" placeholder="衣物名称" />
+					<input type="number" class="layui-input" style="display: inline-block;width: 200px;" id="inPrice" value="" placeholder="衣物价格" />
+					<button class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;" id="addName">确定</button>
+				</div>
+			</div>
+			<!--选择品牌-->
+			<div class="brandOperation">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>品牌
+						</div>
+						<div class="layui-inline layui-input-inline" style="margin-left:10px;margin-top:10px">
+							<input type="text" class="" name="searchBrand" id="searchBrand" placeholder="输入品牌名称" value="" />
+							<button class="layui-btn layui-btn-normal layui-btn-xs" id="searchBrandBtn" type="button">搜索关键词</button>
+						</div>
+					</div>
+				</form>
+				<div id="brand" class="brandContent" style="margin:8px 5px;background-color: #f1f1f1;overflow: scroll"></div>
+				<div class="layui-row" style="padding: 8px 5px;">
+					<input type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addBrand" id="addBrand" value="" placeholder="输入品牌" />
+					<button class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;" id="brandSearch">确定</button>
+				</div>
+			</div>
+<!--选择颜色-->
+			<div class="colorOperation">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>颜色
+						</div>
+					</div>
+				</form>
+				<div class="brandContent" id="colorPicker" style="margin:8px 5px;height: 220px;">
+					<!--<div class="colorLi">
+						<div class="colorLi_child">黑</div>
+						<div class="colorLi_child">红</div>
+					</div>-->
+				</div>
+				<!--<div class="layui-row" style="padding: 8px 5px;">
+					<input type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addBrand" id="addBrand" value="" placeholder="输入颜色" />
+					<button class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;">确定</button>
+				</div>				-->
+			</div>
+			<!--选择瑕疵-->
+			<div class="spotOperation">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>瑕疵
+						</div>
+						<div class="layui-inline layui-input-inline" style="margin-left:10px;margin-top:10px">
+							<input type="text" class="" name="searchSpot" id="searchSpot" placeholder="输入瑕疵关键词" value="" />
+							<button id="searchBtn" type="button" class="layui-btn layui-btn-normal layui-btn-xs">搜索关键词</button>
+						</div>
+						<button id="subSpots" type="button" class="layui-btn layui-btn-normal layui-btn-xs" style="font-size: 16px;height: 40px;">确认提交瑕疵类型</button>
+					</div>
+				</form>
+				<div id="clothesBug" class="brandContent" style="margin:8px 5px;background-color: #f1f1f1;"></div>
+				<div class="layui-row" style="padding: 8px 5px;">
+					<input id="inSpot" type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addBrand"  value="" placeholder="输入瑕疵" />
+					<button id="spotBtn" class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;">添加</button>
+				</div>
+			</div>
+			<!--选择洗后效果-->
+			<div class="effectOperation">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>洗后效果
+						</div>
+						<div class="layui-inline layui-input-inline" style="margin-left:10px;margin-top:10px">
+							<input type="text" class="" name="searchEffect" id="searchEffect" placeholder="输入关键词" value="" />
+							<button type="button" id="searchEffectBtn" class="layui-btn layui-btn-normal layui-btn-xs">搜索关键词</button>
+						</div>
+						<button id="subEffect" type="button" class="layui-btn layui-btn-normal layui-btn-xs" style="font-size: 16px;height: 40px;">确认提交洗衣效果</button>
+					</div>
+				</form>
+				<div id="effectCon" class="brandContent" style="margin:8px 5px;background-color: #f1f1f1;"></div>
+				<div class="layui-row" style="padding: 8px 5px;">
+					<input type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addEffect" id="addEffect" value="" placeholder="输入洗衣效果" />
+					<button id="effectBtn" class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;">确定</button>
+				</div>
+			</div>
+	    </div>
+	    <div class="layui-tab-item">
+	    	<form class="layui-form layui-row" style="float: left; " id="search2">
+				<div class="layui-row">
+					<div class="layui-inline  orderManage" style="margin-top:10px">
+						<span class="headlabel"></span>反检处理
+					</div>
+				</div>
+			</form>
+			<!-- 下面是一些第二行的东西 -->
+			<div class="layui-row">		
+				<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
+					<div class="layui-input-inline" style="margin:0; width: 70%;">
+						<input type="text" name="date" id="date" lay-verify="date" placeholder="选择日期" autocomplete="off" class="layui-input">
+					</div>
+					<button class="layui-btn layui-btn-normal" name="user" type="button">查询</button>
+				</div>
+				<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
+					<div class="layui-input-inline" style="margin:0; width: 70%;">
+						<input type="text" placeholder="扫条形码" autocomplete="off" class="layui-input" id="codeIn1">
+					</div>
+				</div>
+			</div>
+			<!-- 下面是第三行表格 -->
+			<div class="tableResponse">
+				<table class="layui-table" id="table" lay-skin="line" align="center">
+					<thead>
+						<tr align="center">
+							<th>条码号</th>
+							<th>衣物名称</th>
+							<th>价格</th>
+							<th>品牌</th>
+							<th>颜色</th>
+							<th>瑕疵</th>
+							<th>洗后效果</th>
+							<th>拍照</th>
+							<th>保存</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>TM20180907m11211</td>
+							<td>加厚衬衣</td>
+							<td>16</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td>是</td>
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+			
+			<!-- 这个下面是分页 -->
+			<div id="demo8"></div>
+			
+			
+	    </div>
+	  </div>
+	</div> 
+
+</body>
+<div id="codeBox" style="display: none;">
+	<!--<table class="layui-table" style="width: 100%;">-->
+		<!---->
+		<!--<tbody></tbody>-->
+	<!--</table>-->
+	<!--<div id="codeShow"></div>-->
+	<!--<div id="codePrint"></div>-->
+	<!--<div class="printCode" style="height: 100px;">-->
+		<!--<div class="mainCode"><img style="width: 100%;height: 100%;" src="img/edit.png" alt=""></div>-->
+		<!--<div class="codeNum">-->
+			<!--<p class="orderNo">订单号：<span>12345678901</span></p>-->
+			<!--<div class="code2"><span>1231321321321323</span></div>-->
+		<!--</div>-->
+	<!--</div>-->
+</div>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script src="../resource/js/common.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script src="../resource/js/jquery.cookie.js"></script>
+<script src="js/jquery.jqprint-0.3.js"></script>
+<script src="http://www.jq22.com/jquery/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/html2canvas/0.5.0-beta1/html2canvas.js"></script>
+<script src="https://cdn.bootcss.com/html2canvas/0.5.0-beta4/html2canvas.js"></script>
+<script src="js/secondSorting.js"></script>
+</html>

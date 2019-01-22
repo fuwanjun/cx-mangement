@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset='utf-8'>
+    <meta name='renderer' content='webkit'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black'>
+    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <meta name='format-detection' content='telephone=no'>
+    <link rel="stylesheet" href="../resource/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href='css/pageIndex.css'/>
+    <link rel="stylesheet" type="text/css" href='css/orderManagement.css'/>
+    <style>
+        .cancel {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 2px gray;
+            cursor: pointer;
+        }
+
+        .cancel > i {
+            padding-top: 3px;
+
+            font-size: 30px;
+            line-height: 36px;
+            color: gray;
+        }
+
+        .details_box td {
+            width: 50% !important;
+
+        }
+
+        .expressList {
+            position: absolute;
+            width: 80px;
+            left: 50%;
+            margin-left: -40px;
+            top: 38px;
+            background-color: #f1f1f1;
+            z-index: 9999;
+            border-radius: 3px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .expressList li {
+            padding: 10px 0;
+            text-align: center;
+
+        }
+
+        .expressList li:hover {
+            background-color: rgba(0, 125, 208, .7);
+            color: #fff;
+        }
+
+        .showExpress {
+            display: inline-block;
+            width: 72px;
+        }
+
+        .vip-score, .vip-balance, .order-num, .order-price {
+            display: flex;
+            justify-content: center;
+        }
+
+        tbody tr td {
+            text-align: center;
+        }
+
+        .head-pic {
+            width: 50px;
+            height: 50px;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .head-pic img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .layui-form-select dl {
+            padding: 0;
+        }
+
+        .layui-input-block {
+            margin-left: 56px;
+        }
+
+        .layui-form-label {
+            padding: 0;
+            width: auto;
+            line-height: 36px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<form action="" style="display: flex;">
+    <div class="layui-form-item">
+        <div class="layui-form-item">
+            <div class="layui-input-inline" style="margin:0; width: 100%;">
+                <input type="text" name="criticalWord" id="criticalWord" placeholder="用户名和手机号" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+    </div>
+    <div class="layui-form-item" style="display: flex;">
+        <label class="layui-form-label" style="margin-left: 20px;">状态：</label>
+        <div class="layui-input-block" style="margin-left: 0px;">
+            <select name="" id="state" style="height: 38px; border: 1px solid #e6e6e6;">
+                <option value="">全部</option>
+                <option value="DELETED">停用</option>
+                <option value="NORMAL">启用</option>
+            </select>
+        </div>
+    </div>
+    <button class="layui-btn searchSubBtn" type="button" id="search" style="margin-left: 20px;">搜索</button>
+</form>
+<!-- 下面是一些第二行的东西 -->
+<div class="layui-row">
+    <div class="layui-inline  orderManage" style="margin-top:10px">
+        用户信息
+    </div>
+    <div class="layui-inline" style="float:right;margin-right:30px;margin-top:10px">
+        <!--<button class="layui-btn layui-btn-normal" style="margin-right:30px;" id="zhuanyi">转移空托盘</button>
+        <button class="layui-btn  layui-btn-normal" id="xinzhengrenwu">新增任务</button>-->
+    </div>
+</div>
+
+<!-- 下面是第三行表格 -->
+
+
+<table class="layui-table" id="orderList" lay-skin="line" align="center">
+    <thead>
+    <tr align="center">
+        <th width="250px">用户</th>
+        <th>门店推广员</th>
+        <th>永久二维码</th>
+        <th>等级/标签组</th>
+        <th>注册时间</th>
+        <th>积分/余额</th>
+        <th>成交</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<!-- 这个下面是分页 -->
+<div id="page"></div>
+<button id="excel" class="layui-btn layui-btn-primary" type="button">导出EXCEL表格</button>
+<div class="bg">
+
+</div>
+
+</body>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        var data2 = {pageNum: 1, pageSize: 8};
+        getVipMessage(data2);
+    });
+
+    var nowPage = {pageNum: 1, pageSize: 8};
+    //	根据用户名和手机号搜索用户
+    $("#search").on("click", function () {
+        var searchText = $("#criticalWord").val();
+        var state = $("#state").val();
+        var param = {
+            pageNum: 1,
+            pageSize: 8,
+            userKey: searchText,
+            state: state
+        };
+
+        getVipMessage(param);
+    });
+
+
+    //	获取会员信息
+    function getVipMessage(txt) {
+
+        $.ajax({
+            url: globalUrl + "/userInfo/getUserAndOrderInfo",
+            type: "get",
+            data: txt,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                console.log(data);
+//			    总页数
+                var item = "";
+                $(".layui-table tbody").html(" ");
+                for (var i = 0; i < data.data.list.length; i++) {
+//			        姓名
+                    var vipName = "";
+                    if (data.data.list[i].userName) {
+                        vipName = data.data.list[i].userName;
+                    } else {
+                        vipName = " ";
+                    }
+//					店铺推广员
+                    var shoper = " ";
+                    if (data.data.list[i].shopPromotes == 0) {
+                        shoper = '<button class="layui-btn layui-btn-sm layui-btn-danger no">否</button>' +
+                            '<button class="layui-btn layui-btn-sm layui-btn-disabled yes" disabled>是</button>';
+                    } else {
+                        shoper = '<button class="layui-btn layui-btn-sm layui-btn-danger layui-btn-disabled no" disabled>否</button>' +
+                            '<button class="layui-btn layui-btn-sm yes">是</button>';
+                    }
+                    var codeImg = "";
+                    if (data.data.list[i].qrState == 0) {
+                        codeImg = '<button class="layui-btn layui-btn-sm layui-btn-danger qrNo">否</button>' +
+                            '<button class="layui-btn layui-btn-sm layui-btn-disabled qrYes" disabled>是</button>';
+                    } else if (data.data.list[i].qrState == 1) {
+                        codeImg = '<button class="layui-btn layui-btn-sm layui-btn-danger layui-btn-disabled qrNo" disabled>否</button>' +
+                            '<button class="layui-btn layui-btn-sm qrYes">是</button>';
+                    }
+
+//			        会员身份
+                    var vipType = "";
+                    if (data.data.list[i].vip == 0) {
+                        vipType = "普通会员";
+                    } else if (data.data.list[i].vip == 1) {
+                        vipType = "VIP会员";
+                    }
+//					积分
+                    var vipScore = data.data.list[i].fraction ? data.data.list[i].fraction : 0;
+//					订单数
+                    var orderNum = data.data.list[i].orderCount ? data.data.list[i].orderCount : 0;
+//					成交订单总金额
+                    var okOrderPrice = data.data.list[i].payment ? data.data.list[i].payment : "0.00";
+//					余额
+                    var surplus = data.data.list[i].money ? data.data.list[i].money : "0.00";
+//                  停用/启用
+                    var stopBtn = "";
+                    if (data.data.list[i].state == 'NORMAL') {
+                        stopBtn = '<button type="button" class="layui-btn layui-btn-danger stopUse">停用</button>';
+                    } else {
+                        stopBtn = '<button type="button" class="layui-btn startUse">启用</button>';
+                    }
+                    item = '<tr userId="' + data.data.list[i].userId + '">' +
+                        '<td style="display: flex;">' +
+                        '<div class="head-pic"><img src="' + data.data.list[i].userPicture + '" alt=""></div>' +
+                        '<p class="vip-name" style="line-height: 50px;margin-left: 10px;">' + vipName + '</p>' +
+                        '</td>' +
+                        '<td userId="' + data.data.list[i].userId + '">' +
+                        shoper +
+                        '</td>' +
+                        '<td>' +
+                        codeImg +
+                        '</td>' +
+                        '<td>' + vipType + '</td>' +
+                        '<td>' +
+                        '<p>' + timestampToTime(data.data.list[i].createTime) + '</p>' +
+                        '</td>' +
+                        '<td>' +
+                        '<div class="vip-score">' +
+                        '<p class="text-l">积分：</p>' +
+                        '<p class="text-value">' + vipScore + '</p>' +
+                        '</div>' +
+                        '<div class="vip-balance">' +
+                        '<p class="text-l">余额：</p>' +
+                        '<p class="text-value">' + surplus + '</p>' +
+                        '</div>' +
+                        '</td>' +
+                        '<td>' +
+                        '<div class="order-num">' +
+                        '<p class="text-l">订单：</p>' +
+                        '<p class="text-value">' + orderNum + '</p>' +
+                        '</div>' +
+                        '<div class="order-price">' +
+                        '<p class="text-l">金额：</p>' +
+                        '<p class="text-value">' + okOrderPrice + '</p>' +
+                        '</div>' +
+                        '</td>' +
+                        '<td>' +
+                        '<button type="button" class="layui-btn layui-btn-normal backMoney">退余额</button>' +
+                        stopBtn +
+                        '</td>' +
+                        '</tr>';
+                    $(item).appendTo($(".layui-table tbody"));
+                }
+//                toPage(data.data.total, txt);
+                layui.use('laypage', function () {
+                    var laypage = layui.laypage;
+                    laypage.render({
+                        elem: 'page',
+                        count: data.data.total,
+                        limit: 8,
+                        curr: txt.pageNum,
+                        jump: function (obj, first) {
+                            if (!first) {
+                                var data3 = {};
+                                data3.pageNum = obj.curr;
+                                data3.pageSize = 8;
+                                nowPage = data3;
+                                getVipMessage(data3);
+                            }
+                        }
+                    })
+                })
+            }
+        })
+    }
+
+
+    $("#orderList tbody tr td .yes").live("click", function () {
+        var thisBtn = $(this);
+        var userId = thisBtn.parent().attr("userId");
+        $.ajax({
+            url: globalUrl + "userInfo/change2Promotes",
+            type: "post",
+            data: {userId: userId},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                console.log(data);
+                getVipMessage(nowPage);
+
+            }
+        });
+
+    });
+
+    $("#orderList tbody tr td .no").live("click", function () {
+        var thisBtn = $(this);
+        var userId = thisBtn.parent().attr("userId");
+        $.ajax({
+            url: globalUrl + "userInfo/change2Nomal",
+            type: "post",
+            data: {userId: userId},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                console.log(data);
+                getVipMessage(nowPage);
+            }
+        });
+
+    });
+
+    $("#orderList tbody tr td .qrNo").live("click", function () {
+        var id=$(this).parent().parent().attr("userid");
+        codeImgYes(id);
+    });
+    $("#orderList tbody tr td .qrYes").live("click", function () {
+        var id=$(this).parent().parent().attr("userid");
+        codeImgNo(id);
+    });
+
+    //  退余额
+    $(".backMoney").live("click", function () {
+        var userId = $(this).parent().parent().attr("userId");
+        $.ajax({
+            url: globalUrl + "balance/refundBefor",
+            type: "get",
+            data: {userId: userId},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                console.log(data);
+                layui.use('layer', function () {
+                    var layer = layui.layer;
+                    if (data.code == 0) {
+                        if (data.data.money != 0) {
+                            var backMoney = layer.open({
+                                content: '<p>该用户剩余余额：' + data.data.money + '元</p>' +
+                                '<p>平台赠送余额：' + data.data.giftMoney + '元</p>' +
+                                '<p>实际应退款金额：' + data.data.retreat + '元</p>',
+                                btn: ['取消', '确定'],
+                                yes: function () {
+                                    layer.close(backMoney);
+                                },
+                                btn2: function () {
+                                    $.ajax({
+                                        url: globalUrl + "balance/refund",
+                                        type: "post",
+                                        data: {userId: userId},
+                                        beforeSend: function (xhr) {
+                                            xhr.setRequestHeader("token", $.cookie("token"));
+                                        },
+                                        crossDomain: true,
+                                        success: function (data) {
+                                            console.log(data);
+                                            if (data.code == 0) {
+                                                layer.open({
+                                                    content: data.message
+                                                });
+                                                getVipMessage(nowPage);
+                                            } else {
+                                                layer.open({
+                                                    content: data.message
+                                                });
+                                            }
+                                        }
+                                    })
+                                }
+                            })
+                        } else {
+                            layer.open({
+                                content: "该用户没有余额"
+                            });
+                        }
+
+                    } else {
+                        layer.open({
+                            content: data.message
+                        })
+                    }
+                })
+            }
+        })
+    });
+
+    //    停用
+    $(".stopUse").live("click", function () {
+        var userId = $(this).parent().parent().attr("userId");
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            var stop = layer.open({
+                title: '停用',
+                content: '确定停用该账号？',
+                btn: ['取消', '确定'],
+                yes: function () {
+                    layer.close(stop);
+                },
+                btn2: function () {
+                    $.ajax({
+                        url: globalUrl + "userInfo/deleteUser",
+                        type: "post",
+                        data: {userId: userId},
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("token", $.cookie("token"));
+                        },
+                        crossDomain: true,
+                        success: function (data) {
+                            console.log(data);
+                            if (data.code == 0) {
+                                layer.open({
+                                    content: data.message
+                                });
+                                getVipMessage(nowPage);
+                            } else {
+                                layer.open({
+                                    content: data.message
+                                })
+                            }
+                        }
+                    })
+                }
+            })
+        });
+    });
+
+    //    停用
+    $(".startUse").live("click", function () {
+        var userId = $(this).parent().parent().attr("userId");
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            var stop = layer.open({
+                title: '停用',
+                content: '确定恢复该账号？',
+                btn: ['取消', '确定'],
+                yes: function () {
+                    layer.close(stop);
+                },
+                btn2: function () {
+                    $.ajax({
+                        url: globalUrl + "userInfo/openUser",
+                        type: "post",
+                        data: {userId: userId},
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("token", $.cookie("token"));
+                        },
+                        crossDomain: true,
+                        success: function (data) {
+                            console.log(data);
+                            if (data.code == 0) {
+                                layer.open({
+                                    content: data.message
+                                });
+                                getVipMessage(nowPage);
+                            } else {
+                                layer.open({
+                                    content: data.message
+                                })
+                            }
+                        }
+                    })
+                }
+            })
+        });
+    });
+
+    $("#excel").click(function () {
+        var searchText = $("#criticalWord").val();
+        var state = $("#state").val();
+        window.open(globalUrl + "userInfo/exportUserAndOrderInfo?userKey=" + searchText + "&state=" + state);
+    })
+
+//  修改二维码为永久二维码
+    function codeImgYes(id){
+        $.ajax({
+            url: globalUrl + "userInfo/userQrcodeToFixed",
+            type: "post",
+            data: {userId: id},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:function(data){
+                getVipMessage(nowPage);
+            }
+        })
+    }
+//    修改二维码为非永久二维码
+    function codeImgNo(id){
+        $.ajax({
+            url: globalUrl + "userInfo/userQrcodeToTemp",
+            type: "post",
+            data: {userId: id},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:function(data){
+                if(data.code==0){
+                    getVipMessage(nowPage);
+                }
+            }
+        })
+    }
+</script>
+
+</html>

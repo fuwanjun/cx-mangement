@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>污渍终止处理</title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+	<style>
+		.headlabel {
+			width: 12px;
+			height: 18px;
+			background-color: #1194d6;
+			display: inline-block;
+			vertical-align: middle;
+			margin-right: 10px;
+		}
+	</style>
+</head>
+<body style="background: #fff;">
+	<div class="layui-tab-item layui-show">
+		<form class="layui-form layui-row" style="float: left; " id="search1">
+			<div class="layui-row">
+				<div class="layui-inline  orderManage" style="margin-top:10px">
+					<span class="headlabel"></span>污渍终止
+				</div>
+			</div>
+		</form>
+		<form class="layui-form">
+			<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
+				<div class="layui-input-inline" style="margin:0; width: 70%;">
+					<input type="text" id="searchDate1" placeholder="选择日期" class="layui-input">
+				</div>
+				<button class="layui-btn layui-btn-normal" type="button" id="searchBtn1">查询</button>
+			</div>
+			<!--<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">-->
+				<!--<div class="layui-input-inline" style="margin:0; width: 70%;">-->
+					<!--<input type="text" placeholder="扫条形码" autocomplete="off" class="layui-input" id="codeIn1">-->
+				<!--</div>-->
+			<!--</div>-->
+		</form>
+		<table class="layui-table" lay-skin="line" align="center" id="table1">
+			<thead>
+			<tr align="center">
+				<th>订单号</th>
+				<th>条码号</th>
+				<th>衣物名称</th>
+				<th>颜色</th>
+				<th>客户姓名</th>
+				<th>电话</th>
+				<td>确定终止</td>
+				<!--<td>无法洗涤</td>-->
+			</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<div id="page1"></div>
+	</div>
+</body>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script src="../resource/js/common.js"></script>
+<script src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript">
+	var page1=1;
+	layui.use(['element', 'form', 'layer','table', 'laydate', 'laypage','colorpicker'], function () {
+		var element = layui.element;
+		var laydate = layui.laydate;
+		var laypage = layui.laypage
+			,table = layui.table
+			,colorpicker = layui.colorpicker
+			, layer = layui.layer;
+
+		var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+		table1Show(page1,8,105);
+
+	});
+
+	$(".yesBtn").live("click",function(){
+//	    animate=layer.load();
+	    var id=$(this).parent().parent().attr("itemId");
+	    layui.use('layer',function(){
+	        var layer=layui.layer;
+	        layer.open({
+				type:1,
+				content:'<p style="padding: 10px; text-align: center">确定污渍终止？</p>',
+				btn:['确定','取消'],
+				yes:function(){
+					$.ajax({
+                        url: globalUrl + "api/admin/washStop;jsessionid=" + $.cookie("token"),
+                        type: 'get',
+                        data: {id:id},
+                        crossDomain: true,
+                        beforeSend: function (request) {
+                            request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                        },
+						success:function(data){
+                            if(data.status==200){
+                                table1Show(page1,8,105);
+                                layer.closeAll();
+                                layer.msg(data.msg);
+							}else{
+                                layer.msg(data.msg);
+							}
+						}
+					})
+				},
+				btn2:function(){
+				    layer.closeAll();
+				}
+			})
+		})
+	});
+
+    $(".noBtn").live("click",function(){
+        var id=$(this).parent().parent().attr("itemId");
+        layui.use('layer',function(){
+            var layer=layui.layer;
+            layer.open({
+                type:1,
+                content:'<p style="padding: 10px; text-align: center">确定取消污渍终止？</p>',
+                btn:['确定','取消'],
+                yes:function(){
+                    $.ajax({
+                        url: globalUrl + "api/admin/notWashStop;jsessionid=" + $.cookie("token"),
+                        type: 'get',
+                        data: {id:id},
+                        crossDomain: true,
+                        beforeSend: function (request) {
+                            request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                        },
+                        success:function(data){
+                            if(data.status==200){
+                                table1Show(page1,8,105);
+                                layer.closeAll();
+                                layer.msg(data.msg);
+                            }else{
+                                layer.msg(data.msg);
+                            }
+                        }
+                    })
+                },
+                btn2:function(){
+                    layer.closeAll();
+                }
+			})
+        })
+    });
+
+	function table1Show(page,pageSize,status,time){
+	    animate=layer.load();
+		$.ajax({
+            url: globalUrl + "api/admin/listByStatus;jsessionid=" + $.cookie("token"),
+            type: 'get',
+            data: {page:page,pageSize:pageSize,status:status,time},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+			success:function(data){
+				if(data.status==200){
+                    $("#table1 tbody").html("");
+				    for(var i=0;i<data.data.list.length;i++){
+				        var clothesName=data.data.list[i].afterName?data.data.list[i].afterName:data.data.list[i].beforeName;
+				        var colour=data.data.list[i].colour?data.data.list[i].colour:"";
+				        var name=data.data.list[i].userName?data.data.list[i].userName:"";
+				        var phone=data.data.list[i].phone?data.data.list[i].phone:"";
+				        var btns="";
+				        if(data.data.list[i].tab){
+				            btns='<td>' +
+                                '<button class="layui-btn layui-btn-sm layui-btn-normal yesBtn">是</button><button class="layui-btn layui-btn-sm layui-btn-primary noBtn">否</button>' +
+								'</td>';
+						}else{
+                            btns='<td>' +
+                                '<button class="layui-btn layui-btn-sm layui-btn-normal yesBtn">是</button><button class="layui-btn layui-btn-sm layui-btn-primary noBtn">否</button>' +
+                                '</td>';
+						}
+				        var item='<tr itemId="'+data.data.list[i].id+'">' +
+							'<td>'+data.data.list[i].orderNo+'</td>' +
+                            '<td>'+data.data.list[i].barCode+'</td>' +
+							'<td>'+clothesName+'</td>'+
+                            '<td>'+colour+'</td>'+
+                            '<td>'+name+'</td>'+
+                            '<td>'+phone+'</td>'+
+								btns+
+							'</tr>';
+				        $(item).appendTo($("#table1 tbody"));
+					}
+				}
+			}
+		});
+		layer.close(animate);
+	}
+</script>
+
+</html>

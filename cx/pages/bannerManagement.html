@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>轮播图管理</title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" href="./css/pageIndex.css">
+	<link rel="stylesheet" href="./css/customerGroup.css">
+	<style>
+		#test1,#test2{
+			margin:auto;
+			height:350px;
+		}
+		.banner div{
+			width:100%;
+			height:100%;
+		}
+		.banner div img{
+			width:100%;
+			height:100%;
+		}
+		.layui-upload-img {
+			max-width: 300px;
+			max-height: 200px;
+		}
+
+		.layui-table img {
+			max-width: 300px;
+			max-height: 200px;
+		}
+		.goodsFile {
+			display: inline-block;
+			height: 38px;
+			line-height: 38px;
+			padding: 0 18px;
+			background-color: #009688;
+			color: #fff;
+			white-space: nowrap;
+			text-align: center;
+			font-size: 14px;
+			border: none;
+			border-radius: 2px;
+			cursor: pointer;
+			opacity: 0;
+			width: 92px;
+			position: absolute;
+			left: 0;
+			top: 9px;
+		}
+	</style>
+</head>
+<body>
+	<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+		<ul class="layui-tab-title">
+			<li class="layui-this">首页轮播图管理</li>
+			<li>会员专享轮播图管理</li>
+		</ul>
+		<div class="layui-tab-content">
+			<div class="layui-tab-item layui-show">
+				<div class="layui-carousel" id="test1">
+					<div carousel-item class="banner"></div>
+				</div>
+
+				<div style="display: flex; justify-content: space-between">
+					<p style="font-size: 20px;font-weight: bold;line-height: 38px;">首页轮播图</p>
+					<button type="button" class="layui-btn" id="addPic">新增轮播图</button>
+				</div>
+				<table class="layui-table" lay-skin="line" align="center" id="table1">
+					<thead>
+					<tr align="center">
+						<th width="300px">名称</th>
+						<th>跳转链接</th>
+						<th>操作</th>
+					</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+			<div class="layui-tab-item">
+
+				<div class="layui-carousel" id="test2">
+					<div carousel-item class="banner	">
+
+					</div>
+				</div>
+				<div style="display: flex; justify-content: space-between">
+					<p style="font-size: 20px;font-weight: bold;line-height: 38px;">会员专区轮播图</p>
+					<button type="button" class="layui-btn" id="addPic2">新增轮播图</button>
+				</div>
+				<table class="layui-table" lay-skin="line" align="center" id="table2">
+					<thead>
+					<tr align="center">
+						<th width="300px">名称</th>
+						<th>跳转链接</th>
+						<th>操作</th>
+					</tr>
+					</thead>
+					<tbody>
+						<!--<tr>-->
+							<!--<td>hahahaah</td>-->
+							<!--<td>-->
+	<!---->
+							<!--</td>-->
+							<!--<td></td>-->
+						<!--</tr>-->
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+<div id="changePic" style="display: none;padding: 10px 30px 10px 10px;">
+	<form class="layui-form" action="">
+		<div class="layui-form-item" style="overflow: hidden">
+			<label class="layui-form-label">标题</label>
+			<div class="layui-input-block">
+				<input id="titNews" type="text" name="title" required lay-verify="required" placeholder="请输入标题"
+					   autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item" style="overflow: hidden">
+			<label class="layui-form-label">链接：</label>
+			<div class="layui-input-block">
+				<input id="imgUrl" type="text" name="title" required lay-verify="required" placeholder="图片跳转链接"
+					   autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div style="display:flex;">
+			<label class="layui-form-label">
+				<button type="button" class="layui-btn" id="upImg">上传图片</button>
+				<input class="goodsFile" name="file" lay-verify="file" type="file" value="" autocomplete="off">
+			</label>
+			<div class="layui-input-block" id="imgCon" style="margin-left: 14px;margin-bottom: 20px;">
+				<img class="layui-upload-img" id="demo1">
+			</div>
+		</div>
+		<button style="position: absolute;bottom: 20px;right: 20px;" type="button" class="layui-btn" id="saveNews">保存</button>
+	</form>
+</div>
+</html>
+<script src='./js/jquery.min.js'></script>
+<script src="../resource/layui/layui.js"></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.form.js"></script>
+<script src="js/test.js"></script>
+<script>
+var pageBannerCon=$("#test1 .banner");
+var vipBannerCon=$("#test2 .banner");
+var table1=$("#table1 tbody");
+var table2=$("#table2 tbody");
+var url="";
+var pageBannerId="";
+var type="";
+var addPop="";
+$(function(){
+    getPics('HOME',pageBannerCon,'#test1');
+    tableBanner('HOME',table1);
+});
+
+//	tab切换
+$(".layui-tab-title li").click(function(){
+    var i=$(this).index();
+    $(".layui-tab-title li").removeClass("layui-this");
+    $(".layui-tab-title li").eq(i).addClass("layui-this");
+    $(".layui-tab-content .layui-tab-item").removeClass("layui-show");
+    $(".layui-tab-content .layui-tab-item").eq(i).addClass("layui-show");
+    if(i==0){
+        getPics('HOME',pageBannerCon,'#test1');
+        tableBanner('HOME',table1);
+	}else if(i==1){
+        getPics('VIP',vipBannerCon,'#test2');
+        tableBanner('VIP',table2);
+	}
+});
+
+var btnType='';
+
+//点击停用按钮
+$("#table1 tbody tr td .stopBtn").live("click",function(){
+    btnType=0;
+   	var id=$(this).parent().parent().attr('bannerId');
+   	stopBtn(id,btnType);
+});
+$("#table2 tbody tr td .stopBtn").live("click",function(){
+    btnType=1;
+    var id=$(this).parent().parent().attr('bannerId');
+    stopBtn(id,btnType);
+});
+
+//点击启用按钮
+$("#table1 tbody tr td .startBtn").live("click",function(){
+    btnType=0;
+    var id=$(this).parent().parent().attr('bannerId');
+    startBtn(id,btnType);
+});
+$("#table2 tbody tr td .startBtn").live("click",function(){
+    btnType=1;
+    var id=$(this).parent().parent().attr('bannerId');
+    startBtn(id,btnType);
+});
+
+//点击删除按钮
+$("#table1 tbody tr td .del").live("click",function(){
+    btnType=0;
+    var id=$(this).parent().parent().attr('bannerId');
+	layui.use('layer',function(){
+	    var layer=layui.layer;
+	    var delPop=layer.open({
+			content:'确定删除这张图片吗？',
+			btn:['确定','取消'],
+			yes:function(){
+			    delBtn(id,btnType);
+			},
+			btn2:function(){
+			    layer.close(delPop);
+			}
+		})
+	})
+});
+$("#table2 tbody tr td .del").live("click",function(){
+    btnType=1;
+    var id=$(this).parent().parent().attr('bannerId');
+    layui.use('layer',function(){
+        var layer=layui.layer;
+        var delPop=layer.open({
+            content:'确定删除这张图片吗？',
+            btn:['确定','取消'],
+            yes:function(){
+                delBtn(id,btnType);
+            },
+            btn2:function(){
+                layer.close(delPop);
+            }
+        })
+    })
+});
+
+//添加首页轮播图
+$("#addPic").click(function() {
+    url="putRotationMap";
+    $("#titNews").val("");
+    $("#imgUrl").val("");
+    $("#demo1").attr("src","");
+    type='HOME';
+    layui.use('layer',function(){
+        var layer=layui.layer;
+        addPop=layer.open({
+            title:'编辑',
+            type:1,
+            content:$("#changePic"),
+            area:['600px','380px']
+        })
+    });
+
+});
+//添加VIP轮播图
+$("#addPic2").click(function() {
+    url="putRotationMap";
+    $("#titNews").val("");
+    $("#imgUrl").val("");
+    $("#demo1").attr("src","");
+	type='VIP';
+    layui.use('layer',function(){
+        var layer=layui.layer;
+        addPop=layer.open({
+            title:'编辑',
+            type:1,
+            content:$("#changePic"),
+            area:['600px','380px']
+        })
+    });
+});
+
+//点击编辑按钮
+$(".change").live("click",function(){
+    btnType=0;
+    url='updateRotationMap';
+    pageBannerId=$(this).parent().parent().attr('bannerId');
+    layui.use('layer',function(){
+        var layer=layui.layer;
+        searchImg(pageBannerId);
+	});
+});
+
+$("#saveNews").click(function (){
+    var formData = new FormData();
+    var tit = $("#titNews").val();
+    var imgUrl=$("#imgUrl").val();
+    formData.append("remark",tit);
+    formData.append("imgHref",imgUrl);
+    var pic = "";
+    if (document.getElementsByClassName("goodsFile")[0].files[0]) {
+        pic = document.getElementsByClassName("goodsFile")[0].files[0];
+        formData.append("file", pic);
+    }
+    if(url=='updateRotationMap'){
+        formData.append("id",pageBannerId);
+        pageBannerId="";
+    }
+    if(type){
+        formData.append("type",type);
+    }
+    saveImg(formData,type);
+});
+
+layui.use(['laypage', 'layer', 'form', 'upload'], function () {
+    var form = layui.form
+        , laypage = layui.laypage
+        , layer = layui.layer
+        , upload = layui.upload;
+    var $ = layui.jquery, layer = layui.layer;
+
+    $(".goodsFile").on("change", function () {
+        this_file = this;
+        var file_input = document.getElementsByClassName("goodsFile")[0].files[0];
+        if (file_input.name != '') {
+            showImg(this_file)
+        }
+    });
+    //图片回显函数
+    var file;
+
+    function showImg(obj) {
+        file = obj.files[0];
+        var readerFile = new FileReader();
+        readerFile.onload = function (ev) {
+            var data = ev.target.result;
+            $("#demo1").attr("src", data)
+        };
+        readerFile.readAsDataURL(file);
+    }
+
+});
+
+/**
+ * 获取预览轮播图的图片
+ * @param type  HOME:首页轮播图  &  VIP：vip轮播图
+ * @param elem	放置轮播图的元素
+ * @param turnCon	轮播控件 选顶一个元素
+ */
+function getPics(type,elem,turnCon){
+    $.ajax({
+        url: globalUrl + "rotationMap/getRotaionMapAll",
+        type: "get",
+        async:false,
+        data:{type:type},
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("token", $.cookie("token"));
+        },
+        crossDomain: true,
+		success:function(data){
+            elem.html("");
+            for(var i=0;i<data.data.length;i++){
+				var item='<div><img src="http://'+data.data[i].imgUrl+'" alt=""></div>';
+				$(item).appendTo(elem);
+			}
+            layui.use('carousel', function(){
+                var carousel = layui.carousel;
+                //建造实例
+                carousel.render({
+                    elem: turnCon
+                    ,width: '700px' //设置容器宽度
+                    ,height:'350px'
+                    ,arrow: 'always' //始终显示箭头
+                });
+            });
+		}
+	})
+}
+
+/**
+ *
+ * @param type	HOME:首页轮播图  &  VIP：vip轮播图
+ * @param elem  表格信息放置位置
+ */
+function tableBanner(type,elem){
+    $.ajax({
+        url: globalUrl+'rotationMap/getRotaionMap',
+        type: "get",
+        data:{type:type},
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("token", $.cookie("token"));
+        },
+        crossDomain: true,
+        success:function(data){
+			console.log(data);
+			elem.html("");
+			for(var i=0;i<data.data.length;i++){
+			    var imgHref=data.data[i].imgHref?data.data[i].imgHref:"";
+			    var btn="";
+			    if(data.data[i].state=='DISABLED'){
+			        btn='<button type="button" class="layui-btn layui-btn-sm startBtn">启用</button>'
+				}else if(data.data[i].state=='NORMAL'){
+                    btn='<button type="button" class="layui-btn layui-btn-sm layui-btn-primary stopBtn">停用</button>'
+				}
+			    var item='<tr bannerId="'+data.data[i].id+'">' +
+							'<td>'+data.data[i].remark+'</td>' +
+							'<td>'+imgHref+'</td>' +
+							'<td>' +
+								'<button type="button" class="layui-btn layui-btn-sm layui-btn-normal change">编辑</button>' +
+                    			btn+
+                    			'<button type="button" class="layui-btn layui-btn-sm layui-btn-danger del">删除</button>' +
+							'</td>' +
+						 '</tr>';
+				$(item).appendTo(elem);
+			}
+        }
+    });
+}
+
+/**
+ * 停用轮播图
+ * @param id  停用信息的ID
+ */
+function stopBtn(id,btnType){
+    $.ajax({
+        url: globalUrl + "/rotationMap/disableMap",
+        type: "post",
+        async:false,
+        data:{id:id},
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("token", $.cookie("token"));
+        },
+        crossDomain: true,
+        success:function(data){
+            layui.use('layer',function(){
+                var layer=layui.layer;
+                if(btnType==0){
+                    getPics('HOME',pageBannerCon,'#test1');
+                    tableBanner('HOME',table1);
+				}else if(btnType==1){
+                    getPics('VIP',vipBannerCon,'#test2');
+                    tableBanner('VIP',table2);
+				}
+                layer.msg(data.message);
+
+            })
+        }
+    })
+}
+
+/**
+ * 启用轮播图
+ * @param id  停用信息的ID
+ */
+function startBtn(id,btnType){
+    $.ajax({
+        url: globalUrl + "/rotationMap/enableMap",
+        type: "post",
+        async:false,
+        data:{id:id},
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("token", $.cookie("token"));
+        },
+        crossDomain: true,
+        success:function(data){
+            layui.use('layer',function(){
+                var layer=layui.layer;
+                if(btnType==0){
+                    getPics('HOME',pageBannerCon,'#test1');
+                    tableBanner('HOME',table1);
+                }else if(btnType==1){
+                    getPics('VIP',vipBannerCon,'#test2');
+                    tableBanner('VIP',table2);
+                }
+                layer.msg(data.message);
+
+            })
+        }
+    })
+}
+
+/**
+ * 删除按钮
+ * @param id  删除信息的ID
+ */
+function delBtn(id,btnType){
+    $.ajax({
+        url: globalUrl + "rotationMap/deleteRotationMap",
+        type: "post",
+        data:{id:id},
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("token", $.cookie("token"));
+        },
+        crossDomain: true,
+        success:function(data){
+            if(data.code==0){
+                if(btnType==0){
+                    getPics('HOME',pageBannerCon,'#test1');
+                    tableBanner('HOME',table1);
+                }else if(btnType==1){
+                    getPics('VIP',vipBannerCon,'#test2');
+                    tableBanner('VIP',table2);
+                }
+                layer.msg(data.message);
+            }
+        }
+    })
+}
+
+/**
+ * 根据ID查找图片信息
+ * @param id
+ */
+function searchImg(id){
+    $.ajax({
+        url: globalUrl + "rotationMap/getRotationMapgetById",
+        type: "get",
+        data:{id:id},
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("token", $.cookie("token"));
+        },
+        crossDomain: true,
+        success:function(data){
+            console.log(data);
+            if(data.code==0){
+                $("#titNews").val(data.data.remark);
+                $("#demo1").attr("src","http://"+data.data.imgUrl);
+                $("#imgUrl").val(data.data.imgHref);
+                addPop=layer.open({
+                    title:'编辑',
+                    type:1,
+                    content:$("#changePic"),
+                    area:['600px','380px']
+                })
+            }else{
+                layer.msg(data.message);
+            }
+        }
+    })
+}
+
+/**
+ * 保存图片信息
+ * @param type
+ * @param formData
+ */
+function saveImg(formData,type){
+    $.ajax({
+        url: globalUrl + "rotationMap/"+url,
+        data: formData,
+        contentType: false,
+        processData: false,
+        type: "post",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("token", $.cookie("token"));
+        },
+        crossDomain: true,
+		success:function(data){
+            console.log(data);
+            layui.use('layer',function(){
+			var layer=layui.layer;
+            if(data.code==0){
+					if(type=='HOME'){
+						getPics('HOME',pageBannerCon,'#test1');
+						tableBanner('HOME',table1);
+						}else if(type=='VIP'){
+							getPics('VIP',vipBannerCon,'#test2');
+							tableBanner('VIP',table2);
+						}else{
+							getPics('HOME',pageBannerCon,'#test1');
+							tableBanner('HOME',table1);
+							getPics('VIP',vipBannerCon,'#test2');
+							tableBanner('VIP',table2);
+						}
+						layer.msg(data.message);
+						layer.close(addPop);
+					}else{
+						layer.close(addPop);
+					}
+            });
+		}
+	})
+}
+</script>

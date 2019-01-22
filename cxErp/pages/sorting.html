@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+
+	<style>
+		.goodsImg{
+			width: 50px;
+			height: 50px;
+		}
+		body{
+			background-color: #fff;
+		}
+		.headlabel{
+			width: 12px;
+			height: 18px;
+			background-color: #1194d6;
+			display: inline-block;
+			vertical-align: middle;
+			margin-right: 10px;
+		}
+		.layui-form-label{
+			width:100px;
+		}
+		.layui-form-item .layui-input-inline.address{
+			width:504px;
+		}
+		.tableResponse{
+			/*height: 120px;*/
+			overflow-y: auto;
+		}
+		.attachment{
+			border: 1px solid #999;
+			border-radius: 4px;
+			width: 80px;
+			display: inline-block;
+		}
+		.attachmentNumber{
+			width:30px;
+			border: none;
+			outline: none;
+		}
+		.attachment span{
+			padding: 0px 6px;
+		}
+		.layui-table[lay-skin=line] td{
+			border-width: 1px;
+		}
+		#searchBrand,#searchEffect,#searchSpot{
+			outline: none;
+			border-radius: 8px;
+			height: 27px;
+			padding:4px 6px;		
+		}
+		.brandContent{
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap
+		}
+		.brandLi{
+			padding: 10px;
+			font-size: 16px;
+			color: #333;
+			margin: 10px;
+			border: 1px solid #ddd;
+			height: 45px;
+			background-color: #fff;
+			position: relative;
+		}
+		.brandLi p{
+			margin-top:5px;
+			font-size: 16px;
+		}
+		.colorLi{
+			margin: 12px;
+			border: 1px solid #ddd;
+			height: 26px;
+			width: 90px;
+			display: flex;
+			flex-direction: row;
+			text-align: center;
+			align-items: center;
+			justify-content: center;
+		}
+		.brandLi-active{
+			background-color: #aaa;
+		}
+		.nameOperation,
+		.nameOperation2,
+		.brandOperation,
+		.brandOperation2,
+		.colorOperation,
+		.colorOperation2,
+		.spotOperation,
+		.spotOperation2,
+		.effectOperation,
+		.effectOperation2{
+			display: none;
+		}
+
+		.colorLi_child{
+			width: 45px;
+			height: 26px;
+		}
+		.colorLi_child:first-of-type{
+			text-align: right;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.colorLi_child:last-of-type{
+			text-align: left;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		#expressType .text {
+			background: #1E9FFF;
+			padding: 0 10px;
+			line-height: 38px;
+			height: 38px;
+			color: #fff;
+			border-top-left-radius: 2px;
+			border-bottom-left-radius: 2px;
+		}
+		.layui-form-select dl dd.layui-this {
+			background-color: #1E9FFF;
+		}
+
+		.layui-form-select dl {
+			padding: 0;
+		}
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+		}
+		input[type="number"]{
+			-moz-appearance: textfield;
+		}
+		.brandLi:active{
+			background: #F00;
+			color: #fff;
+		}
+		.brandLi i{
+			font-size:20px;
+			position: absolute;
+			top:-10px;
+			right:-10px;
+			color: #999;
+		}
+		.brandLi i:active{
+			color: #f00;
+		}
+		.photos,photos2{
+			display: none;
+		}
+		.spot-active{
+			background: #F00;
+			color: #fff;
+		}
+	</style>
+
+</head>
+
+<body>
+	<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this">分拣</li>
+	    <li>反拣处理</li>
+	  </ul>
+	  <div class="layui-tab-content" style="height: 100px;">
+	    <div class="layui-tab-item layui-show">
+	    	<form class="layui-form layui-row" style="float: left; " id="search1">
+				<div class="layui-row">
+					<div class="layui-inline  orderManage" style="margin-top:10px">
+						<span class="headlabel"></span>分拣录入
+					</div>
+				</div>
+			</form>
+			<!-- 下面是一些第二行的东西 -->
+			<form class="layui-form">
+				<div style="width: 100%;display: flex;">
+					<div class="layui-form-item" id="expressType" style="width: 20%;margin-bottom: 0;margin-top: 10px; display: flex;">
+						<div class="text">快递类型</div>
+						<div class="layui-form-item">
+							<select name="">
+								<option value="2">自配物流</option>
+								<option value="3">德邦物流</option>
+								<option value="1">顺丰物流</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item" style="width: 20%;margin-bottom: 0;margin-top: 10px;margin-left: 20px;">
+						<div class="layui-input-inline" style="margin:0; width: 70%;" id="ydNum">
+							<input type="text" lay-filer="orderNum" lay-verify="date" id="orderNum" placeholder="请输入运单号"
+								   autocomplete="off" class="layui-input">
+						</div>
+					</div>
+
+					<button style="margin-top: 10px; position: absolute;right:150px;" type="button" id="ok" class="layui-btn layui-btn-normal">分拣完成</button>
+				</div>
+
+
+				<div class="layui-form-item">
+				    <div class="layui-inline" orderNum="">
+				      <label class="layui-form-label">订单号</label>
+				      <div class="layui-input-inline">
+				        <input type="tel" id="orderNo" readonly name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+				      </div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">签收时间</label>
+				      <div class="layui-input-inline">
+				        <input type="text" id="qsTime" readonly name="email" lay-verify="email" autocomplete="off" class="layui-input">
+				      </div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">客户姓名</label>
+				      <div class="layui-input-inline">
+				        <input type="text" id="userName" readonly name="email" lay-verify="email" autocomplete="off" class="layui-input">
+				      </div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">客户电话</label>
+				      <div class="layui-input-inline">
+				        <input type="text" id="userPhone" readonly name="email" lay-verify="email" autocomplete="off" class="layui-input">
+				      </div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">客户地址</label>
+				      <div class="layui-input-inline address">
+				        <input type="text" id="userAddress" readonly name="email" lay-verify="email" autocomplete="off" class="layui-input">
+				      </div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">取件员姓名</label>
+				      <div class="layui-input-inline">
+				        <input type="text" id="pickerName" readonly name="email" lay-verify="email" autocomplete="off" class="layui-input">
+				      </div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">取件员电话</label>
+				      <div class="layui-input-inline">
+				        <input type="text" id="pickerPhone" readonly name="email" lay-verify="email" autocomplete="off" class="layui-input">
+				      </div>
+				    </div>
+				    <div class="layui-inline">
+				      <label class="layui-form-label">录入时间</label>
+				      <div class="layui-input-inline">
+				        <input type="text" id="inTime" readonly name="email" lay-verify="email" autocomplete="off" class="layui-input">
+				      </div>
+				    </div>
+				  </div>
+				
+			</form>
+			<!-- 下面是第三行表格 -->
+			<table class="layui-table" lay-skin="line" align="center" id="recording">
+				<thead>
+					<tr align="center">
+						<th>衣物名称一</th>
+						<th>价格一</th>
+						<th>衣物名称二</th>
+						<th width="90px">价格二</th>
+						<th>附件</th>
+						<th>品牌</th>
+						<th>颜色</th>
+						<th width="300px">瑕疵</th>
+						<th width="300px">洗后效果</th>
+						<td>拍照</td>
+						<td>补差价</td>
+						<td>条码号</td>
+						<td>删除</td>
+						<td>打印</td>
+					</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
+			<!-- 这个下面是分页 -->
+			<div id="demo7"></div>
+			<div class="nameOperation">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>衣物名称
+						</div>
+						<div class="layui-inline layui-input-inline" style="margin-left:10px;margin-top:10px">
+							<input type="text" class="" name="searchBrand" id="searchName" placeholder="输入品牌名称" value="" />
+							<button class="layui-btn layui-btn-normal layui-btn-xs" id="searchNameBtn" type="button">搜索关键词</button>
+						</div>
+					</div>
+				</form>
+				<div id="clothesName" class="brandContent" style="margin:8px 5px;background-color: #f1f1f1;overflow: scroll"></div>
+				<div class="layui-row" style="padding: 8px 5px;">
+					<input type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addBrand" id="inName" value="" placeholder="衣物名称" />
+					<input type="number" class="layui-input" style="display: inline-block;width: 200px;" id="inPrice" value="" placeholder="衣物价格" />
+					<button class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;" id="addName">确定</button>
+				</div>
+			</div>
+
+			<div class="brandOperation">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>品牌
+						</div>
+						<div class="layui-inline layui-input-inline" style="margin-left:10px;margin-top:10px">
+							<input type="text" class="" name="searchBrand" id="searchBrand" placeholder="输入品牌名称" value="" />
+							<button class="layui-btn layui-btn-normal layui-btn-xs" id="searchBrandBtn" type="button">搜索关键词</button>
+						</div>
+					</div>
+				</form>
+				<div id="brand" class="brandContent" style="margin:8px 5px;background-color: #f1f1f1;overflow: scroll"></div>
+				<div class="layui-row" style="padding: 8px 5px;">
+					<input type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addBrand" id="addBrand" value="" placeholder="输入品牌" />
+					<button class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;" id="brandSearch">确定</button>
+				</div>				
+			</div>
+			<div class="colorOperation">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>颜色
+						</div>
+					</div>
+				</form>
+				<div class="brandContent" id="colorPicker" style="margin:8px 5px;height: 220px;">
+					<!--<div class="colorLi">
+						<div class="colorLi_child">黑</div>
+						<div class="colorLi_child">红</div>
+					</div>-->
+				</div>
+				<!--<div class="layui-row" style="padding: 8px 5px;">
+					<input type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addBrand" id="addBrand" value="" placeholder="输入颜色" />
+					<button class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;">确定</button>
+				</div>				-->
+			</div>
+			<div class="spotOperation">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>瑕疵
+						</div>
+						<div class="layui-inline layui-input-inline" style="margin-left:10px;margin-top:10px">
+							<input type="text" class="" name="searchSpot" id="searchSpot" placeholder="输入瑕疵关键词" value="" />
+							<button id="searchBtn" type="button" class="layui-btn layui-btn-normal layui-btn-xs">搜索关键词</button>
+						</div>
+						<button id="subSpots" type="button" class="layui-btn layui-btn-normal layui-btn-xs" style="font-size: 16px;height: 40px;">确认提交瑕疵类型</button>
+					</div>
+				</form>
+				<div id="clothesBug" class="brandContent" style="margin:8px 5px;background-color: #f1f1f1;"></div>
+				<div class="layui-row" style="padding: 8px 5px;">
+					<input id="inSpot" type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addBrand"  value="" placeholder="输入瑕疵" />
+					<button id="spotBtn" class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;">添加</button>
+				</div>				
+			</div>
+			<div class="effectOperation">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>洗后效果
+						</div>
+						<div class="layui-inline layui-input-inline" style="margin-left:10px;margin-top:10px">
+							<input type="text" class="" name="searchEffect" id="searchEffect" placeholder="输入关键词" value="" />
+							<button type="button" id="searchEffectBtn" class="layui-btn layui-btn-normal layui-btn-xs">搜索关键词</button>
+						</div>
+						<button id="subEffect" type="button" class="layui-btn layui-btn-normal layui-btn-xs" style="font-size: 16px;height: 40px;">确认提交洗衣效果</button>
+					</div>
+				</form>
+				<div id="effectCon" class="brandContent" style="margin:8px 5px;background-color: #f1f1f1;"></div>
+				<div class="layui-row" style="padding: 8px 5px;">
+					<input type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addEffect" id="addEffect" value="" placeholder="输入洗衣效果" />
+					<button id="effectBtn" class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;">确定</button>
+				</div>				
+			</div>
+	    </div>
+	    <!--返检处理-->
+	    <div class="layui-tab-item">
+	    	<form class="layui-form layui-row" style="float: left; " id="search2">
+				<div class="layui-row">
+					<div class="layui-inline  orderManage" style="margin-top:10px">
+						<span class="headlabel"></span>反检处理
+					</div>
+				</div>
+			</form>
+			<!-- 下面是一些第二行的东西 -->
+			<div class="layui-row">		
+				<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
+					<div class="layui-input-inline" style="margin:0; width: 70%;">
+						<input type="text" name="date" id="date" lay-verify="date" placeholder="选择日期" autocomplete="off" class="layui-input">
+					</div>
+					<button class="layui-btn layui-btn-normal" name="user" type="button">查询</button>
+				</div>
+				<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
+					<div class="layui-input-inline" style="margin:0; width: 70%;">
+						<input type="text" placeholder="扫条形码" autocomplete="off" class="layui-input" id="codeIn1">
+					</div>
+				</div>
+			</div>
+			<!-- 下面是第三行表格 -->
+			<div class="tableResponse">
+				<table class="layui-table" id="backTable" lay-skin="line" align="center">
+					<thead>
+						<tr align="center">
+							<th>条码号</th>
+							<th>衣物名称</th>
+							<th>价格</th>
+							<th>品牌</th>
+							<th>颜色</th>
+							<th>瑕疵</th>
+							<th>洗后效果</th>
+							<th>拍照</th>
+							<th>保存</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!--<tr>-->
+							<!--<td class="backCode">TM20180907m11211</td>-->
+							<!--<td class="backName">加厚衬衣</td>-->
+							<!--<td class="backPrice">16</td>-->
+							<!--<td class="backBrand"></td>-->
+							<!--<td class="backColor"></td>-->
+							<!--<td class="backSpot"></td>-->
+							<!--<td class="backEffect"></td>-->
+							<!--<td class="backPhoto">-->
+								<!--<button type="button" class="layui-btn">上传</button>-->
+							<!--</td>-->
+							<!--<td class="save">-->
+								<!--<button type="button" class="layui-btn">保存</button>-->
+							<!--</td>-->
+						<!--</tr>-->
+					</tbody>
+				</table>
+			</div>
+			
+			<!-- 这个下面是分页 -->
+			<div id="page2"></div>
+			<div class="brandOperation2">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>品牌
+						</div>
+						<div class="layui-inline layui-input-inline" style="margin-left:10px;margin-top:10px">
+							<input type="text" class="" name="searchBrand" id="searchBrand2" placeholder="输入品牌名称" value="" />
+							<button class="layui-btn layui-btn-normal layui-btn-xs" id="searchBrandBtn2" type="button">搜索关键词</button>
+						</div>
+					</div>
+				</form>
+				<div id="brand2" class="brandContent" style="margin:8px 5px;background-color: #f1f1f1;height: 200px;overflow: scroll"></div>
+				<div class="layui-row" style="padding: 8px 5px;">
+					<input type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addBrand" id="addBrand2" value="" placeholder="输入品牌" />
+					<button class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;" id="brandSearch2">确定</button>
+				</div>
+			</div>
+			<div class="colorOperation2">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>颜色
+						</div>
+					</div>
+				</form>
+				<div class="brandContent" id="colorPicker2" style="margin:8px 5px;height: 220px;">
+					<!--<div class="colorLi">
+						<div class="colorLi_child">黑</div>
+						<div class="colorLi_child">红</div>
+					</div>-->
+				</div>
+				<!--<div class="layui-row" style="padding: 8px 5px;">
+					<input type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addBrand" id="addBrand" value="" placeholder="输入颜色" />
+					<button class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;">确定</button>
+				</div>				-->
+			</div>
+			<div class="spotOperation2">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>瑕疵
+						</div>
+						<div class="layui-inline layui-input-inline" style="margin-left:10px;margin-top:10px">
+							<input type="text" class="" name="searchSpot" id="searchSpot2" placeholder="输入瑕疵关键词" value="" />
+							<button id="searchBtn2" type="button" class="layui-btn layui-btn-normal layui-btn-xs">搜索关键词</button>
+						</div>
+						<button id="subSpots2" type="button" class="layui-btn layui-btn-normal layui-btn-xs" style="font-size: 16px;height: 40px;">确认提交瑕疵类型</button>
+					</div>
+				</form>
+				<div id="clothesBug2" class="brandContent" style="margin:8px 5px;background-color: #f1f1f1;height: 220px;"></div>
+				<div class="layui-row" style="padding: 8px 5px;">
+					<input id="inSpot2" type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addBrand"  value="" placeholder="输入瑕疵" />
+					<button id="spotBtn2" class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;">添加</button>
+				</div>
+			</div>
+			<div class="effectOperation2">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>洗后效果
+						</div>
+						<div class="layui-inline layui-input-inline" style="margin-left:10px;margin-top:10px">
+							<input type="text" class="" name="searchEffect" id="searchEffect2" placeholder="输入关键词" value="" />
+							<button type="button" id="searchEffectBtn2" class="layui-btn layui-btn-normal layui-btn-xs">搜索关键词</button>
+						</div>
+						<button id="subEffect2" type="button" class="layui-btn layui-btn-normal layui-btn-xs" style="font-size: 16px;height: 40px;">确认提交洗衣效果</button>
+					</div>
+				</form>
+				<div id="effectCon2" class="brandContent" style="margin:8px 5px;background-color: #f1f1f1;height: 220px;"></div>
+				<div class="layui-row" style="padding: 8px 5px;">
+					<input type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addEffect" id="addEffect2" value="" placeholder="输入洗衣效果" />
+					<button id="effectBtn2" class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;">确定</button>
+				</div>
+			</div>
+
+	    </div>
+	  </div>
+	</div>
+</body>
+<div id="codeBox" style="display: none;padding: 10px;">
+	<!--<div class="printCode">-->
+		<!--<p class="orderNo">订单号：<span></span></p>-->
+		<!--<div class="mainCode"><img src="" alt=""></div>-->
+		<!--<div class="code2"><img src="" alt=""></div>-->
+	<!--</div>-->
+</div>
+<script src='./js/jquery.min.js'></script>
+
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script src="js/jquery.jqprint-0.3.js"></script>
+<script src="http://www.jq22.com/jquery/jquery-migrate-1.2.1.min.js"></script>
+<script src="js/sorting.js"></script>
+
+</html>

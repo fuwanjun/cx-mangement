@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" href="./css/pageIndex.css">
+	<link rel="stylesheet" href="./css/customerGroup.css">
+
+</head>
+<style>
+	.bombBox>.layui-form-item>.layui-form-label {
+		padding: 9px 0;
+	}
+
+	.submitBtn {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+	}
+
+	.submitBtn>button {
+		width: auto;
+		text-align: center;
+		min-width: 92px;
+	}
+
+
+	.spaceBetween {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	.bombBoxTitle{
+		width: 80px;
+		text-align:right;
+	}
+</style>
+
+<body>
+	<div class="loading"> </div>
+	<div class="body">
+		<div class="layui-row">
+			<!-- 编辑客户 -->
+			<div class="layui-form bombBox updataCustomer">
+				<div class="layui-form-item">
+					<p class="bombBoxTitle">会员信息</p>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">姓名</label>
+					<div class="layui-input-block">
+						<input class="layui-input updataCustomerName" type="text" value="老薛" placeholder="请输入用户姓名" autocomplete="off">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">手机号</label>
+					<div class="layui-input-block">
+						<input class="layui-input updataCustomerPhone" type="text" value="15286595623" placeholder="请输入用户手机号" autocomplete="off">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">会员等级</label>
+					<div class="layui-input-block">
+						<select name="">
+                            <option value="普通会员">普通会员</option>
+                            <option value="高级会员">高级会员</option>
+                        </select>
+					</div>
+				</div>
+				<!--<div class="layui-form-item">
+					<label class="layui-form-label">车牌号</label>
+					<div class="layui-input-block spaceBetween">
+						<div class="layui-input-inline" style="width: 100px;">
+							<input type="text" class="updataFirstName layui-input" placeholder="如：京A" autocomplete="off">
+						</div>
+						<div class="layui-input-inline" style="width: 270px;margin: 0px;">
+							<input type="text" class="updataLastNum layui-input" placeholder="车牌号后五位" autocomplete="off">
+						</div>
+					</div>
+				</div>-->
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+<script src='./js/jquery.min.js'></script>
+<script src="../resource/layui/layui.js"></script>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+<script>
+        var geocoder, map, marker = null;
+        geocoder = new qq.maps.Geocoder();
+        function codeAddress() {
+            var address = '中国,北京,海淀区,海淀大街38号';
+            //对指定地址进行解析
+            geocoder.getLocation(address);
+            //设置服务请求成功的回调函数
+            geocoder.setComplete(function(result) {
+            console.log(result);
+            });
+            //若服务请求失败，则运行以下函数
+            geocoder.setError(function() {
+                alert("出错了，请输入正确的地址！！！");
+            });
+        }
+        codeAddress();
+    </script>
+<script>
+
+	
+	$(function () {
+		$('.body').show();
+		$('.loading').hide();
+	});
+
+	layui.use(['laypage', 'layer', 'form'], function () {
+		var form = layui.form;
+		var laypage = layui.laypage;
+		var layer = layui.layer;
+
+		//监听提交
+		laypage.render({
+			elem: 'pageBtn',
+			count: 100,
+			layout: ['prev', 'page', 'next', 'skip', 'count', 'limit'],
+			jump: function (obj) {
+				console.log(obj)
+			}
+		});
+	})
+
+	function alertMsg(type, msg) {
+		var icon = '';
+		switch (true) {
+			case (type == ('success')):
+				icon = '&#x1005;';
+				break;
+			case (type == ('error')):
+				icon = '&#x1007;';
+				break;
+		}
+		layer.open({
+			type: 1,
+			title: false,
+			closeBtn: false,
+			area: ['400px', '200px'],
+			shade: 0.5,
+			id: 'LAY_layuipro',
+			btnAlign: 'c',
+			moveType: 1,
+			content: `<div style="text-align: center">
+							<i class="layui-icon" style="line-height: 150px;font-size: 100px; color: #000000;">` +
+				icon + `</i>  
+							<p style="font-size: 22px">` + msg + `</p>
+						</div>`,
+			time: 2000,
+		});
+	}
+
+	// 显示弹框阴影
+	function showBG(DOM) {
+		parent.ableBtn();
+		$('.bombBox').hide();
+		$(DOM).fadeIn();
+		$('.bg').fadeIn();
+		parent.disableBtn();
+	}
+
+	// 隐藏弹框阴影
+	function hideBG() {
+		$('.bg').fadeOut();
+		parent.ableBtn();
+		$('.bombBox').fadeOut();
+	}
+	var sortNum = 0;
+	//$('.bg').fadeOut();
+	//$('.bombBox').fadeOut();
+	$('.layui-colla-title').eq(0).addClass('selectedStatus');
+	$('.list').live('click', function () {
+		var index = $('.layui-colla-item').index(this);
+		// 添加选中样式
+		$('.layui-colla-title').removeClass('selectedStatus');
+		$('.layui-colla-title').eq(index).addClass('selectedStatus');
+		sortNum = index;
+		var itemHight = $('.layui-colla-item').outerHeight(true) + 1;
+		var offSetHeight = index * itemHight;
+		$('.operating').css({
+			'position': 'relative',
+			'top': offSetHeight + 'px',
+		});
+		$('.operating').show();
+		$('.form').show();
+	});
+
+
+	// 黑名单
+	$('.blacklist').live('click', function () {
+		var index = $('.layui-colla-item').index(this);
+		$('.layui-colla-title').removeClass('selectedStatus');
+		$('.layui-colla-title').eq(index).addClass('selectedStatus');
+		// 黑名单不可操作无优惠
+		$('.operating').hide();
+		$('.form').hide();
+	})
+
+	// 添加客户分组
+	$('.addList').live('click', function () {
+		showBG('.addListForm');
+		// $('.addListForm').fadeIn();
+	})
+
+	// 取消弹框操作
+	// 两个dom节点，插好按钮和取消按钮
+	$('.cancel ,.cancelDelete').live('click', function () {
+		hideBG();
+	});
+	// 添加编辑
+	$('.submitAdd button').live('click', function () {
+		var addDiscountTitle = $('.groupTitle input').val();
+		var addDiscountType = $('.addDiscountType input').val();
+		var noParkingTime = $('.noParkingTime input').val();
+		if (!addDiscountTitle) {
+			layer.msg('分组名不能为空！');
+			return
+		}
+		var addListStr = `<div class="layui-colla-item list">
+							<h2 class="layui-colla-title">` + addDiscountTitle +
+			`</h2>
+						</div>`
+
+		$('.blacklist').before(addListStr);
+		hideBG();
+	})
+
+	// 修改分组
+	$('.updataList').live('click', function () {
+		showBG('.updataListForm');
+		// $('.updataListForm').fadeIn();
+	});
+
+	$('.submitUpdata button').live('click', function () {
+		var updataDiscountTitle = $('.updataTitle input').val();
+		var updataDiscountType = $('.updataDiscountType input').val();
+		var noParkingTime = $('.updataNoParkingTime input').val();
+		if (!updataDiscountTitle) {
+			layer.msg('分组名不能为空！');
+			return
+		}
+		hideBG();
+	});
+
+	// 添加客户
+	$('.addCustomerBtn').live('click', function () {
+		showBG('.addCustomer');
+		// $('.addCustomer').fadeIn();
+	})
+
+
+	// 提交添加的客户
+	$('.submitAddCustomer').live('click', function () {
+		var firstName = $('.firstName').val();
+		var lastNum = $('.lastNum').val();
+		var customerName = $('.addCustomerName').val();
+		var customerPhone = $('.addCustomerPhone').val();
+		var fullCarNum = firstName + lastNum;
+		// 车牌号验证
+		var express = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/;
+		var isCarNum = express.test(fullCarNum);
+		if (fullCarNum == '') {
+			layer.msg('车牌号不能为空！');
+			return;
+		};
+
+		if (!isCarNum) {
+			layer.msg('请输入正确的车牌号！');
+			return;
+		};
+
+
+
+		// 验证手机号
+		var phoneNum = /^1(3|4|5|7|8)\d{9}$/;
+		var isPhoneNum = phoneNum.test(customerPhone)
+		if (customerPhone != '' && !isPhoneNum) {
+			layer.msg('手机号格式不正确！');
+			return;
+		}
+
+		var data = [{
+			customerName,
+			customerPhone,
+			fullCarNum,
+		}]
+		addCustomer(data)
+
+		hideBG();
+	})
+
+	// 搜索
+	$('.search').live('click', function () {
+		var carNum = $('#carNum').val();
+		var name = $('#name').val();
+		var phoneNum = $('#phoneNum').val();
+	})
+
+	// 编辑客户
+	var customerIndex = 0;
+	$('.updataCustomerBtn').live('click', function () {
+		customerIndex = $('.updataCustomerBtn').index(this);
+		showBG('.updataCustomer');
+		// $('.updataCustomer').fadeIn();
+	});
+
+	// 提交编辑客户
+	$('.submitUpdataCustomer').live('click', function () {
+		var updataCustomerName = $('.updataCustomerName').val();
+		var updataCustomerPhone = $('.updataCustomerPhone').val();
+		var firstName = $('.updataFirstName').val();
+		var lastNum = $('.updataLastNum').val();
+		var fullCarNum = firstName + lastNum;
+
+		// 验证车牌
+		var carNum = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/;
+		var isCarNum = carNum.test(fullCarNum);
+		if (fullCarNum == '') {
+			layer.msg('车牌号不能为空！');
+			return;
+		};
+		if (!isCarNum) {
+			layer.msg('请输入正确的车牌号！');
+			return;
+		};
+
+		// 验证手机号
+		var phoneNum = /^1(3|4|5|7|8)\d{9}$/;
+		var isPhoneNum = phoneNum.test(updataCustomerPhone)
+		if (updataCustomerPhone != '' && !isPhoneNum) {
+			layer.msg('手机号格式不正确！');
+			return;
+		}
+		$('.customerName').eq(customerIndex).text(updataCustomerName == '' ? '---' : updataCustomerName);
+		$('.customerPhone').eq(customerIndex).text(updataCustomerPhone == '' ? '---' : updataCustomerPhone);
+		$('.customerCarNum').eq(customerIndex).text(fullCarNum);
+		hideBG();
+	});
+
+	// 删除用户
+	$('.deleteCustomerBtn').live('click', function () {
+		customerIndex = $('.deleteCustomerBtn').index(this);
+		showBG('.deleteCustomer');
+		// $('.deleteCustomer').fadeIn();
+	});
+	$('.confirmDeleteCustomer').live('click', function () {
+		// 删除成功后的操作
+		$('.customItem').eq(customerIndex).remove();
+		alertMsg('success', '删除成功！');
+		hideBG();
+	});
+
+	// 转移分组
+	$('.changeGroupBtn').live('click', function () {
+		customerIndex = $('.changeGroupBtn').index(this);
+		showBG('.changeCustomerGroup');
+		// $('.changeCustomerGroup').fadeIn();
+	});
+	$('.changeGroupSub').live('click', function () {
+		hideBG();
+	});
+
+
+	// 批量删除
+	$('.deleteCustomers').live('click', function () {
+		showBG('.deleteCustomerGroup');
+		// $('.deleteCustomerGroup').fadeIn();
+	});
+	$('.deleteCustomer').live('click', function () {
+		// 批量删除逻辑
+		hideBG();
+	})
+	$('.cancelDeletes').live('click', function () {
+		hideBG();
+	})
+
+	// 批量转移
+	$('.changeCustomers').live('click', function () {
+		showBG('.changeGroups');
+		// $('.changeGroups').fadeIn();
+	});
+	$('.changeGroupsSub').live('click', function () {
+		hideBG();
+	});
+
+
+	// 删除分组
+	$('.deleteList').live('click', function () {
+		showBG('.deleteListForm');
+		// $('.deleteListForm').fadeIn();
+		var itemName = $('.layui-colla-title').eq(sortNum).text();
+		$('.deleteItemName').text(itemName);
+	})
+
+	// 确认删除
+	// 删除后要将所删除分组内的客户安排
+	$('.confirmDelete').live('click', function () {
+		$('.deleteListForm').hide();
+		showBG('.changeItem');
+	});
+
+	// 不保留原有客户
+	var itemMsg = '';
+	$('.notTranslate').live('click', function () {
+		itemMsg = '操作提示信息';
+		$('.message').html(itemMsg);
+		showBG('.deleteMessage');
+	});
+	// 保留原有客户
+	$('.translate').live('click', function () {
+		itemMsg = '操作提示信息';
+		$('.message').html(itemMsg);
+		showBG('.deleteMessage');
+	});
+	$('.messageBtn').live('click', function () {
+		itemMsg = '';
+		// 移除删除的框并添加选中样式
+		$('.layui-colla-title').eq(sortNum).parent().remove();
+		$('.layui-colla-title').eq(0).addClass('selectedStatus');
+		hideBG();
+	})
+
+
+	// 全选和非全选状态选择
+	var selectAllBtn = false;
+	updataBtn();
+	$('#selectAll').live('click', function () {
+		var isSelectAll = $('#selectAll').prop('checked');
+		selectAllBtn = !selectAllBtn;
+		$('.customSelect').prop('checked', isSelectAll);
+		updataBtn();
+	});
+
+	// 判断是否又选中的条目，如果没有则禁用批量按钮
+	function updataBtn() {
+		if (!selectAllBtn) {
+			// 禁用按钮
+			$('.changeCustomers ,.deleteCustomers').addClass('layui-btn-disabled').attr('disabled', "true");;
+		} else {
+			// 接近按钮
+			$('.changeCustomers ,.deleteCustomers').removeClass('layui-btn-disabled').removeAttr("disabled");;
+		}
+	}
+
+	// 优惠活动状态
+	var discountStatus = false;
+	var discountStatusStr = '已关闭';
+	$(".layui-form-switch").live('click', function () {
+		discountStatus = !discountStatus;
+		discountStatusStr = (discountStatus) ? '已开启' : '已关闭';
+		$('.discountStatus').text(discountStatusStr);
+	});
+
+	// 添加客户item
+	function addCustomer(data) {
+		var Str = ``;
+		data.forEach(item => {
+			Str +=
+				`<tr class="customItem">
+				<td>
+					<input type="checkbox" class="customSelect">
+				</td>
+				<td>` + (item.customerName ==
+					'' ? '-' : item.customerName) + `</td>
+				<td>` + (item.customerPhone == '' ? '-' : item.customerPhone) +
+				`</td>
+				<td>` + item.fullCarNum +
+				`</td>
+				<td>
+					<button class="layui-btn layui-btn-sm layui-btn-primary">编辑</button>
+					<button class="layui-btn layui-btn-sm layui-btn-primary">删除</button>
+					<button class="layui-btn layui-btn-sm layui-btn-primary">转移分组</button>
+				</td>
+			</tr>`;
+		});
+		$('.customerItemContainer').html(Str);
+	}
+</script>

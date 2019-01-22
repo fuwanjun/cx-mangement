@@ -1,0 +1,205 @@
+{
+	"contentManagement": [
+		{
+			"title": "后台首页",
+			"icon": "icon-text",
+			"href": "page/index.html",
+			"spread": false,
+			"children": [
+				{
+					"title": "搜索框占位符",
+					"icon": "&#xe61c;",
+					"href": "page/main.html",
+					"spread": false
+				},
+				{
+					"title": "热搜标签",
+					"icon": "&#xe609;",
+					"href": "page/spotlight/spotlight.html",
+					"spread": false
+				},
+				{
+					"title": "分类图标图片",
+					"icon": "&#xe61c;",
+					"href": "page/addSortImg/addSortImg.html",
+					"spread": false
+				},
+				{
+					"title": "推荐民宿产品",
+					"icon": "&#xe61c;",
+					"href": "page/recommend/homestayRecommend.html",
+					"spread": false
+				},
+				{
+					"title": "推荐攻略产品",
+					"icon": "&#xe61c;",
+					"href": "page/recommend/strategyRecommend.html",
+					"spread": false
+				}
+			]
+		},
+		{
+			"title": "产品管理",
+			"icon": "icon-text",
+			"href": "",
+			"spread": false,
+			"children": [
+				{
+					"title": "民宿产品管理",
+					"icon": "&#xe61c;",
+					"href": "page/homestayProductManage/homestayProductManage.html",
+					"spread": false
+				},
+				{
+					"title": "民宿档期价格调控",
+					"icon": "&#xe609;",
+					"href": "page/login",
+					"spread": false
+				},
+				{
+					"title": "攻略产品管理",
+					"icon": "&#xe61c;",
+					"href": "page/strategyProductManage/strategyProductManage.html",
+					"spread": false
+				},
+				{
+					"title": "店铺产品管理",
+					"icon": "&#xe61c;",
+					"href": "page/shopProductManage/shopProductManage.html",
+					"spread": false
+				}
+			]
+		},
+		{
+			"title": "订单管理",
+			"icon": "&#xe634;",
+			"href": "",
+			"spread": false,
+			"children": [
+				{
+					"title": "民宿订单",
+					"icon": "&#xe61c;",
+					"href": "page/homestayOrderlist/homestayOrderlist.html",
+					"spread": false
+				},
+				{
+					"title": "攻略订单",
+					"icon": "&#xe609;",
+					"href": "page/strategyOrderList/strategyOrderList.html",
+					"spread": false
+				},
+				{
+					"title": "店铺订单",
+					"icon": "&#xe61c;",
+					"href": "page/shopOrderList/shopOrderList.html",
+					"spread": false
+				},
+				{
+					"title": "定制申请",
+					"icon": "&#xe61c;",
+					"href": "page/customApplication/customApplication.html",
+					"spread": false
+				}
+			]
+			
+		},
+		{
+			"title": "财务管理",
+			"icon": "&#xe634;",
+			"href": "",
+			"spread": false,
+			"children": [
+				{
+					"title": "民宿汇款管理",
+					"icon": "&#xe61c;",
+					"href": "page/homestayMoney/homestayMoney.html",
+					"spread": false
+				}
+			]
+			
+		},
+		{
+			"title": "用户管理",
+			"icon": "&#xe634;",
+			"href": "page/img/images.html",
+			"spread": false
+		},
+		{
+			"title": "系统管理",
+			"icon": "&#xe630;",
+			"href": "",
+			"spread": false,
+			"children": [
+				{
+					"title": "404页面",
+					"icon": "&#xe61c;",
+					"href": "page/404.html",
+					"spread": false
+				},
+				{
+					"title": "登录",
+					"icon": "&#xe609;",
+					"href": "page/login/login.html",
+					"spread": false
+				}
+			]
+		}
+	],
+	"memberCenter": [
+		{
+			"title": "用户中心",
+			"icon": "&#xe612;",
+			"href": "page/user/userList.html",
+			"spread": false
+		},
+		{
+			"title": "会员等级",
+			"icon": "icon-vip",
+			"href": "page/user/userGrade.html",
+			"spread": false
+		}
+	],
+	"systemeSttings": [
+		{
+			"title": "系统基本参数",
+			"icon": "&#xe631;",
+			"href": "page/systemSetting/basicParameter.html",
+			"spread": false
+		},{
+			"title": "系统日志",
+			"icon": "icon-log",
+			"href": "page/systemSetting/logs.html",
+			"spread": false
+		},{
+			"title": "友情链接",
+			"icon": "&#xe64c;",
+			"href": "page/systemSetting/linkList.html",
+			"spread": false
+		},{
+			"title": "图标管理",
+			"icon": "&#xe857;",
+			"href": "page/systemSetting/icons.html",
+			"spread": false
+		}
+	],
+	"seraphApi": [
+		{
+			"title": "三级联动模块",
+			"icon": "icon-mokuai",
+			"href": "page/doc/addressDoc.html",
+			"spread": false
+		},{
+			"title": "bodyTab模块",
+			"icon": "icon-mokuai",
+			"href": "page/doc/bodyTabDoc.html",
+			"spread": false
+		},{
+			"title": "三级菜单",
+			"icon": "icon-mokuai",
+			"href": "page/doc/navDoc.html",
+			"spread": false
+		}
+	]
+}
+
+

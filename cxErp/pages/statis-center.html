@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset='utf-8'>
+    <meta name='renderer' content='webkit'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black'>
+    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <meta name='format-detection' content='telephone=no'>
+    <link rel="stylesheet" href="../resource/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href='css/pageIndex.css'/>
+    <link rel="stylesheet" type="text/css" href='css/orderManagement.css'/>
+    <style>
+        .pics {
+            display: none;
+        }
+        #photos .photoImg {
+            width: 290px;
+            height: 280px;
+        }
+        #photos .photoImg img {
+            width: 100%;
+            height: 100%;
+        }
+        .headlabel {
+            width: 12px;
+            height: 18px;
+            background-color: #1194d6;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        .layui-form-label{
+            padding:9px 0;
+        }
+        .layui-input-block{
+            margin-left:80px;
+        }
+    </style>
+</head>
+<body style="background: #fff;">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">工厂总统计</li>
+            <li>衣物总统计</li>
+            <li>操作员统计</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form class="layui-form layui-row" style="float: left; " id="search1">
+                    <div class="layui-row">
+                        <div class="layui-inline  orderManage" style="margin-top:10px">
+                            <span class="headlabel"></span>工厂总统计
+                        </div>
+                    </div>
+                </form>
+                <form class="layui-form">
+                    <div class="layui-form-item" style="display: flex;margin-bottom: 0;margin-top: 10px;">
+                        <label class="layui-form-label">时间：</label>
+                        <div class="layui-input-block" style="margin-left: 0px;">
+                            <input id="test3" type="text" name="title" required  lay-verify="required" placeholder="开始时间" autocomplete="off" class="layui-input">
+                        </div>
+                        <p style="line-height: 38px;font-size: 16px;margin: 0 10px;">~</p>
+                        <div class="layui-input-block" style="margin-left: 0px;">
+                            <input id="test4" type="text" name="title" required  lay-verify="required" placeholder="结束时间" autocomplete="off" class="layui-input">
+                        </div>
+                        <button class="layui-btn layui-btn-normal" style="margin-left:10px" id="tab1search" type="button">查询</button>
+                    </div>
+
+                </form>
+                <table class="layui-table" lay-skin="line" align="center" id="table1">
+                    <thead>
+                    <tr align="center">
+                        <th>洗涤数量</th>
+                        <th>返检处理</th>
+                        <th>返洗处理</th>
+                        <th>返烫处理</th>
+                        <th>事故处理</th>
+                        <th>外包数量</th>
+                        <th>退件数量</th>
+                        <th>污渍终止</th>
+                        <th>补差价总额</th>
+                        <th>总营收</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div id="page1"></div>
+            </div>
+<!--衣物总统计-->
+            <div class="layui-tab-item">
+                <form class="layui-form layui-row" style="float: left; ">
+                    <div class="layui-row">
+                        <div class="layui-inline  orderManage" style="margin-top:10px">
+                            <span class="headlabel"></span>衣物总统计
+                        </div>
+                    </div>
+                </form>
+                <form class="layui-form   layui-row" style="display: flex;">
+                    <div class="layui-form-item layui-inline" style="width: 12%;margin-bottom: 0;margin-top: 10px;">
+                        <div class="layui-input-inline" style="margin:0; width: 100%;">
+                            <input type="text" placeholder="衣物种类" id="tab2input" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="display: flex;margin-bottom: 0;margin-top: 10px;">
+                        <label class="layui-form-label">时间：</label>
+                        <div class="layui-input-block" style="margin-left: 0px;">
+                            <input id="test5" type="text" name="title" required  lay-verify="required" placeholder="开始时间" autocomplete="off" class="layui-input">
+                        </div>
+                        <p style="line-height: 38px;font-size: 16px;margin: 0 10px;">~</p>
+                        <div class="layui-input-block" style="margin-left: 0px;">
+                            <input id="test6" type="text" name="title" required  lay-verify="required" placeholder="结束时间" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <button class="layui-btn layui-btn-normal" style="margin:10px 0 0 10px" id="tab2search" type="button">查询</button>
+                </form>
+                <table class="layui-table" lay-skin="line" align="center" id="table2">
+                    <thead>
+                        <tr align="center">
+                            <th>衣物种类</th>
+                            <th>洗涤数量</th>
+                            <th>外包量统计</th>
+                            <th>退件数量</th>
+
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div id="page2"></div>
+            </div>
+<!--操作员统计-->
+            <div class="layui-tab-item">
+                <form class="layui-form layui-row" style="float: left; ">
+                    <div class="layui-row">
+                        <div class="layui-inline  orderManage" style="margin-top:10px">
+                            <span class="headlabel"></span>操作员统计
+                        </div>
+                    </div>
+                </form>
+                <form class="layui-form   layui-row" style="display: flex;">
+                    <!--<div class="layui-form-item" style="display: flex;margin-bottom: 0;margin-top: 10px;">-->
+                        <!--<label class="layui-form-label">工号：</label>-->
+                        <!--<div class="layui-input-block" style="margin-left: 0px;">-->
+                            <!--<input type="text" name="title" required  lay-verify="required" placeholder="输入工号" autocomplete="off" class="layui-input">-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <div class="layui-form-item layui-inline" style="width: 12%;margin-bottom: 0;margin-top: 10px;">
+                        <label class="layui-form-label">工种选择：</label>
+                        <div class="layui-input-inline" style="margin:0; width:calc(100% - 80px);">
+                            <select name=""   lay-filter="selJob" id="selJob">
+                                <!--<option value="">全部</option>-->
+                                <option value="10">分拣</option>
+                                <option value="20">洗涤</option>
+                                <option value="70">熨烫</option>
+                                <option value="80">质检</option>
+                            </select>
+                            <!--<input type="text" placeholder="衣物种类" id="tab3input" autocomplete="off" class="layui-input">-->
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="display: flex;margin-bottom: 0;margin-top: 10px;">
+                        <label class="layui-form-label">时间：</label>
+                        <div class="layui-input-block" style="margin-left: 0px;">
+                            <input id="test7" type="text" name="title" required  lay-verify="required" placeholder="开始时间" autocomplete="off" class="layui-input">
+                        </div>
+                        <p style="line-height: 38px;font-size: 16px;margin: 0 10px;">~</p>
+                        <div class="layui-input-block" style="margin-left: 0px;">
+                            <input id="test8" type="text" name="title" required  lay-verify="required" placeholder="结束时间" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <button class="layui-btn layui-btn-normal" style="margin:10px 0 0 10px" id="tab3search" type="button">查询</button>
+                </form>
+
+                <table class="layui-table" lay-skin="line" align="center" id="table3">
+                    <thead>
+                    <tr align="center">
+                        <th width="150px">工号</th>
+                        <th width="200px">操作员</th>
+                        <th>分拣数量</th>
+                        <th>返拣处理</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div id="page3"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<div id="photos" style="display:none;overflow: hidden;"></div>
+<script src='./js/jquery.min.js'></script>
+<script src="../resource/js/common.js"></script>
+<script src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script>
+    var tablePage1=1;
+    var tablePage2=1;
+    var tablePage3=1;
+    var animate="";
+    layui.use(['element', 'form', 'layer','table', 'laydate', 'laypage','colorpicker'], function () {
+        var element = layui.element;
+        var laydate = layui.laydate;
+        var form = layui.form;
+        var laypage = layui.laypage
+            , table = layui.table
+            , colorpicker = layui.colorpicker
+            , layer = layui.layer;
+
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+//        animate=layer.load();
+
+        laydate.render({
+            elem:"#test3"
+        });
+        laydate.render({
+            elem:"#test4"
+        });
+        laydate.render({
+            elem:"#test5"
+        });
+        laydate.render({
+            elem:"#test6"
+        });
+        laydate.render({
+            elem:"#test7"
+        });
+        laydate.render({
+            elem:"#test8"
+        });
+        table1Show();
+
+        form.on('select(selJob)',function(data){
+            var type=data.value;
+            if(type==10){
+                $("#table3 thead").html("");
+                var listHead='<tr>' +
+                    '<th width="150px">工号</th>' +
+                    '<th width="200px">操作员</th>' +
+                    '<th>分拣数量</th>' +
+                    '<th>返拣处理</th>' +
+                    '</tr>';
+                $(listHead).appendTo($("#table3 thead"));
+                table3Show(type,function(data){
+                    if(data.status==200){
+                        $("#table3 tbody").html("");
+                        for(var i=0;i<data.data.length;i++){
+                            var item='<tr>' +
+                                '<td>'+data.data[i].userCode+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].userName)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].washNum)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].backErrorNum)+'</td>' +
+                                '</tr>';
+                            $(item).appendTo($("#table3 tbody"));
+                        }
+                    }
+                    layer.close(animate);
+                })
+            }else if(type==20){
+                $("#table3 thead").html("");
+                var listHead='<tr>' +
+                    '<th width="150px">工号</th>' +
+                    '<th width="200px">操作员</th>' +
+                    '<th>洗涤数量</th>' +
+                    '<th>漏检返单</th>' +
+                    '<th>返洗处理</th>' +
+                    '<th>事故处理</th>' +
+                    '<th>退件</th>' +
+                    '<th>外包</th>' +
+                    '<th>事故退件</th>' +
+                    '<th>事故外包</th>' +
+                    '<th>污渍终止</th>' +
+                    '</tr>';
+                $(listHead).appendTo($("#table3 thead"));
+                table3Show(type,function(data){
+                    if(data.status==200){
+                        $("#table3 tbody").html("");
+                        for(var i=0;i<data.data.length;i++){
+                            var item='<tr>' +
+                                '<td>'+data.data[i].userCode+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].userName)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].washNum)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].backNum)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].backErrorNum)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].faultErrorNum)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].backPieceNum)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].outNum)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].faultBackPieceNum)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].faultOutNum)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].washStop)+'</td>' +
+                                '</tr>';
+                            $(item).appendTo($("#table3 tbody"));
+                        }
+                    }
+                    layer.close(animate);
+                })
+            }else if(type==70){
+                $("#table3 thead").html("");
+                var listHead='<tr>' +
+                    '<th width="150px">工号</th>' +
+                    '<th width="200px">操作员</th>' +
+                    '<th>熨烫数量</th>' +
+                    '<th>返洗数量</th>' +
+                    '<th>返烫处理</th>' +
+                    '<th>事故返单</th>' +
+                    '<th>事故处理</th>' +
+                    '</tr>';
+                $(listHead).appendTo($("#table3 thead"));
+                table3Show(type,function(data){
+                    if(data.status==200){
+                        $("#table3 tbody").html("");
+                        for(var i=0;i<data.data.length;i++){
+                            var item='<tr>' +
+                                '<td>'+data.data[i].userCode+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].userName)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].washNum)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].backErrorNum)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].backErrorNum70)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].faultNum)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].faultErrorNum)+'</td>' +
+                                '</tr>';
+                            $(item).appendTo($("#table3 tbody"));
+                        }
+                    }
+                    layer.close(animate);
+                })
+            }else if(type==80){
+                $("#table3 thead").html("");
+                var listHead='<tr>' +
+                    '<th width="150px">工号</th>' +
+                    '<th width="200px">操作员</th>' +
+                    '<th>质检数量</th>' +
+                    '<th>返烫数量</th>' +
+                    '<th>事故返单</th>' +
+                    '</tr>';
+                $(listHead).appendTo($("#table3 thead"));
+                table3Show(type,function(data){
+                    if(data.status==200){
+                        $("#table3 tbody").html("");
+                        for(var i=0;i<data.data.length;i++){
+                            var item='<tr>' +
+                                '<td>'+data.data[i].userCode+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].userName)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].washNum)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].backErrorNum70)+'</td>' +
+                                '<td>'+checkEmpty(data.data[i].faultNum)+'</td>' +
+                                '</tr>';
+                            $(item).appendTo($("#table3 tbody"));
+                        }
+                    }
+                    layer.close(animate);
+                })
+            }
+        });
+    });
+
+
+//    查询衣物种类
+    $("#tab2search").click(function(){
+        var val=$("#tab2input").val();
+        var startTime=$("#test5").val();
+        var endTime=$("#test6").val();
+        table2Show(val,startTime,endTime);
+    });
+
+    $("#tab3search").click(function(){
+//        var val=$("#tab3input").val();
+        layui.use('form',function(){
+            var form=layui.form;
+
+        });
+        var startTime=$("#test7").val();
+        var endTime=$("#test8").val();
+        table3Show(type,val,startTime,endTime);
+    });
+
+    $(".layui-tab-title li").click(function(){
+        var i=$(this).index();
+        if(i==0){
+            animate=layer.load();
+            table1Show();
+        }else if(i==1){
+            animate=layer.load();
+            table2Show();
+        }else if(i==2){
+            animate=layer.load();
+            table3Show(10,function(data){
+                if(data.status==200){
+                    $("#table3 tbody").html("");
+                    for(var i=0;i<data.data.length;i++){
+                        var item='<tr>' +
+                            '<td>'+data.data[i].userCode+'</td>' +
+                            '<td>'+checkEmpty(data.data[i].userName)+'</td>' +
+                            '<td>'+checkEmpty(data.data[i].washNum)+'</td>' +
+                            '<td>'+checkEmpty(data.data[i].backErrorNum)+'</td>' +
+                            '</tr>';
+                        $(item).appendTo($("#table3 tbody"));
+                    }
+                }
+                layer.close(animate);
+            });
+        }
+    });
+
+
+    $("#tab1search").click(function(){
+       var startTime=$("#test3").val();
+       var endTime=$("#test4").val();
+        table1Show(startTime,endTime);
+    });
+
+//  工厂统计
+    function table1Show(dateStart,dateEnd){
+        $.ajax({
+            url: globalUrl + "api/statistical/factory;jsessionid=" + $.cookie("token"),
+            type: 'get',
+            data: {dateStart:dateStart,dateEnd:dateEnd},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success:function(data){
+                layer.close(animate);
+                if(data.status==200){
+                    $('#table1 tbody').html("");
+                    var item='<tr>' +
+                        '<td>'+checkEmpty(data.data.washNum)+'</td>' +
+                        '<td>'+checkEmpty(data.data.backErrorNum10)+'</td>' +
+                        '<td>'+checkEmpty(data.data.backErrorNum)+'</td>' +
+                        '<td>'+checkEmpty(data.data.backErrorNum70)+'</td>' +
+                        '<td>'+checkEmpty(data.data.faultErrorNum)+'</td>' +
+                        '<td>'+checkEmpty(data.data.outNum)+'</td>' +
+                        '<td>'+checkEmpty(data.data.backPieceNum)+'</td>' +
+                        '<td>'+checkEmpty(data.data.washStop)+'</td>' +
+                        '<td>'+checkEmpty(data.data.washFill)+'</td>' +
+                        '<td>'+(parseFloat(checkEmpty(data.data.washTotal))+parseFloat(checkEmpty(data.data.washFill)))+'</td>' +
+                        '</tr>';
+                    $(item).appendTo($('#table1 tbody'));
+                }
+            },error:function(){
+                layer.close(animate);
+            }
+        })
+    }
+
+//    衣物统计
+    function table2Show(clothesName,dateStart,dateEnd){
+        $.ajax({
+            url: globalUrl + "api/statistical/clothes;jsessionid=" + $.cookie("token"),
+            type: 'get',
+            data: {clothesName:clothesName,dateStart:dateStart,dateEnd:dateEnd},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success:function(data){
+                if(data.status==200){
+                    $("#table2 tbody").html("");
+                    for(var i=0;i<data.data.length;i++){
+                        var item='<tr>' +
+                            '<td>'+data.data[i].clothesName+'</td>' +
+                            '<td>'+data.data[i].washNum+'</td>' +
+                            '<td>'+checkEmpty(data.data[i].outNum)+'</td>' +
+                            '<td>'+checkEmpty(data.data[i].backPieceNum)+'</td>' +
+                            '</tr>';
+                        $(item).appendTo($("#table2 tbody"));
+                    }
+                }
+                layer.close(animate);
+            },error:function(){
+                layer.close(animate);
+            }
+        });
+
+    }
+
+//    操作员统计列表
+    function table3Show(status,success,userCode,clothesName,itemStatus,dateStart,dateEnd){
+        $.ajax({
+            url: globalUrl + "api/statistical/worker;jsessionid=" + $.cookie("token"),
+            type: 'get',
+            data: {itemStatus:status,userCode:userCode,clothesName:clothesName,dateStart:dateStart,dateEnd:dateEnd},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success:success,
+            error:function(){
+                layer.close(animate);
+            }
+        });
+    }
+
+    function checkEmpty(num){
+        if(num){
+            return num;
+        }else{
+            return 0;
+        }
+    }
+
+
+</script>
+</html>

@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset='utf-8'>
+    <meta name='renderer' content='webkit'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black'>
+    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <meta name='format-detection' content='telephone=no'>
+    <link rel="stylesheet" href="../resource/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href='css/pageIndex.css'/>
+    <link rel="stylesheet" type="text/css" href='css/orderManagement.css'/>
+    <style>
+        .cancel {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 2px gray;
+            cursor: pointer;
+        }
+
+        .cancel > i {
+            padding-top: 3px;
+
+            font-size: 30px;
+            line-height: 36px;
+            color: gray;
+        }
+
+        .details_box td {
+            width: 50% !important;
+
+        }
+
+        .goodsImg {
+            width: 50px;
+            height: 50px;
+        }
+
+        .bombBox > .layui-form-item > .layui-form-label {
+            padding: 9px 0;
+        }
+
+        .body {
+            width: 100%;
+            height: 100%;
+        }
+
+        .mask, .mask_add {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, .4);
+            display: none;
+        }
+
+        .addSort {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .bombBox {
+            position: absolute;
+            margin-left: -300px;
+            top: 260px;
+            left: 50%;
+            background-color: #fff;
+            width: 600px;
+        }
+
+        .layui-form-item {
+            width: 60%;
+        }
+
+        .regionBox {
+            width: 100%;
+        }
+
+        .regionBox > .layui-input-block .layui-input-inline {
+            width: 28%;
+        }
+
+        /*.regionBox>.layui-input-block .layui-input-inline .layui-form-select{
+            width: 140px;
+        }*/
+        .bombBoxTitle {
+            width: 80px;
+            text-align: right;
+            margin-top: 15px;
+        }
+
+        .funBtn {
+            width: 100%;
+            text-align: right;
+            padding: 0 24px;
+        }
+
+        .layui-upload-img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .goodsFile, .sortFile {
+            display: inline-block;
+            height: 38px;
+            line-height: 38px;
+            padding: 0 18px;
+            background-color: #009688;
+            color: #fff;
+            white-space: nowrap;
+            text-align: center;
+            font-size: 14px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            opacity: 0;
+            width: 92px;
+            position: absolute;
+            left: 0;
+            top: 9px;
+        }
+
+        .sureBtn_change {
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<!-- 下面是一些第二行的东西 -->
+
+<div class="layui-row">
+
+    <div class="layui-inline  orderManage" style="margin-top:10px">
+        工厂管理列表
+    </div>
+
+    <div class="layui-inline" style="float:right;margin-top:10px">
+        <button class="layui-btn  layui-btn-normal" id="xinzhengrenwu">新增工厂</button>
+        <!--<button class="layui-btn layui-btn-danger" id="zhuanyi">删除全部</button>-->
+    </div>
+
+</div>
+
+<!-- 下面是第三行表格 -->
+
+
+<table class="layui-table" id="shopList" lay-skin="line" align="center">
+    <!-- <colgroup>
+          <col width="150">
+          <col width="150">
+          <col width="200">
+          <col>
+        </colgroup> -->
+    <thead>
+    <tr align="center">
+        <th>编号</th>
+        <th>工厂名称</th>
+        <th>工厂地址</th>
+        <th>是否可用</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>0245</td>
+        <td>鞋子</td>
+        <td>
+            江苏省常州市新北区世贸广场7号楼-2414室
+        </td>
+        <td>是</td>
+        <td>
+            <button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
+            <button class="layui-btn layui-btn-xs changeBtn">修改</button>
+        </td>
+    </tr>
+    <tr>
+        <td>0245</td>
+        <td>鞋子</td>
+        <td>
+            江苏省常州市新北区世贸广场7号楼-2414室
+        </td>
+        <td>是</td>
+        <td>
+            <button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
+            <button class="layui-btn layui-btn-xs changeBtn">修改</button>
+        </td>
+    </tr>
+    <tr>
+        <td>0245</td>
+        <td>鞋子</td>
+        <td>
+            江苏省常州市新北区世贸广场7号楼-2414室
+        </td>
+        <td>是</td>
+        <td>
+            <button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
+            <button class="layui-btn layui-btn-xs changeBtn">修改</button>
+        </td>
+    </tr>
+    <tr>
+        <td>0245</td>
+        <td>鞋子</td>
+        <td>
+            江苏省常州市新北区世贸广场7号楼-2414室
+        </td>
+        <td>是</td>
+        <td>
+            <button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
+            <button class="layui-btn layui-btn-xs changeBtn">修改</button>
+        </td>
+    </tr>
+
+    </tbody>
+</table>
+
+<!-- 这个下面是分页 -->
+<div id="demo7"></div>
+
+<div class="mask body">
+    <div class="addSort">
+        <div class="layui-row">
+            <form class="layui-form bombBox" id="updateForm">
+                <div class="layui-form-item">
+                    <p class="bombBoxTitle">增加工厂</p>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">工厂名称</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input shopName" type="text" value="" placeholder="请输入工厂名称"
+                               autocomplete="off">
+                        <input type="hidden" name="shopId" id="shopId" value=""/>
+                    </div>
+                </div>
+                <div class="layui-form-item regionBox">
+                    <label class="layui-form-label">选择地区</label>
+                    <div class="layui-input-block">
+                        <div class="layui-input-inline">
+                            <select name="P1" lay-filter="province">
+                                <option></option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="C1" lay-filter="city">
+                                <option></option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="A1" lay-filter="area">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">详细地址</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input shopAddress" type="text" value="" placeholder="请输入详细地址"
+                               autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-inline">
+                    <label class="layui-form-label">可用</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="0" title="是" checked="">
+                        <input type="radio" name="status" value="1" title="否">
+                    </div>
+                </div>
+                <div class="layui-form-item funBtn">
+                    <button class="layui-btn layui-btn-sm sureBtn" type="button">确定</button>
+                    <button class="layui-btn layui-btn-sm sureBtn_change" type="button">修改</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-primary cancelBtn" type="button">取消</button>
+                </div>
+                <span class="layui-layer-setwin">
+						<a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"></a>
+					</span>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<!--<script type="text/javascript" src="../resource/layui/layui.all_area.js"></script>-->
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script src='./js/citys.js'></script>
+<script type="text/javascript">
+    var page1 = 1;
+    var pageSize = 5;
+    layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+        var element = layui.element
+            , laydate = layui.laydate
+            , laypage = layui.laypage
+            , form = layui.form
+            , layer = layui.layer;
+
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+        var pca = {};
+        pca.keys = {};
+        pca.ckeys = {};
+        var region = {};
+
+        initRegion('select[name=P1]', 'select[name=C1]', 'select[name=A1]', "北京", "北京", "东城区");
+        getShopList(page1, pageSize);
+
+        function formVerify() {
+            var reg = /^[0-9]*$/;
+            var bol = true;
+            var name = $(".shopName").val();
+            var state = $("input[name=status]:checked").val();
+            var address = $(".shopAddress").val();
+
+            if (name == "") {
+                layer.msg("请输入工厂名称", {time: 2000});
+                bol = false;
+                return bol;
+            }
+            if (!region.province || !region.city || !region.district) {
+                layer.msg("请选择省市区", {time: 2000});
+                bol = false;
+                return bol;
+            }
+            if (address == "") {
+                layer.msg("请输入工厂详细地址", {time: 2000});
+                bol = false;
+                return bol;
+            }
+            return bol;
+
+        }
+
+
+        //监听提交
+        $(".sureBtn").click(function () {
+            var canForm = formVerify();
+            if (canForm) {
+                var formData = new FormData();
+                formData.append("shopName", $(".shopName").val());
+                formData.append("status", $("input[name=status]:checked").val());
+                formData.append("shopAddress", $(".shopAddress").val());
+                var province = $("select[name=P1]").val();
+                var city = $("select[name=C1]").val();
+                var district = $("select[name=A1]").val();
+                formData.append("region", province + "-" + city + "-" + district);
+                $.ajax({
+                    type: "post",
+                    url: globalUrl + "shop/putShop",
+                    async: true,
+                    contentType: false,
+                    processData: false,
+                    cache: false,
+                    data: formData,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("token", $.cookie("token"));
+                    },
+                    crossDomain: true,
+                    success: function (res) {
+                        document.getElementById("updateForm").reset();
+                        form.render();
+                        $(".mask").fadeOut();
+                        getShopList(page1, pageSize);
+                    },
+                    error: function (err) {
+
+                    }
+                });
+            } else {
+                return false;
+            }
+        })
+        $(".sureBtn_change").click(function () {
+            var id = $("#shopId").val();
+            if (formVerify()) {
+                var formData = new FormData();
+                formData.append("shopName", $(".shopName").val());
+                formData.append("status", $("input[name=status]:checked").val());
+                formData.append("shopAddress", $(".shopAddress").val());
+                var province = $("select[name=P1]").val();
+                var city = $("select[name=C1]").val();
+                var district = $("select[name=A1]").val();
+                formData.append("region", province + "-" + city + "-" + district);
+                formData.append("id", id);
+
+                $.ajax({
+                    type: "post",
+                    url: globalUrl + "shop/updateShop",
+                    async: true,
+                    contentType: false,
+                    processData: false,
+                    cache: false,
+                    data: formData,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("token", $.cookie("token"));
+                    },
+                    crossDomain: true,
+                    success: function (res) {
+                        if (res.code == 0) {
+                            document.getElementById("updateForm").reset();
+                            form.render();
+                            $(".mask").fadeOut();
+                            getShopList(page1, pageSize);
+                        }
+                    },
+                    error: function (err) {
+
+                    }
+                });
+            } else {
+                return false;
+            }
+        })
+
+        //获取详情
+        function getDataById(id) {
+            $.ajax({
+                type: "get",
+                data: {id: id},
+                url: globalUrl + "shop/getShopById",
+                async: true,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("token", $.cookie("token"));
+                },
+                crossDomain: true,
+                success: function (res) {
+                    if (id) {
+                        $("#shopId").val(id);
+                    }
+                    $(".shopAddress").val(res.data.shopAddress);
+                    $(".shopName").val(res.data.shopName);
+                    var province = res.data.region.split("-")[0];
+                    var city = res.data.region.split("-")[1];
+                    var district = res.data.region.split("-")[2];
+                    initRegion('select[name=P1]', 'select[name=C1]', 'select[name=A1]', province, city, district);
+                    if (res.data.status == 0) {
+                        $("input[name=status]").removeAttr("checked")
+                        $("input[name=status]").eq(0).prop("checked", true);
+
+                    } else {
+                        $("input[name=status]").removeAttr("checked")
+                        $("input[name=status]").eq(1).attr("checked", true);
+                    }
+                    form.render();
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+        }
+
+        //删除接口
+        function deleteDataById(id) {
+            $.ajax({
+                type: "post",
+                data: {id: id},
+                url: globalUrl + "shop/deleteShopById",
+                async: true,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("token", $.cookie("token"));
+                },
+                crossDomain: true,
+                success: function (res) {
+                    if (res.code == 0) {
+                        getShopList(page1, pageSize);
+                        layer.closeAll();
+                        layer.msg(res.message);
+                    } else {
+                        layer.msg(res.message);
+                    }
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+        }
+
+        $("#shopList button.changeBtn").live("click", function () {
+            //根据id对数据渲染
+            $(".mask").fadeIn()
+            $(".sureBtn").hide();
+            $(".sureBtn_change").show();
+            var id = $(this).parent().attr("data-id");
+            getDataById(id);
+
+        })
+
+        $("#shopList .deleteBtn").live("click", function () {
+            var id = $(this).parent().attr("data-id");
+            layer.confirm("要删除该商品吗？", {
+                btn: ['确定', '取消']
+            }, function (index) {
+                layer.close(index);
+
+                deleteDataById(id);
+                //进行后台的下架请求接口
+            })
+        });
+
+        function initRegion(province, city, area, initprovince, initcity, initarea) {
+            if (!province || !$(province).length) return;
+            $(province).html('');
+            $(province).append('<option selected>全部</option>');
+            for (var i in citys) {
+                $(province).append('<option>' + citys[i].name + '</option>');
+                pca.keys[citys[i].name] = citys[i];
+            }
+            form.render('select');
+            if (initprovince) $(province).next().find('[lay-value="' + initprovince + '"]').click();
+            if (!city || !$(city).length) return;
+            formRender(city);
+            form.on('select(province)', function (data) {
+                var cs = pca.keys[data.value];
+                $(city).html('');
+                $(city).append('<option>全部</option>');
+                if (cs) {
+                    cs = cs.city;
+                    for (var i in cs) {
+                        $(city).append('<option>' + cs[i].name + '</option>');
+                        pca.ckeys[cs[i].name] = cs[i];
+                    }
+                    $(city).find('option:eq(1)').attr('selected', true);
+                }
+                form.render('select');
+                $(city).next().find('.layui-this').removeClass('layui-this').click();
+                formHidden('province', data.value);
+                //此处可以自己修改 显示的位置, 不想显示可以直接去掉
+                region.province = data.value;
+            });
+            if (initprovince) $(province).next().find('[lay-value="' + initprovince + '"]').click();
+            if (initcity) $(city).next().find('[lay-value="' + initcity + '"]').click();
+            if (!area || !$(area).length) return;
+            formRender(area);
+            form.on('select(city)', function (data) {
+                var cs = pca.ckeys[data.value];
+                $(area).html('');
+                $(area).append('<option>全部</option>');
+                if (cs) {
+                    cs = cs.area;
+                    for (var i in cs) {
+                        $(area).append('<option>' + cs[i] + '</option>');
+                    }
+                    $(area).find('option:eq(1)').attr('selected', true);
+                }
+                form.render('select');
+                $(area).next().find('.layui-this').removeClass('layui-this').click();
+                formHidden('city', data.value);
+                //$('.pca-label-city').html(data.value);	//此处可以自己修改 显示的位置, 不想显示可以直接去掉
+                region.city = data.value;
+
+            });
+            form.on('select(area)', function (data) {
+                formHidden('area', data.value);
+                //$('.pca-label-area').html(data.value);	//此处可以自己修改 显示的位置, 不想显示可以直接去掉
+                region.district = data.value;
+            });
+            if (initprovince) $(province).next().find('[lay-value="' + initprovince + '"]').click();
+            if (initcity) $(city).next().find('[lay-value="' + initcity + '"]').click();
+            if (initarea) $(area).next().find('[lay-value="' + initarea + '"]').click();
+        }
+
+        function formRender(obj) {
+            $(obj).html('');
+            $(obj).append('<option>全部</option>');
+            form.render('select');
+        }
+
+        function formHidden(obj, val) {
+            if (!$('#pca-hide-' + obj).length)
+                $('body').append('<input id="pca-hide-' + obj + '" type="hidden" value="' + val + '" />');
+            else
+                $('#pca-hide-' + obj).val(val);
+        }
+
+    });
+
+
+    $("#xinzhengrenwu").click(function () {
+        $(".mask").fadeIn();
+        $(".sureBtn").show();
+        $(".sureBtn_change").hide();
+    })
+    $(".mask .layui-layer-close").click(function () {
+        $(".mask").fadeOut()
+    })
+    $(".mask .layui-layer-close").click(function () {
+        $(".mask_add").fadeOut()
+    })
+    $(".cancelBtn_add").click(function () {
+        $(".mask_add").fadeOut()
+    })
+    $(".cancelBtn").click(function () {
+        $(".mask").fadeOut()
+    })
+
+    function getShopList(page, pageSize) {
+        $.ajax({
+            type: "get",
+            url: globalUrl + "shop/getShopList",
+            async: true,
+            data: {pageNum: page, pageSize: pageSize},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (res) {
+                if (res.code == 0) {
+                    var str;
+                    $("#shopList tbody").html("");
+                    $.each(res.data.list, function (index, value) {
+                        str += '<tr>';
+                        str += '<td>' + value.id + '</td>';
+                        str += '<td>' + value.shopName + '</td>';
+                        str += '<td>' + value.shopAddress + '</td>';
+                        if (value.status == 0) {
+                            str += '<td>是</td>'
+                        } else if (value.status == 1) {
+                            str += '<td>否</td>'
+                        }
+                        str += '<td data-id="' + value.id + '">';
+                        str += '<button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>';
+                        str += '<button class="layui-btn layui-btn-xs changeBtn">修改</button>';
+                        str += '</td></tr>';
+                    });
+                    $(str).appendTo($("#shopList tbody"));
+                    layui.use('laypage', function () {
+                        var laypage = layui.laypage;
+                        laypage.render({
+                            elem: 'demo7',
+                            count: res.data.total,
+                            limit: pageSize,
+                            curr: page,
+                            jump: function (obj, first) {
+                                page = obj.curr;
+                                if (!first) {
+                                    getShopList(obj.curr, pageSize)
+                                }
+                            }
+                        })
+                    })
+                }
+            }
+        })
+    }
+
+</script>
+
+</html>

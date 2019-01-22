@@ -1,0 +1,526 @@
+<!-- 添加申请 -->
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>常洗ERP</title>
+	<link rel="shortcut icon" type="image/x-icon" href="./images/p.png" media="screen" />
+	<link rel="stylesheet" href="./resource/layui/css/layui.css">
+	<link rel="stylesheet" href="./css/index.css">
+</head>
+<style>
+	body {
+		user-select: none;
+	}
+
+	.layui-layout-admin .layui-body {
+		bottom: 1px !important;
+	}
+	dd{
+		background: #2ea8e6;
+	}
+	dd:hover{
+		background: #2c40ea;
+	}
+	.layui-nav-child{
+		padding:0;
+	}
+
+	.bg {
+		width: 140px;
+		height: calc(100vh - 60px);
+		position: absolute;
+		top: 60px;
+		left: 0px;
+		background-color: rgba(0, 0, 0, 0.5);
+		z-index: 100000;
+	}
+
+	.spread {
+		width: 50px;
+		height: 50px;
+		background-color: red;
+		border-radius: 50%;
+		position: absolute;
+		bottom: 40px;
+		left: 0px;
+		z-index: 10000;
+
+	}
+	.pageContainer{
+		background-color: #f1f1f1;
+	}
+</style>
+
+<body class="layui-layout-body">
+
+	<div class="layui-layout layui-layout-admin">
+		<div class="layui-header">
+			<div class="layui-logo pointer">
+
+				<span class="title">
+					常洗工厂后台管理中心
+				</span>
+			</div>
+			<ul class="layui-nav layui-layout-right">
+				<li class="layui-nav-item">
+					<a id="user"></a>
+					<dl class="layui-nav-child"> <!-- 二级菜单 -->
+						<dd id="logout"><a href="">退出登录</a></dd>
+						<dd id="changePassword"><a href="">修改密码</a></dd>
+					</dl>
+				</li>
+			</ul>
+		</div>
+		<div class="layui-side layui-bg-blue  indexLeft">
+			<div class="layui-side-scroll  pointer">
+				<ul class="layui-nav layui-nav-tree" lay-filter="test" id="leftMenu">
+					<!--<li class="layui-nav-item items">-->
+						<!--<a src="">洗涤流程<span class="layui-nav-more"><span></a>-->
+						<!--<dl class="layui-nav-child">-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/signIn.html">签收</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/sorting.html">分拣</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/secondSorting.html">代加工分拣</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a>岗位管理</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a>外包洗涤</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/positionManage.html">精洗</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="">普洗</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="">干洗</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="">皮具护理</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="">洗鞋</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/ironing.html">熨烫</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/qualityTest.html">整理质检</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/secondWashing.html">外包洗涤</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/service.html">客服</a>-->
+							<!--</dd>-->
+						<!--</dl>-->
+					<!--</li>-->
+					<!--<li class="layui-nav-item items">-->
+						<!--<a src="">上架流程<span class="layui-nav-more"></span></a>-->
+						<!--<dl class="layui-nav-child">-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/onShelf.html">上架</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/package.html">包装</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/deliveryGood.html">发货</a>-->
+							<!--</dd>-->
+						<!--</dl>-->
+					<!--</li>-->
+					<!--<li class="layui-nav-item items">-->
+						<!--<a src="">工厂管理<span class="layui-nav-more"></span></a>-->
+						<!--<dl class="layui-nav-child">-->
+							<!--<dd class="item">-->
+								<!--<a src="">统计</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/search.html">查询</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/bounce.html">退件处理</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/spotCancel.html">污渍终止</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/staff.html">设置</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="">衣物种类添加</a>-->
+							<!--</dd>-->
+							<!--<dd class="item">-->
+								<!--<a src="pages/cooperation.html">加工商管理</a>-->
+							<!--</dd>-->
+						<!--</dl>-->
+					<!--</li>-->
+				</ul>
+			</div>
+		</div>
+		<!--<div class="layui-side layui-bg-black   indexLeft">
+			<div class="navBar layui-side-scroll" id="navBar">
+				<ul class="layui-nav layui-nav-tree site-demo-nav">
+					<li class="layui-nav-item layui-this">
+						<a href="javascript:;" data-url="page/main.html"><i class="layui-icon" data-icon=""></i><cite>后台首页</cite></a>
+					</li>
+				</ul>
+			</div>
+		</div>-->
+		<div class="layui-body">
+			<iframe class="pageContainer">
+			</iframe>
+		</div>
+	</div>
+	<div class="bg">
+	</div>
+	<div class="spread" id="spread" style="display:none">
+	</div>
+</body>
+<form id="changeBox" style="margin: 20px 30px 0 0;">
+	<div class="layui-form-item">
+		<label class="layui-form-label">账号</label>
+		<div class="layui-input-block">
+			<input id="codeInput" type="text" readonly class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">原密码</label>
+		<div class="layui-input-block">
+			<input id="oriPassword" type="text" name="title" required  lay-verify="required" placeholder="请输入修改前的密码" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">新密码</label>
+		<div class="layui-input-block">
+			<input id="nowPassword" type="text" name="title" required  lay-verify="required" placeholder="请输入新密码" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<button type="button" class="layui-btn" id="changeBtn" style="float: right;">确认提交</button>
+</form>
+<script src="./resource/layui/layui.js"></script>
+<script src="./resource/js/jquery.min.js"></script>
+<script src="./resource/js/jquery.cookie.js"></script>
+<script src="./resource/js/common.js"></script>
+<script>
+	var leftMenu=$.cookie("leftMenu");
+	var childMenu=$.cookie("childMenu");
+
+	$("#user").html($.cookie("userName"));
+//	userInfo();
+	function userInfo(){
+	    $.ajax({
+            url:globalUrl+"api/admin/getUserInfo;jsessionid=" + $.cookie("token"),
+            type:'get',
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success:function(data){
+
+			},
+			error:function(xhr){
+                console.log(xhr)
+			}
+		})
+	}
+
+//	记录菜单打开状态
+	$("#leftMenu li").live("click",function(){
+	    var i=$(this).index();
+	    $.cookie("leftMenu",i);
+	});
+
+	$("#logout").click(function(){
+		layui.use('layer',function(){
+		    var layer=layui.layer;
+            var out=layer.open({
+				type:1,
+				content:"<p style='margin: 10px;'>确定要退出当前账号吗？</p>",
+				btn:['确定','取消'],
+				yes:function(){
+				    goOut()
+				},
+				btn2:function(){
+				    layer.close(out);
+				}
+			})
+		})
+	});
+//	修改密码
+	$("#changePassword").click(function(){
+	    $("#codeInput").val($.cookie("userCode"));
+		layui.use('layer',function(){
+		    var layer=layui.layer;
+		    layer.open({
+				type:1,
+				content:$("#changeBox"),
+				area:['400px','300px']
+			})
+		})
+	});
+	
+//	提交修改密码
+	$("#changeBtn").click(function(){
+		var code=$("#codeInput").val();
+		var oriPassword=$("#oriPassword").val();
+		var nowPassword=$("#nowPassword").val();
+		$.ajax({
+            url:globalUrl+"api/washUser/change;jsessionid=" + $.cookie("token"),
+            type:'post',
+			data:{
+                usercode:code,
+                passwordOld:oriPassword,
+                passwordNew:nowPassword
+			},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+			success:function (data) {
+				console.log(data);
+				if(data.status==200){
+                    goOut();
+				}
+				if(data.status==210){
+				    alert(data.msg);
+				}
+
+            }
+		})
+	});
+
+//	退出登录
+	function goOut(){
+        $.ajax({
+            url:globalUrl+"api/admin/logout;jsessionid=" + $.cookie("token"),
+            type:'post',
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success:function(data){
+                console.log(data);
+                if(data.status==200){
+                    window.location.href="login.html";
+                }
+            }
+        })
+	}
+	//JavaScript代码区域
+	layui.use(['element','layer'], function () {
+		var element = layui.element
+		,layer=layui.layer;
+		var token=$.cookie("token");
+		$(function(){
+//			if(!token){
+//				window.location.href="login.html";
+//				return false;
+//			}
+			//var account=JSON.parse($.cookie("data")).account;
+			//var userName=JSON.parse($.cookie("data")).userName;
+			//var userPicture=JSON.parse($.cookie("data")).userPicture;
+			//getMenu(account);
+			getCurrentStatus();
+		});
+		function getCurrentStatus(lastStatus,currentStatus){
+			//获取刷新之前的状态
+			try {
+				lastStatus = JSON.parse(sessionStorage.getItem('currenStatus'));
+			} catch (error) {
+		
+			}
+			if (lastStatus) {
+				if (lastStatus.src) {
+					$('.pageContainer').attr('src', lastStatus.src);
+					
+				} else {
+					$('.pageContainer').attr('src', 'pages/signIn.html');
+					$('dd.item').eq(0).addClass('layui-this');
+				}
+				if (lastStatus.item) {
+					$('ul.layui-nav-tree').find('dd.item').eq(lastStatus.item).addClass('layui-this');
+				} else {
+					$('ul.layui-nav-tree .item').eq(0).addClass('layui-this');
+				}
+				$('.layui-this').parent().parent().addClass('layui-nav-itemed');
+			} else {
+				$('.pageContainer').attr('src', 'pages/signIn.html');
+				$('.item').eq(0).addClass('layui-this');
+				$('.layui-this').parent().parent().addClass('layui-nav-itemed');
+			}
+		}
+	});
+	getMenu();
+	function getMenu() {
+		$.ajax({
+			url:globalUrl+"api/admin/menu;jsessionid=" + $.cookie("token"),
+			type:'get',
+			async:false,
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+			success:function(data){
+			    console.log(data);
+                $("#leftMenu").html("");
+			    for(var i=0;i<data.data.length;i++){
+			        var menuItem='<li class="layui-nav-item items" menuId="'+data.data[i].id+'">' +
+                        			'<a>'+data.data[i].name+'<span class="layui-nav-more"></span></a>'+
+									'<dl class="layui-nav-child"></dl>'+
+								 '</li>';
+			        $(menuItem).appendTo($("#leftMenu"));
+				}
+                $("#leftMenu li").removeClass("layui-nav-itemed");
+                $("#leftMenu li").eq(leftMenu).addClass("layui-nav-itemed");
+			}
+		})
+    }
+
+    $("#leftMenu li").live("click",function(event){
+        event.stopPropagation();
+        var thisDiv=$(this);
+       	var menuId=$(this).attr("menuId");
+        getChildMenu(menuId,thisDiv);
+	});
+	$("#leftMenu li dl dd a").live("click",function(event){
+	    event.stopPropagation();
+	});
+
+	/**
+	 * 刷新后恢复到上次打开的状态 先保存当前状态
+	 */
+	var currenStatus = {};
+	var lastStatus = null;
+	var pcOryidong = false;
+	
+	
+	// 向iframe内添加内容并更新最新的链接
+	$('a').live('click', function (e) {
+		e.preventDefault();
+		var src = $(this).attr('src');
+		if (src=="javascript:;") {
+			$(this).parent("li").toggleClass("layui-nav-itemed");
+		}else{
+			currenStatus.src = src;
+			$('.pageContainer').attr('src', src)
+			updataStatus();
+			if (pcOryidong) {
+				$(".indexLeft").hide()
+				$('.spread').show()
+			}
+		}
+	});
+	
+	$("ul.layui-nav-tree .layui-nav-child a").live("click",function(e){
+		$("ul.layui-nav-tree .layui-nav-child .item").removeClass("layui-this");
+		$("ul.layui-nav-tree .layui-nav-child .item a").removeClass("layui-this");
+		$(this).addClass("layui-this");
+		var src = $(this).attr('src');
+	})
+
+
+	$('dd').live('click', function () {
+		currenStatus.item = $('.item').index(this);
+		updataStatus();
+	});
+
+	// 弹框点出时阻止掉导航栏点击
+	$('.bg').hide();
+
+	function disableBtn() {
+		$('.bg').fadeIn();
+	}
+	
+	function ableBtn() {
+		$('.bg').fadeOut();
+	}
+
+
+	function updataStatus() {
+		var data = JSON.stringify(currenStatus)
+//		console.log(data);
+		sessionStorage.setItem('currenStatus', data);
+	}
+
+
+	function yidong() {
+
+		$('.bg').remove()
+
+		pcOryidong = true;
+
+		$(".indexLeft").hide()
+		$('.spread').show()
+
+		$(".layui-body").css({
+			'left': "0"
+		})
+
+
+	}
+
+	$(".spread").live("click", function () {
+
+		$(".indexLeft").show()
+
+		$('.spread').hide()
+
+
+
+	});
+
+	function getChildMenu(menuId,thisDiv){
+        $.ajax({
+            url:globalUrl+"api/admin/menu;jsessionid=" + $.cookie("token"),
+            type:'get',
+            data:{parentid:menuId},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success:function(data){
+                console.log(data);
+                thisDiv.find("dl").html("");
+                for(var i=0;i<data.data.length;i++){
+                    var menuItem='<dd class="item">' +
+                        '<a src="'+data.data[i].url+'">'+data.data[i].name+'</a>'+
+                        '</dd>';
+//                    $(menuItem).appendTo($(this).find($(".layui-nav-child")));
+                    $(menuItem).appendTo(thisDiv.find("dl"));
+                }
+            }
+        });
+	}
+
+	function browserRedirect() {
+		var sUserAgent = navigator.userAgent.toLowerCase();
+		var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+		var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+		var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+		var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+		var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+		var bIsAndroid = sUserAgent.match(/android/i) == "android";
+		var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+		var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+
+		if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+			yidong()
+		} else {
+//			pc()
+		}
+	}
+
+	browserRedirect();
+
+</script>
+</html>

@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+	<style>
+		.cancel {
+			position: absolute;
+			top: -10px;
+			right: -10px;
+			width: 30px;
+			height: 30px;
+			background-color: #ffffff;
+			border-radius: 50%;
+			box-shadow: 0 0 2px gray;
+			cursor: pointer;
+		}
+
+		.cancel>i {
+			padding-top: 3px;
+
+			font-size: 30px;
+			line-height: 36px;
+			color: gray;
+		}
+
+
+		.details_box td {
+			width: 50% !important;
+
+		}
+		.searchSelect{
+			padding: 8px 5px;
+			background-color: #0288D1;
+			color: #fff;
+		}
+		/*.searchSelect option{
+			width: 100%;
+			padding: 10px 5px;
+			height: 100%;
+		}*/
+	</style>
+</head>
+<body>
+	<!--<form class="layui-form   layui-row" style="float: left; " id="search">
+		<div class="layui-row">
+			<div class="layui-form-item   layui-inline " style="width: 20%;">
+				<div class="layui-input-inline" style="margin:0; width: 70%;">
+					<input type="text" name="criticalWord" id="criticalWord" placeholder="输入订单号/快递员/快递单号" autocomplete="off" class="layui-input">
+				</div>
+				<button class="layui-btn" name="user" type="button">搜索</button>
+			</div>
+		</div>
+	</form>-->
+
+	<!-- 下面是一些第二行的东西 -->
+
+	<div class="layui-row">
+
+		<div class="layui-inline  orderManage" style="margin-top:10px">
+			订单统计
+		</div>
+		<div class="layui-inline">
+		    <select class="searchSelect" name="">
+				<option value="week" checked="">按周查询</option>
+				<option value="month">按月查询</option>
+			</select>
+		</div>
+		<div class="layui-inline layui-btn-group" style="float:right;margin-right:30px;margin-top:10px">
+			<button class="layui-btn  layui-btn-normal" id="download" onclick="browseFolder();">导出</button>
+			<!--<button class="layui-btn  layui-btn-danger" id="deleteOrder">删除订单</button>-->
+			<a class="layui-btn" href="http://192.168.3.171:8080/excel/getImportModel">下载模板</a>
+		</div>
+
+	</div>
+
+	<!-- 下面是第三行表格 -->
+
+
+	<table class="layui-table" lay-filter="table1" id="table1" lay-skin="line" align="center">
+		<thead>
+			<tr>
+		      	<th lay-data="{field:'orderNo', width:80, sort: true}">订单编号</th>
+		      	<th lay-data="{field:'userId', width:120, sort: true, edit: 'text'}">客户</th>
+		      	<th lay-data="{field:'createTime', minWidth: 150}">订单生成时间</th>
+		      	<th lay-data="{field:'payment', width:80}">付款金额</th>
+			</tr>
+		</thead>
+		<tbody>
+			
+		</tbody>
+	</table>
+
+
+
+	<!-- 这个下面是分页 -->
+
+	<div id="demo7"></div>
+
+
+	<!-- 这边是增加任务的弹框 -->
+	<div class="shadow  createRenwushadow" style="display:none">
+		<div class="createRenwu">
+			<div class="tip">
+
+				新增任务
+
+			</div>
+			<div class="layui-form" id="layui-form" action="">
+
+				<div class="bianhoa">
+					任务编号
+				</div>
+				<div class="form_box">
+					<input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+				</div>
+
+				<div class="bianhoa">
+					目标点
+				</div>
+				<div class="form_box">
+					<input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入新增任务的目标点" class="layui-input">
+				</div>
+
+				<div class="bianhoa">
+					任务类型
+				</div>
+
+			</div>
+
+			<div class="form_box anniuBox">
+
+
+				<button class="layui-btn ">停车任务</button>
+
+
+
+				<button class="layui-btn  ">取车任务</button>
+
+
+				<button class="layui-btn  ">取物任务</button>
+
+				<button class="layui-btn  ">取消停车任务</button>
+
+
+			</div>
+
+			<div class="form_box  cancerOrsure" style="margin-top:50px;">
+
+				<div>
+					<button class="layui-btn layui-btn-lg layui-btn layui-btn-primary  layui-btn-fluid" id="createRenwuCancer">取消</button>
+				</div>
+				<div style="flex:1">
+
+				</div>
+				<div>
+					<button class="layui-btn layui-btn-lg   layui-btn-fluid" id="createRenwuSure">确认</button>
+				</div>
+
+
+			</div>
+
+
+
+
+		</div>
+
+
+
+	</div>
+
+	<!-- 这边是转移空托盘的阴影弹框 -->
+
+	<div class="zhuanyi_shadow" style="display:none">
+
+		<div class="zhanyikongtuopan_shadow">
+
+
+			<div class="tip" style="margin-top:15px">
+				转移空托盘
+			</div>
+
+			<div class="newNumberBox" style="margin-top:40px">
+				目标点
+			</div>
+
+			<div class="newNumberBox_inputBox">
+				<input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入新增的目标点" class="layui-input">
+			</div>
+
+			<div class="newNumberBox" style="margin-top:25x">
+				任务类型
+			</div>
+
+			<div class="newNumberBox_inputBox">
+				<div class="layui-input-inline">
+					<button class="layui-btn    layui-btn-fluid">转移空托盘</button>
+				</div>
+			</div>
+
+
+
+
+			<div class="form_box  cancerOrsure" style="margin-top:60px;">
+
+				<div>
+					<button class="layui-btn   layui-btn-primary  layui-btn-lg   layui-btn-fluid" id="zhuanyiCancer">取消</button>
+				</div>
+				<div style="flex:1">
+
+				</div>
+				<div>
+					<button class="layui-btn layui-btn-lg   layui-btn-fluid" id="zhuanyiSure">确认</button>
+				</div>
+
+
+			</div>
+
+		</div>
+
+
+
+	</div>
+
+
+
+	<!-- 这边是操作的弹框 -->
+	<div class="caozuoShadow" style="display:none">
+
+		<!-- 这边是第一层 -->
+		<div class="caozuoShadow_sonBox">
+
+			<div class="caozuoBtnBox" style="margin-top:22px">
+				<button class="layui-btn layui-btn-fluid layui-btn-lg">现金取车</button>
+			</div>
+			<div class="caozuoBtnBox">
+				<button class="layui-btn layui-btn-fluid layui-btn-lg">增加免费取物次数</button>
+			</div>
+			<div class="caozuoBtnBox">
+				<button class="layui-btn layui-btn-fluid layui-btn-lg">修改车牌号</button>
+			</div>
+
+			<div class="caozuoBtnBox">
+				<button class="layui-btn layui-btn-fluid layui-btn-lg">暂停任务</button>
+			</div>
+			<div class="caozuoBtnBox">
+				<button class="layui-btn layui-btn-fluid layui-btn-lg">取物超时</button>
+			</div>
+			<div class="caozuoBtnBox">
+				<button class="layui-btn layui-btn-fluid layui-btn-lg">取车超时</button>
+			</div>
+			<div class="caozuoBtnBox">
+				<button class="layui-btn layui-btn-fluid layui-btn-lg">详情</button>
+			</div>
+
+			<!-- <div class="guanbi_box" style="margin-top:20px">
+				<button class="layui-btn layui-btn-fluid layui-btn-lg layui-btn-danger">取消</button>
+			</div> -->
+
+			<div class="cancel" id="cancel">
+				<i class="layui-icon"> &#x1007;</i>
+			</div>
+
+
+
+		</div>
+
+		<!-- 这边是现金取车对应的弹框 -->
+		<div class="xianjing_shadow" style="display:none">
+			<div class="tip" style="margin-top:15px">
+				取车信息
+			</div>
+
+			<div class="pictureOrText">
+				<div class="pictureOrTextOne">
+					<div> 车牌号：京F.12736</div>
+					<div>停车时间：2018.01.12 09:30AM</div>
+					<div> 取车时间：2018.01.12 09:30AM</div>
+					<div> 取物次数：0次</div>
+					<div> 取车费用：30元</div>
+
+
+				</div>
+
+				<div class="pictureOrTextTwo">
+					<img class="cheImg" src="" alt="">
+
+				</div>
+
+
+
+			</div>
+
+			<div class="form_box  cancerOrsure" style="margin-top:30px;">
+
+				<div>
+					<button class="layui-btn    layui-btn-primary layui-btn-lg   layui-btn-fluid" id="queCheCancer">取消</button>
+				</div>
+				<div style="flex:1">
+
+				</div>
+				<div>
+					<button class="layui-btn layui-btn-lg  layui-btn-fluid" id="yiPay">车主已付款</button>
+				</div>
+
+
+			</div>
+
+
+		</div>
+
+		<!-- 这边是现金取车主已付款的二次弹框 -->
+
+		<div class="chezhuPay_shadow" style="display:none">
+
+			<div class="tip" style="margin-top:15px">
+				取车信息
+			</div>
+
+
+			<div class="quwuTip" style="  margin-top: 80px; font-size: 18px;">
+				请告知车主前往D取车点取车
+			</div>
+
+			<div class="wenxintip" style="  margin-top: 80px; font-size: 16px;">
+
+				请告知车主：泊车机器人将在十分钟内将车送至取车点，在取到
+				<br> 车后5分钟内驶离停车场，否则将产生额外费用
+			</div>
+
+
+			<div class="form_box  cancerOrsure" style="margin-top:60px;">
+
+				<!-- <div>
+							<button class="layui-btn   layui-btn-primary layui-btn-lg   layui-btn-fluid" id="qucheCancer">取消</button>
+					</div> -->
+
+				<div>
+					<button class="layui-btn layui-btn-lg    layui-btn-fluid" id="DdainSure">确认</button>
+				</div>
+
+			</div>
+
+		</div>
+
+
+		<!--这边是增加免费取物次数-->
+
+		<div class="cishu_shadow" style="display:none">
+
+
+			<div class="tip" style="margin-top:15px">
+				增加免费取物次数
+			</div>
+
+			<div class="oldNumber">
+				车牌号
+			</div>
+
+
+			<div class="duOldNumber">
+				京F.568812
+			</div>
+
+			<div class="newNumberBox">
+				增加次数
+			</div>
+
+			<div class="newNumberBox_inputBox">
+
+				<div class="layui-form">
+					<select name="interest" lay-filter="aihao">
+
+						<option value="1" selected="">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+
+					</select>
+				</div>
+			</div>
+
+			<div class="form_box  cancerOrsure" style="margin-top:60px;">
+
+				<div>
+					<button class="layui-btn   layui-btn-primary  layui-btn-lg   layui-btn-fluid" id="cishuCancer">取消</button>
+				</div>
+				<div style="flex:1">
+
+				</div>
+				<div>
+					<button class="layui-btn layui-btn-lg   layui-btn-fluid" id="cishuSure">确认增加</button>
+				</div>
+
+			</div>
+
+		</div>
+
+
+		<!-- 修改车牌号对应的逻辑 -->
+		<div class="CarNumber_shadow" style="display:none">
+
+			<div class="tip" style="margin-top:15px">
+				修改车牌号
+			</div>
+
+			<div class="oldNumber">
+
+				原车牌号
+
+			</div>
+
+			<div class="duOldNumber">
+				京F.568812
+			</div>
+
+			<div class="newNumberBox">
+				新车牌号
+			</div>
+
+			<div class="newNumberBox_inputBox">
+				<input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入新的车牌号" class="layui-input">
+			</div>
+
+
+			<div class="form_box  cancerOrsure" style="margin-top:60px;">
+
+				<div>
+					<button class="layui-btn   layui-btn-primary  layui-btn-lg   layui-btn-fluid" id="catNumberCancer">取消</button>
+				</div>
+				<div style="flex:1">
+
+				</div>
+				<div>
+					<button class="layui-btn layui-btn-lg   layui-btn-fluid" id="catNumberSure">确认修改</button>
+				</div>
+
+			</div>
+
+		</div>
+
+		<!-- 这边是暂停任务对应的逻辑-->
+
+		<div class="zhanting_shadow" style="display:none">
+
+
+			<div class="tip" style="margin-top:15px">
+				暂停任务
+			</div>
+
+			<div class="oldNumber">
+				机器人编号
+			</div>
+
+			<div class="duOldNumber">
+				Gk251
+			</div>
+
+			<div class="oldNumber">
+				任务状态
+			</div>
+
+			<div class="duOldNumber">
+				停车中
+			</div>
+
+
+			<div class="form_box  cancerOrsure" style="margin-top:40px;">
+
+				<div>
+					<button class="layui-btn   layui-btn-primary  layui-btn-lg   layui-btn-fluid" id="zhantingCancer">取消</button>
+				</div>
+				<div style="flex:1">
+
+				</div>
+				<div>
+					<button class="layui-btn layui-btn-lg   layui-btn-fluid" id="zhantingSure">暂停</button>
+				</div>
+
+
+			</div>
+
+		</div>
+
+
+
+		<!-- 这边是取物超时对应的逻辑 -->
+		<div class="quwu_shadow" style="display:none">
+
+			<div class="tip" style="margin-top:15px">
+				取物超时
+			</div>
+
+
+			<div class="quwuTip">
+				你要帮助车牌号为京F.12283的车辆从入口4重新停进停车位吗？
+
+			</div>
+
+			<div class="wenxintip">
+
+				温馨提示：请先人工确定车主不在停车场，车辆在托盘上正常
+
+
+			</div>
+
+
+			<div class="form_box  cancerOrsure" style="margin-top:30px;">
+
+				<div>
+					<button class="layui-btn   layui-btn-primary layui-btn-lg   layui-btn-fluid" id="quwuCancer">取消</button>
+				</div>
+				<div style="flex:1">
+
+				</div>
+				<div>
+					<button class="layui-btn layui-btn-lg    layui-btn-fluid" id="quwuSure">确认超时</button>
+				</div>
+
+
+			</div>
+
+
+
+		</div>
+
+		<!-- 这边是取车超时的逻辑 -->
+		<div class="quche_shadow" style="display:none">
+
+			<div class="tip" style="margin-top:15px">
+				取车超时
+			</div>
+
+
+			<div class="quwuTip">
+				车主京F.12283的车辆取车超时
+				<br> 你要帮助车牌号为京F.12283的车辆从入口4重新停进停车位吗？
+			</div>
+
+			<div class="wenxintip" style="  margin-top: 110px;">
+
+				温馨提示：请先人工确定车主不在停车场，车辆在托盘上正常
+
+
+			</div>
+
+
+			<div class="form_box  cancerOrsure" style="margin-top:30px;">
+
+				<div>
+					<button class="layui-btn   layui-btn-primary layui-btn-lg   layui-btn-fluid" id="qucheCancer">取消</button>
+				</div>
+				<div style="flex:1">
+
+				</div>
+				<div>
+					<button class="layui-btn layui-btn-lg    layui-btn-fluid" id="qucheSure">确认超时</button>
+				</div>
+
+
+			</div>
+
+
+
+		</div>
+
+
+		<!-- 这边是详情对应的页面 -->
+		<div class="xiangqing_shadow" style="display:none">
+
+			<div class="cancel" id="xiangqingCancer">
+				<i class="layui-icon"> &#x1007;</i>
+			</div>
+
+			<div class="tip" style="margin-top:15px">
+				详情
+			</div>
+
+			<div class="details_box">
+				<table class="layui-table" align="center">
+
+					<!-- <thead>
+										<tr align="center">
+											<th>编号</th>
+											<th>车牌号/取车码</th>
+										</tr>
+									</thead> -->
+					<tbody>
+
+
+
+						<tr>
+							<td>编号</td>
+							<td>5245</td>
+						</tr>
+
+						<tr>
+							<td>停车时间</td>
+							<td>2018.01.24 09:30AM</td>
+						</tr>
+
+
+						<tr>
+							<td>取车时间：</td>
+							<td>--</td>
+						</tr>
+
+
+						<tr>
+							<td>停车时间</td>
+							<td>2018.01.24 09:30AM</td>
+						</tr>
+
+
+						<tr>
+							<td>取车超时</td>
+							<td>--</td>
+						</tr>
+						<tr>
+							<td>停车超时费用</td>
+							<td>--</td>
+						</tr>
+
+						<tr>
+							<td>支付方式</td>
+							<td>--</td>
+						</tr>
+						<tr>
+							<td>车辆照片</td>
+							<td>查看图片</td>
+						</tr>
+						<tr>
+							<td>车辆类型</td>
+							<td>正常</td>
+						</tr>
+						<tr>
+							<td>停车入口</td>
+							<td>入口2</td>
+						</tr>
+						<tr>
+							<td>取车出口</td>
+							<td>--</td>
+						</tr>
+						<tr>
+							<td>计费方式</td>
+							<td>普通计费</td>
+						</tr>
+						<tr>
+							<td>计费方式</td>
+							<td>普通计费</td>
+						</tr>
+						<tr>
+							<td>取物次数</td>
+							<td>0</td>
+						</tr>
+						<tr>
+							<td>取物费用</td>
+							<td>0元</td>
+						</tr>
+						<tr>
+							<td>取物完成时间</td>
+							<td>无</td>
+						</tr>
+						<tr>
+							<td>车牌号修改</td>
+							<td>普通计费</td>
+						</tr>
+						<tr>
+							<td>使用机器人</td>
+							<td>GK251 GK251</td>
+						</tr>
+						<tr>
+							<td>历史停车点</td>
+							<td>（x1,y1）,(x1,y1),(x1,y1)</td>
+						</tr>
+						<tr>
+							<td>执行状态</td>
+							<td>
+								<br> 机器人1接受任务
+								<br> 机器人1接受任务
+								<br> 机器人1接受任务
+								<br> 机器人1接受任务
+								<br> 机器人1接受任务
+								<br> 机器人1接受任务
+								<br> 机器人1接受任务
+							</td>
+						</tr>
+
+						<tr>
+							<td>行进路线</td>
+							<td>
+								<br> 时间：0.936
+								<br> 停车路线：（x1,y2）（x1,y2）（x1,y2）（x1,y2） （x1,y2）（x1,y2）
+								<br> 时间：10:21 AM
+								<br> 转移路线1：（x1,y2）（x1,y2）（x1,y2）（x1,y2） （x1,y2）（x1,y2）
+								<br> 时间：10:21 AM
+								<br> 转移路线2：（x1,y2）（x1,y2）（x1,y2）（x1,y2） （x1,y2）（x1,y2）
+
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+
+			</div>
+
+
+
+			<!-- <div class="details_box_sure" style="margin-top:11px">
+					<button class="layui-btn layui-btn-lg layui-btn-fluid " id="details_sure">确认</button>
+		    </div> -->
+
+
+
+
+
+		</div>
+
+		<!-- 增加免费取物次数对应的弹框共用弹框-->
+
+
+		<div class="common_shadow" style="display:none">
+
+			<div style="text-align: center;" style="margin-top:20px">
+				<i class="layui-icon" style="line-height: 150px;font-size: 100px; color: #000000;">&#x1005;</i>
+			</div>
+			<div class="quwuTip" id="commonTip" style="    margin-top: 20px; font-size: 20px;">
+
+				设置成功
+			</div>
+
+			<div class="quwuTip" id="commonNext" style="  margin-top: 40px; font-size: 16px;">
+
+				当前任务已处于暂停中，点击恢复可重新恢复任务正常
+			</div>
+
+			<div class="form_box  cancerOrsure" style="margin-top:60px;">
+
+				<!-- <div>
+									<button class="layui-btn   layui-btn-primary layui-btn-lg   layui-btn-fluid" id="qucheCancer">取消</button>
+							</div> -->
+
+				<div>
+					<button class="layui-btn layui-btn-lg    layui-btn-fluid" id="commomSure">确认</button>
+				</div>
+
+			</div>
+
+
+		</div>
+
+
+
+
+
+
+	</div>
+
+
+
+
+
+
+</body>
+<script src='./js/jquery.min.js'></script>
+
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/html" id="demoTool">
+	<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+	<!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/javascript">
+	layui.use(['element', 'form', 'layer', 'laydate', 'laypage','table'], function () {
+		var element = layui.element
+		,laydate = layui.laydate
+		,laypage = layui.laypage
+		,layer = layui.layer
+		,table=layui.table;
+
+		var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+		getOrderList();
+		//时间选择器
+		laydate.render({
+			elem: '#test5',
+			type: 'date'
+		})
+
+		//时间选择器
+		laydate.render({
+			elem: '#test6',
+			type: 'date'
+		})
+
+		
+//		table.render({
+//			elem:"#table1"
+//			,height: 315
+//		    ,url: 'json/table1.json/' //数据接口
+//		    ,page: true //开启分页
+//		    ,limit:10
+//		    ,cols: [[ //表头
+//		      {field: 'id', title: '订单编号', fixed: 'left'}
+//		      ,{field: 'customerName', title: '客户名'}
+//		      ,{field: 'customerPhone', title: '客户电话'}
+//		      ,{field: 'orderId', title: '快递单号'} 
+//		      ,{field: 'money', title: '金额'}
+//		      ,{field: 'createTime', title: '订单创建时间',sort: true}
+//		      ,{field: 'status', title: '状态'}
+//		      ,{title: '操作', width: 150,toolbar:"#demoTool"}
+//		      ,{title: '操作', width: 150
+//			      ,templet: function(d){
+//			        return '<button class="layui-btn layui-btn-xs layui-btn-danger">删除</button><button class="layui-btn layui-btn-xs layui-btn-normal">查看详情</button>'
+//			      }
+//			  }
+//		    ]]
+//		})
+		
+		
+		//监听工具条
+		table.on('tool(table1)', function(obj){
+		    var data = obj.data;
+		    if(obj.event === 'detail'){
+		      layer.msg('ID：'+ data.id + ' 的查看操作');
+		    } else if(obj.event === 'del'){
+		      layer.confirm('真的删除行么', function(index){
+		        obj.del();
+		        layer.close(index);
+		      });
+		    } else if(obj.event === 'edit'){
+		      layer.alert('编辑行：<br>'+ JSON.stringify(data))
+		    }
+		});
+		
+		function getOrderList(){
+			var str='';
+			$.ajax({
+				type:"get",
+				url:globalUrl+"excel/getOrder",
+				async:true,
+				data:{type:"week",page:1},
+				success:function(res){
+					if(res.code==0){
+						if(res.data){
+							$.each(res.data.list, function(index,val) {
+								str+='<tr>'
+								str+='<td>'+val.orderNo+'</td>'
+								str+='<td>'+val.userId+'</td>'
+								str+='<td>'+formatDate(val.createTime)+'</td>'
+								str+='<td>'+val.payment+'</td>'
+								str+='</tr>'
+							});
+						}else{
+							str+='<tr><td colspan="4">暂无数据</td></tr>'
+						}
+						$("#table1 tbody").html(str);
+						//  这个是分页的设置 
+						laypage.render({
+							elem: 'demo7'
+							, count: res.data.total
+							, layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+							, jump: function (obj) {
+								console.log(obj)
+							}
+						});
+					}
+				}
+				
+			});
+		}
+	});
+	
+	//删除
+	$("#table1").on("click","button.layui-btn-danger",function(){
+		alert("ll")
+	})
+	
+	function alertMsg(type, msg) {
+		var icon = '';
+		switch (true) {
+			case (type == ('success')):
+				icon = '&#x1005;';
+				break;
+			case (type == ('error')):
+				icon = '&#x1007;';
+				break;
+		}
+		layer.open({
+			type: 1,
+			title: false,
+			closeBtn: false,
+			area: ['400px', '200px'],
+			shade: 0.5,
+			id: 'LAY_layuipro',
+			btnAlign: 'c',
+			moveType: 1,
+			content: `<div style="text-align: center">
+              <i class="layui-icon" style="line-height: 150px;font-size: 100px; color: #000000;">` +
+				icon + `</i>  
+              <p style="font-size: 22px">` + msg + `</p>
+            </div>`,
+			time: 2000,
+		});
+	};
+
+
+	// 下面是转移空托盘的弹框
+
+	$("#zhuanyi").click(function () {
+
+		$(".zhuanyi_shadow").show()
+		// console.log("xioagou")
+		parent.disableBtn()
+
+		//   parent.disableBtn()
+
+	})
+
+	$("#zhuanyiCancer").click(function () {
+		$(".zhuanyi_shadow").hide()
+
+		parent.ableBtn()
+	})
+
+
+	$("#zhuanyiSure").click(function () {
+
+		$(".zhuanyi_shadow").hide()
+		parent.ableBtn()
+
+		parent.ableBtn()
+
+		alertMsg("success", "转移成功")
+
+	})
+
+
+
+	//  下面是新增任务的弹框
+	$("#createRenwuCancer").click(function () {
+		$(".createRenwushadow").hide();
+		parent.ableBtn()
+	})
+
+	$("#createRenwuSure").click(function () {
+
+		// layer.msg('请输入任务任务编号');
+
+		$(".createRenwushadow").hide()
+
+		parent.ableBtn()
+
+
+		alertMsg("success", "新增任务成功")
+
+
+
+	})
+
+	$("#xinzhengrenwu").click(function () {
+		$(".createRenwushadow").show()
+
+		parent.disableBtn()
+
+	})
+
+	// 这边是操作取消
+
+	$("#cancel").click(function () {
+
+		$(".caozuoShadow").hide()
+
+		parent.ableBtn()
+
+	})
+
+	$("td").click(function () {
+
+		if ($(this).text() == "操作") {
+			$(".caozuoShadow").fadeIn();
+
+			parent.disableBtn()
+
+		}
+	})
+
+	// 这边是第一层的点击
+	$(".caozuoBtnBox   button").click(function () {
+		$(".caozuoShadow_sonBox").hide()
+
+		if ($(this).text() == "现金取车") {
+
+			$(".xianjing_shadow").show()
+
+		}
+
+		if ($(this).text() == "增加免费取物次数") {
+
+			$(".cishu_shadow").show();
+
+		}
+		if ($(this).text() == "修改车牌号") {
+
+			$('.CarNumber_shadow').show()
+
+		}
+
+		if ($(this).text() == "暂停任务") {
+
+			$(".zhanting_shadow").show()
+
+
+		}
+
+		if ($(this).text() == "取物超时") {
+			$(".quwu_shadow").show();
+		}
+
+		if ($(this).text() == "取车超时") {
+
+			$(".quche_shadow").show();
+
+		}
+
+		if ($(this).text() == "详情") {
+
+			$(".xiangqing_shadow").show();
+		}
+
+	})
+
+
+	// 点击时现金取车的逻辑
+
+	$("#queCheCancer").click(function () {
+
+		$(".xianjing_shadow").hide()
+		$(".caozuoShadow_sonBox").show()
+
+	})
+
+
+	$("#yiPay").click(function () {
+
+		$(".xianjing_shadow").hide()
+		// $(".caozuoShadow_sonBox").show()
+
+		// 车主已付款出现
+		$(".chezhuPay_shadow").show()
+
+	})
+
+
+	$("#DdainSure").click(function () {
+
+		$(".chezhuPay_shadow").hide()
+
+
+		$(".xianjing_shadow").hide()
+		$(".caozuoShadow_sonBox").show()
+
+	})
+
+
+	// 这边是增加免费取物次数的逻辑
+
+	$("#cishuCancer").click(function () {
+
+		$(".cishu_shadow").hide()
+		$(".caozuoShadow_sonBox").show()
+
+	})
+
+	$("#cishuSure").click(function () {
+
+
+		$(".cishu_shadow").hide()
+		$(".caozuoShadow_sonBox").hide()
+
+		var tip1 = "次数增加成功";
+		var tip2 = "当前车牌号为京F·568812可免费取物次数为2次";
+		var obj = $(".cishu_shadow")
+		successShadow(obj, tip1, tip2)
+
+	})
+
+
+	// $("#commomSure").click(function () {
+
+	// 	$(".common_shadow").hide();
+	// 	$(".cishu_shadow").hide();
+	// 	$(".caozuoShadow_sonBox").show()
+	// })
+
+
+
+	// 这边是成功提示的按钮
+	function successShadow(obj, tip1, tip2) {
+
+		$(".common_shadow").show()
+
+		$("#commonTip").text(tip1)
+		$("#commonNext").text(tip2)
+		$("#commomSure").click(function () {
+			$(".common_shadow").hide();
+			obj.hide();
+			$(".caozuoShadow_sonBox").show()
+
+		})
+
+	}
+
+	//修改车牌号码的逻辑
+	$("#catNumberCancer").click(function () {
+
+
+		$(".CarNumber_shadow").hide()
+		$(".caozuoShadow_sonBox").show()
+
+
+	})
+
+	$("#catNumberSure").click(function () {
+		$(".CarNumber_shadow").hide()
+
+
+		alertMsg("success", "修改成功")
+
+		setTimeout(function () {
+
+			$(".caozuoShadow_sonBox").show()
+		}, 2000)
+
+
+	})
+
+
+	//  暂停任务的逻辑
+
+	$("#zhantingCancer").click(function () {
+
+		$(".zhanting_shadow").hide()
+		$(".caozuoShadow_sonBox").show()
+
+
+
+	})
+
+	$("#zhantingSure").click(function () {
+
+		$(".zhanting_shadow").hide()
+		$(".caozuoShadow_sonBox").hide()
+
+
+		var tip1 = "设置成功";
+		var tip2 = "当前任务已处于暂停中，点击恢复可重新恢复任务正常";
+		var obj = $(".zhanting_shadow")
+		successShadow(obj, tip1, tip2)
+
+	})
+
+
+	// 这边是取物超时的逻辑
+
+	$("#quwuCancer").click(function () {
+
+		$(".quwu_shadow").hide()
+		$(".caozuoShadow_sonBox").show()
+
+
+	})
+
+	$("#quwuSure").click(function () {
+		$(".quwu_shadow").hide()
+
+		alertMsg("success", "取物超时确认完成")
+
+		setTimeout(function () {
+
+			$(".caozuoShadow_sonBox").show()
+		}, 2000)
+
+
+
+	})
+
+
+	// 这边是取车对应的逻辑
+
+	$("#qucheCancer").click(function () {
+
+		$(".quche_shadow").hide()
+
+		$(".caozuoShadow_sonBox").show()
+
+	})
+
+	$("#qucheSure").click(function () {
+
+		$(".quche_shadow").hide()
+
+		alertMsg("success", "取车超时确认完成")
+
+
+
+		setTimeout(function () {
+
+			$(".caozuoShadow_sonBox").fadeIn()
+		}, 2000)
+
+	})
+
+	// 这边是详情页面对应的取消按钮
+	$("#xiangqingCancer").click(function () {
+		$(".xiangqing_shadow").hide()
+		$(".caozuoShadow_sonBox").show()
+	})
+	
+	function browseFolder(){
+		var filePath="E://";
+		$.ajax({
+			type:"get",
+			url:globalUrl+"excel/getImportModel",
+			async:true,
+			data:{},
+			success:function(res){
+			}
+		});
+	}
+	
+	
+</script>
+
+</html>

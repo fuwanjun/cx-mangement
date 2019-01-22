@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+	<style>
+		.cancel {
+			position: absolute;
+			top: -10px;
+			right: -10px;
+			width: 30px;
+			height: 30px;
+			background-color: #ffffff;
+			border-radius: 50%;
+			box-shadow: 0 0 2px gray;
+			cursor: pointer;
+		}
+
+		.cancel>i {
+			padding-top: 3px;
+
+			font-size: 30px;
+			line-height: 36px;
+			color: gray;
+		}
+
+
+		.details_box td {
+			width: 50% !important;
+
+		}
+		.expressList{
+			position: absolute;
+			width: 80px;
+			left: 50%;
+			margin-left: -40px;
+			top: 38px;
+			background-color: #f1f1f1;
+			z-index: 9999;
+			border-radius: 3px;
+			overflow: hidden;
+			display: none;
+		}
+		.expressList li{
+			padding: 10px 0;
+			text-align: center;
+			
+		}
+		.expressList li:hover{
+			background-color:rgba(0,125,208,.7);
+			color: #fff;
+		}
+		
+		.showExpress{
+			display: inline-block;
+			width: 72px;
+		}
+		.vip-score,.vip-balance,.order-num,.order-price{
+			display: flex;
+			justify-content: center;
+		}
+		tbody tr td{
+			text-align: center;
+		}
+		.head-pic{
+			width:50px;
+			height:50px;
+			-webkit-border-radius: 50%;
+			-moz-border-radius: 50%;
+			border-radius: 50%;
+			overflow: hidden;
+		}
+		.head-pic img{
+			width:100%;
+			height:100%;
+		}
+		.layui-input-block{
+			margin-left:56px;
+		}
+		.layui-form-label{
+			padding:0;
+			width:auto;
+			line-height: 36px;
+		}
+		
+	</style>
+
+</head>
+
+<body>
+	<form class="layui-form   layui-row" style="display: flex;">
+		<div class="layui-form-item">
+			<label class="layui-form-label">用户名：</label>
+			<div class="layui-input-block">
+				<input type="text" id="criticalWord" name="title" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item" style="display: flex;">
+			<label class="layui-form-label" style="margin-left: 20px;">时间：</label>
+			<div class="layui-input-block" style="margin-left: 0px;">
+				<input id="test5" type="text" name="title" required  lay-verify="required" placeholder="开始时间" autocomplete="off" class="layui-input">
+			</div>
+			<p style="line-height: 38px;font-size: 16px;margin: 0 10px;">~</p>
+			<div class="layui-input-block" style="margin-left: 0px;">
+				<input id="test6" type="text" name="title" required  lay-verify="required" placeholder="结束时间" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<button id="search" style="margin-left: 20px;" type="button" class="layui-btn">搜索</button>
+	</form>
+	<!-- 下面是一些第二行的东西 -->
+	<div class="layui-row">
+		<div class="layui-inline  orderManage" style="margin-top:10px">
+			微信充值记录
+		</div>
+		<div class="layui-inline" style="float:right;margin-right:30px;margin-top:10px">
+			<!--<button class="layui-btn layui-btn-normal" style="margin-right:30px;" id="zhuanyi">转移空托盘</button>
+			<button class="layui-btn  layui-btn-normal" id="xinzhengrenwu">新增任务</button>-->
+		</div>
+	</div>
+
+	<!-- 下面是第三行表格 -->
+
+
+	<table class="layui-table" id="orderList" lay-skin="line" align="center">
+		<!-- <colgroup>
+			  <col width="150">
+			  <col width="150">
+			  <col width="200">
+			  <col>
+			</colgroup> -->
+		<thead>
+			<tr align="center">
+				<th width="250px">用户</th>
+				<th>金额</th>
+				<th>赠送金额</th>
+				<th>时间</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+
+	<!-- 这个下面是分页 -->
+	<div id="page"></div>
+	<button id="excel" class="layui-btn layui-btn-primary" type="button">导出EXCEL表格</button>
+	<div class="bg">
+
+	</div>
+	
+</body>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script>
+	$(function(){
+        getRecord(1);
+	});
+
+	function getRecord(page,condi,startTime,endTime){
+	    $.ajax({
+			url:globalUrl+"rechargeCard/getAllRechargeList",
+            type:"get",
+            data:{
+                pageNum:page,
+				condi:condi,
+				startTime:startTimeCinfg(startTime),
+				endTime:endTimeCinfg(endTime)
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+			success:function(data){
+				console.log(data);
+                $("#orderList tbody").html(" ");
+				for(var i=0;i<data.data.list.length;i++){
+					var item='<tr>' +
+						'<td style="display: flex;justify-content: flex-start;">' +
+						'<div class="head-pic"><img src="'+data.data.list[i].userPictUre+'" alt=""></div>'+
+						'<p class="vip-name" style="line-height: 50px;margin-left: 10px;">'+data.data.list[i].userName+'</p>'+
+						'</td>' +
+						'<td>'+data.data.list[i].price+'</td>'+
+						'<td>'+data.data.list[i].giftPrice+'</td>'+
+						'<td>'+timestampToTime(data.data.list[i].createTime)+'</td>'+
+						'</tr>';
+					$(item).appendTo($("#orderList tbody"));
+				}
+                layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+                    var element = layui.element;
+                    var laydate = layui.laydate;
+                    var laypage = layui.laypage
+                        , layer = layui.layer;
+                    var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+                    //时间选择器
+                    laydate.render({
+                        elem: '#test5',
+                        type: 'date'
+                    });
+
+                    //时间选择器
+                    laydate.render({
+                        elem: '#test6',
+                        type: 'date'
+                    });
+
+                    laypage.render({
+                        elem:'page',
+                        count:data.data.total,
+                        limit:data.data.pageSize,
+                        curr:page,
+                        jump:function(obj,first){
+                            if(!first){
+                                getRecord(obj.curr)
+                            }
+                        }
+                    })
+                })
+
+			}
+		});
+	}
+	$("#search").click(function(){
+        var searchCon=$("#criticalWord").val();
+        var startTime=$("#test5").val();
+        var endTime=$("#test6").val();
+        getRecord(1,searchCon,startTime,endTime);
+	});
+
+    $("#excel").click(function(){
+        getExcel();
+    });
+    //	导出EXCEL表格
+    function getExcel(){
+        var startTime=$("#test5").val();
+        var endTime=$("#test6").val();
+        var condi=$("#criticalWord").val();
+        window.open(globalUrl+"rechargeCard/exportRechargeList?keyWord="+condi+"&startTime="+startTime+"&endTime="+endTime);
+    }
+</script>
+
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+	<style>
+		.tit{
+			font-size:20px;
+			font-weight: 400;
+		}
+	</style>
+</head>
+<body>
+	<div class="layui-row">
+		<div class="layui-inline  orderManage" style="margin-top:10px">装衣袋库存管理</div>
+		<div class="layui-inline" style="float:right;margin-top:10px">
+		</div>
+	</div>
+	<div style="display: flex;">
+		<div class="tit">装衣带总数：<span id="num"></span></div>
+		<div style="margin: 0 20px;" class="tit">剩余装衣带总数：<span id="surplusNum"></span></div>
+		<div>
+			<button class="layui-btn layui-btn-primary setBtn">减库存</button>
+			<button class="layui-btn setBtn2">加库存</button>
+		</div>
+	</div>
+	
+	
+
+</body>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript">
+	var allNum="";
+	var id="";
+	layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+		var element = layui.element
+		,laydate = layui.laydate
+		,laypage = layui.laypage
+		,form =layui.form
+		, layer = layui.layer;
+		var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+        getAllStock();
+	});
+
+	$(".setBtn").click(function(){
+	    layui.use('layer',function(){
+	        var layer=layui.layer;
+	        layer.open({
+				title:'设置',
+				content:'<input style="width: 100%;padding: 5px;" id="inputNum" type="number" placeholder="输入减少的库存量"/>',
+				btn:['确定','取消'],
+				yes:function(){
+					var num=$("#inputNum").val();
+                    changeStock(id,num,1)
+				}
+			})
+		})
+	});
+    $(".setBtn2").click(function(){
+        layui.use('layer',function(){
+            var layer=layui.layer;
+            layer.open({
+                title:'设置',
+                content:'<input style="width: 100%;padding: 5px;" id="inputNum" type="number" placeholder="输入添加的库存量"/>',
+                btn:['确定','取消'],
+                yes:function(){
+                    var num=$("#inputNum").val();
+                    changeStock(id,num,0);
+                }
+            })
+        })
+    });
+
+//	获取总库存
+	function getAllStock(){
+	    $.ajax({
+            type:"get",
+            url:globalUrl+"pocket/getPocketStock",
+            async:true,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+			success:function(data){
+				if(data.status==200){
+				    id=data.data.id;
+				    allNum=data.data.stockTotal;
+				    $("#num").html(data.data.stockTotal);
+                    $("#surplusNum").html(data.data.surplusStock);
+				}
+			}
+		})
+	}
+
+	function changeStock(id,num,type){
+        $.ajax({
+            type:"post",
+            url:globalUrl+"pocket/update",
+            data:{id:id,num:num,type:type},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:function(data){
+                if(data.status==200){
+                    getAllStock();
+                    layer.closeAll();
+                }else{
+                    layer.msg(data.msg);
+                }
+            }
+        })
+	}
+</script>
+
+</html>

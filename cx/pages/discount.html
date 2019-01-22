@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" href="./css/pageIndex.css">
+	<link rel="stylesheet" href="./css/discount.css">
+
+</head>
+<style>
+</style>
+
+<body>
+	<div class="loading"> </div>
+	<div class="body">
+		<div class="table">
+			<div class="tableHead">
+				<button class="layui-btn addDiscountBtn">
+					<i class="layui-icon">&#xe61f;</i>添加优惠方式
+				</button>
+			</div>
+			<div class="tableBody">
+				<table class="layui-table">
+					<colgroup>
+						<col width="10%">
+						<col width="13%">
+						<col width="20%">
+						<col width="15%">
+						<col width="20%">
+						<col width="22%">
+					</colgroup>
+					<thead class="center">
+						<tr>
+							<th class="checkBox selectAll" isSelected="true">
+								全选
+								<i class="layui-icon unSelected">&#xe63f;</i>
+							</th>
+							<th>优惠方式</th>
+							<th>优惠详情</th>
+							<th>每日限用次数</th>
+							<th>享受优惠的分组</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody class="center">
+
+						<tr class="discountItem">
+							<td class="checkBox selectitem" isSelected="false">
+								<i class="layui-icon unSelected">&#xe63f;</i>
+							</td>
+							<td>折扣</td>
+							<td>打八折</td>
+							<td>1</td>
+							<td>普通员工</td>
+							<td>
+								<button class="layui-btn updataDiscountBtn layui-btn-primary">
+									编辑
+								</button>
+								<button class="layui-btn deleteDiscountBtn layui-btn-primary">
+									删除
+								</button>
+							</td>
+						</tr>
+						<tr class="discountItem">
+							<td class="checkBox selectitem" isSelected="false">
+								<i class="layui-icon unSelected">&#xe63f;</i>
+							</td>
+							<td>折扣</td>
+							<td>打八折</td>
+							<td>1</td>
+							<td>普通员工</td>
+							<td>
+								<button class="layui-btn updataDiscountBtn layui-btn-primary">
+									编辑
+								</button>
+								<button class="layui-btn deleteDiscountBtn layui-btn-primary">
+									删除
+								</button>
+							</td>
+						</tr>
+						<tr class="discountItem">
+							<td class="checkBox selectitem" isSelected="false">
+								<i class="layui-icon unSelected">&#xe63f;</i>
+							</td>
+							<td>折扣</td>
+							<td>打八折</td>
+							<td>1</td>
+							<td>普通员工</td>
+							<td>
+								<button class="layui-btn updataDiscountBtn layui-btn-primary">
+									编辑
+								</button>
+								<button class="layui-btn deleteDiscountBtn layui-btn-primary">
+									删除
+								</button>
+							</td>
+						</tr>
+						<tr class="discountItem">
+							<td class="checkBox selectitem" isSelected="false">
+								<i class="layui-icon unSelected">&#xe63f;</i>
+							</td>
+							<td>折扣</td>
+							<!-- 优惠详情 -->
+							<td>
+								<p>1</p>
+								<p>2</p>
+								<p>3</p>
+							</td>
+							<td>1</td>
+							<td>普通员工</td>
+							<td>
+								<button class="layui-btn updataDiscountBtn layui-btn-primary">
+									编辑
+								</button>
+								<button class="layui-btn deleteDiscountBtn layui-btn-primary">
+									删除
+								</button>
+							</td>
+						</tr>
+						<tr class="discountItem">
+							<td class="checkBox selectitem" isSelected="false">
+								<i class="layui-icon unSelected">&#xe63f;</i>
+							</td>
+							<td>折扣</td>
+							<td>打八折</td>
+							<td>1</td>
+							<td>普通员工</td>
+							<td>
+								<button class="layui-btn updataDiscountBtn layui-btn-primary">
+									编辑
+								</button>
+								<button class="layui-btn deleteDiscountBtn layui-btn-primary">
+									删除
+								</button>
+							</td>
+						</tr>
+						<tr class="discountItem">
+							<td class="checkBox selectitem" isSelected="false">
+								<i class="layui-icon unSelected">&#xe63f;</i>
+							</td>
+							<td>折扣</td>
+							<td>打八折</td>
+							<td>1</td>
+							<td>普通员工</td>
+							<td>
+								<button class="layui-btn updataDiscountBtn layui-btn-primary">
+									编辑
+								</button>
+								<button class="layui-btn deleteDiscountBtn layui-btn-primary">
+									删除
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="tableFoot">
+				<button class="layui-btn layui-btn-primary deleteDiscountsBtn">
+					<i class="layui-icon">&#xe640;</i>批量删除
+				</button>
+			</div>
+		</div>
+
+
+		<!-- 弹出框 -->
+		<div class="bg">
+			<div class="Container">
+				<!-- 取消事件 -->
+				<div class="cancel">
+					<i class="layui-icon"> &#x1007;</i>
+				</div>
+				<!-- 添加优惠方式 -->
+				<div class="layui-form bombBox addDiscountForm">
+					<div class="layui-form-item">
+						<p class="bombBoxTitle">添加优惠方式</p>
+					</div>
+					<div class="formItems">
+						<div class="discountTypeBtn layui-btn-container">
+							<button class="layui-btn discountButton discountBtn layui-btn-primary">折扣</button>
+							<button class="layui-btn discountButton limitedFreeBtn layui-btn-primary">限时免费</button>
+							<button class="layui-btn discountButton durationFreeBtn layui-btn-primary">时间段免费</button>
+							<button class="layui-btn discountButton lowPeakFreeBtn layui-btn-primary">低峰期免费</button>
+						</div>
+						<!-- 打折 -->
+						<div class="discountForm discountContainer layui-form">
+							<div class="layui-form-item">
+								<label class="layui-form-label label-left">打</label>
+								<div class="layui-input-inline discountNum">
+									<select>
+										<option value="9">9</option>
+										<option value="8">8</option>
+										<option value="7">7</option>
+										<option value="6">6</option>
+										<option value="5">5</option>
+										<option value="4">4</option>
+										<option value="3">3</option>
+										<option value="2">2</option>
+										<option value="1">1</option>
+									</select>
+								</div>
+								<label class="layui-form-label" style="text-align:left">折</label>
+							</div>
+							<!-- 限用次数 -->
+							<div class="layui-form-item">
+								<label class="layui-form-label label-left">每天限用次数</label>
+								<div class="layui-input-inline useTimes">
+									<select>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">不限次数</option>
+									</select>
+								</div>
+								<label class="layui-form-label" style="text-align:left">次</label>
+							</div>
+
+							<!-- 优惠分组 -->
+							<!-- <div class="layui-form-item">
+							<label class="layui-form-label label-left">享受该优惠的分组</label>
+							<div class="layui-input-inline discountGroup">
+								<select>
+									<option value="1">1111</option>
+									<option value="2">2222</option>
+									<option value="3">3333</option>
+									<option value="4">4444</option>
+									<option value="5">5555</option>
+								</select>
+							</div>
+						</div> -->
+							<div class="layui-form-item">
+								<label class="layui-form-label label-left" for="discountGroup">享受该优惠的分组</label>
+								<div class="layui-input-inline" style="outline:none">
+									<input type="text" id="discountGroup" class="discountGroup title layui-input" readonly="readonly" placeholder="请选择享受该优惠的分组"
+									 autocomplete="off">
+									<ul class="items">
+										<li class="item" id="1">1</li>
+										<li class="item" id="2">2</li>
+										<li class="item" id="3">3</li>
+										<li class="item" id="4">4</li>
+										<li class="item" id="5">5</li>
+										<li class="item" id="6">6</li>
+									</ul>
+								</div>
+							</div>
+							<div class="btnGroup">
+								<button class="layui-btn layui-btn-normal addDiscountSub">确认添加</button>
+							</div>
+						</div>
+					</div>
+					<!-- 限时免费 -->
+					<div class="limitedTimeFree discountContainer layui-form">
+						<div class="layui-form-item">
+							<label class="layui-form-label label-left">限前</label>
+							<div class="layui-input-inline freeTime">
+								<select>
+									<option value="9">9</option>
+									<option value="8">8</option>
+									<option value="7">7</option>
+									<option value="6">6</option>
+									<option value="5">5</option>
+									<option value="4">4</option>
+									<option value="3">3</option>
+									<option value="2">2</option>
+									<option value="1">1</option>
+								</select>
+							</div>
+							<label class="layui-form-label" style="text-align:left">小时免费</label>
+						</div>
+						<!-- 限用次数 -->
+						<div class="layui-form-item">
+							<label class="layui-form-label label-left">每天限用次数</label>
+							<div class="layui-input-inline useTimesFree">
+								<select>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">不限次数</option>
+								</select>
+							</div>
+							<label class="layui-form-label" style="text-align:left">次</label>
+						</div>
+
+						<!-- 优惠分组 -->
+						<div class="layui-form-item">
+							<label class="layui-form-label label-left" for="discountGroupFree">享受该优惠的分组</label>
+							<div class="layui-input-inline" style="outline:none">
+								<input type="text" id="discountGroupFree" class="discountGroupFree title layui-input" readonly="readonly" placeholder="请选择享受该优惠的分组"
+								 autocomplete="off">
+								<ul class="items">
+									<li class="item" id="1">1</li>
+									<li class="item" id="2">2</li>
+									<li class="item" id="3">3</li>
+									<li class="item" id="4">4</li>
+									<li class="item" id="5">5</li>
+									<li class="item" id="6">6</li>
+								</ul>
+							</div>
+						</div>
+						<div class="btnGroup">
+							<button class="layui-btn layui-btn-normal limitedTimeFreeSub">确认添加</button>
+						</div>
+					</div>
+
+					<!-- 时间段免费 -->
+					<div class="durationTimeFree discountContainer layui-form">
+						<!-- 添加事件段 -->
+						<div class="layui-form-item">
+							<label class="layui-form-label label-left">免费时间</label>
+							<div class="layui-input-inline duration">
+								<select>
+									<option value="9">法定工作日&#40;智能跳过节假日&#41;</option>
+									<option value="8">法定节假日&#40;智能跳过工作日&#41;</option>
+									<option value="7">周一至周五</option>
+									<option value="6">周六&#44;周日</option>
+									<option value="5">每天</option>
+								</select>
+							</div>
+						</div>
+						<!-- 优惠分组 -->
+						<!-- <div class="layui-form-item">
+						<label class="layui-form-label label-left">享受该优惠的分组</label>
+						<div class="layui-input-inline discountGroupDuration">
+							<select>
+								<option value="1">1111</option>
+								<option value="2">2222</option>
+								<option value="3">3333</option>
+								<option value="4">4444</option>
+								<option value="5">5555</option>
+							</select>
+						</div>
+					</div> -->
+						<!-- 优惠分组 -->
+						<div class="layui-form-item">
+							<label class="layui-form-label label-left" for="discountGroupDuration">享受该优惠的分组</label>
+							<div class="layui-input-inline" style="outline:none">
+								<input type="text" id="discountGroupDuration" class="discountGroupDuration title layui-input" readonly="readonly" placeholder="请选择享受该优惠的分组"
+								 autocomplete="off">
+								<ul class="items">
+									<li class="item" id="1">1</li>
+									<li class="item" id="2">2</li>
+									<li class="item" id="3">3</li>
+									<li class="item" id="4">4</li>
+									<li class="item" id="5">5</li>
+									<li class="item" id="6">6</li>
+								</ul>
+							</div>
+						</div>
+						<div class="btnGroup">
+							<button class="layui-btn layui-btn-normal durationFreeSub">确认添加</button>
+						</div>
+					</div>
+					<!-- 低峰期段免费 -->
+					<div class="lowPeakFree discountContainer layui-form">
+						<div class="layui-form-item">
+							<table class="layui-table" lay-skin="line">
+								<colgroup>
+									<col width="80%">
+									<col width="20%">
+								</colgroup>
+								<thead>
+									<tr>
+										<th>已有时间段</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+								<!-- 优惠时间段 -->
+								<tbody class="tbody">
+
+								</tbody>
+								<tfoot class="tfoot">
+									<tr>
+										<td colspan="2">
+											<label for="selectTime" class="addLowPeak">添加</label>
+											<div class="layui-input-inline" style="width:0px;height:0px;margin:0px;padding:0px;">
+												<input type="text" style="width:0px;height:0px;margin:0px;padding:0px;border:none;" class="layui-input" id="selectTime" placeholder=" - ">
+											</div>
+										</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+
+						<!-- 优惠分组 -->
+						<!-- <div class="layui-form-item">
+						<label class="layui-form-label label-left">享受该优惠的分组</label>
+						<div class="layui-input-inline discountGroupLowPeak">
+							<select>
+								<option value="1">1111</option>
+								<option value="2">2222</option>
+								<option value="3">3333</option>
+								<option value="4">4444</option>
+								<option value="5">5555</option>
+							</select>
+						</div>
+					</div> -->
+						<!-- 优惠分组 -->
+						<div class="layui-form-item">
+							<label class="layui-form-label label-left" for="discountGroupLowPeak">享受该优惠的分组</label>
+							<div class="layui-input-inline" style="outline:none">
+								<input type="text" id="discountGroupLowPeak" class="discountGroupLowPeak title layui-input" readonly="readonly" placeholder="请选择享受该优惠的分组"
+								 autocomplete="off">
+								<ul class="items">
+									<li class="item" id="1">1</li>
+									<li class="item" id="2">2</li>
+									<li class="item" id="3">3</li>
+									<li class="item" id="4">4</li>
+									<li class="item" id="5">5</li>
+									<li class="item" id="6">6</li>
+								</ul>
+							</div>
+						</div>
+						<div class="btnGroup">
+							<button class="layui-btn layui-btn-normal lowPeakFreeSub">确认添加</button>
+						</div>
+					</div>
+				</div>
+
+
+
+
+				<!-- 编辑优惠方式 -->
+				<div class="layui-form bombBox updataDiscountForm">
+					<div class="layui-form-item">
+						<p class="bombBoxTitle">编辑优惠方式</p>
+					</div>
+					<div class="formItems">
+						<div class="discountTypeBtn layui-btn-container">
+							<button class="layui-btn discountButton discountBtn layui-btn-primary">折扣</button>
+							<button class="layui-btn discountButton limitedFreeBtn layui-btn-primary">限时免费</button>
+							<button class="layui-btn discountButton durationFreeBtn layui-btn-primary">时间段免费</button>
+							<button class="layui-btn discountButton lowPeakFreeBtn layui-btn-primary">低峰期免费</button>
+						</div>
+						<!-- 打折 -->
+						<div class="discountForm discountContainer layui-form">
+							<div class="layui-form-item">
+								<label class="layui-form-label label-left">打</label>
+								<div class="layui-input-inline updataDiscountNum">
+									<select>
+										<option value="9">9</option>
+										<option value="8">8</option>
+										<option value="7">7</option>
+										<option value="6">6</option>
+										<option value="5">5</option>
+										<option value="4">4</option>
+										<option value="3">3</option>
+										<option value="2">2</option>
+										<option value="1">1</option>
+									</select>
+								</div>
+								<label class="layui-form-label" style="text-align:left">折</label>
+							</div>
+							<!-- 限用次数 -->
+							<div class="layui-form-item">
+								<label class="layui-form-label label-left">每天限用次数</label>
+								<div class="layui-input-inline updataUseTimes">
+									<select>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">不限次数</option>
+									</select>
+								</div>
+								<label class="layui-form-label" style="text-align:left">次</label>
+							</div>
+
+							<!-- 优惠分组 -->
+							<!-- <div class="layui-form-item">
+						<label class="layui-form-label label-left">享受该优惠的分组</label>
+						<div class="layui-input-inline updataDiscountGroup">
+							<select>
+								<option value="1">1111</option>
+								<option value="2">2222</option>
+								<option value="3">3333</option>
+								<option value="4">4444</option>
+								<option value="5">5555</option>
+							</select>
+						</div>
+					</div> -->
+							<!-- 优惠分组 -->
+							<div class="layui-form-item">
+								<label class="layui-form-label label-left" for="updataDiscountGroup">享受该优惠的分组</label>
+								<div class="layui-input-inline" style="outline:none">
+									<input type="text" id="updataDiscountGroup" class="updataDiscountGroup title layui-input" readonly="readonly" placeholder="请选择享受该优惠的分组"
+									 autocomplete="off">
+									<ul class="items">
+										<li class="item" id="1">1</li>
+										<li class="item" id="2">2</li>
+										<li class="item" id="3">3</li>
+										<li class="item" id="4">4</li>
+										<li class="item" id="5">5</li>
+										<li class="item" id="6">6</li>
+									</ul>
+								</div>
+							</div>
+							<div class="btnGroup">
+								<button class="layui-btn layui-btn-normal updataDiscountSub">保存编辑</button>
+							</div>
+						</div>
+						<!-- 限时优惠 -->
+						<div class="limitedTimeFree discountContainer layui-form">
+							<div class="layui-form-item">
+								<label class="layui-form-label label-left">限前</label>
+								<div class="layui-input-inline updataFreeTime">
+									<select>
+										<option value="9">9</option>
+										<option value="8">8</option>
+										<option value="7">7</option>
+										<option value="6">6</option>
+										<option value="5">5</option>
+										<option value="4">4</option>
+										<option value="3">3</option>
+										<option value="2">2</option>
+										<option value="1">1</option>
+									</select>
+								</div>
+								<label class="layui-form-label" style="text-align:left">小时免费</label>
+							</div>
+							<!-- 限用次数 -->
+							<div class="layui-form-item">
+								<label class="layui-form-label label-left">每天限用次数</label>
+								<div class="layui-input-inline updataUseTimesFree">
+									<select>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">不限次数</option>
+									</select>
+								</div>
+								<label class="layui-form-label" style="text-align:left">次</label>
+							</div>
+
+							<!-- 优惠分组 -->
+							<!-- <div class="layui-form-item">
+						<label class="layui-form-label label-left">享受该优惠的分组</label>
+						<div class="layui-input-inline updataDiscountGroupFree">
+							<select>
+								<option value="1">1111</option>
+								<option value="2">2222</option>
+								<option value="3">3333</option>
+								<option value="4">4444</option>
+								<option value="5">5555</option>
+							</select>
+						</div>
+					</div> -->
+							<!-- 优惠分组 -->
+							<div class="layui-form-item">
+								<label class="layui-form-label label-left" for="updataDiscountGroupFree">享受该优惠的分组</label>
+								<div class="layui-input-inline" style="outline:none">
+									<input type="text" id="updataDiscountGroupFree" class="updataDiscountGroupFree title layui-input" readonly="readonly" placeholder="请选择享受该优惠的分组"
+									 autocomplete="off">
+									<ul class="items">
+										<li class="item" id="1">1</li>
+										<li class="item" id="2">2</li>
+										<li class="item" id="3">3</li>
+										<li class="item" id="4">4</li>
+										<li class="item" id="5">5</li>
+										<li class="item" id="6">6</li>
+									</ul>
+								</div>
+							</div>
+							<div class="btnGroup">
+								<button class="layui-btn layui-btn-normal updataLimitedTimeFreeSub">保存编辑</button>
+							</div>
+						</div>
+
+						<!-- 限时免费 -->
+						<div class="durationTimeFree discountContainer layui-form">
+							<!-- 添加事件段 -->
+							<div class="layui-form-item">
+								<label class="layui-form-label label-left">免费时间</label>
+								<div class="layui-input-inline updataDuration">
+									<select>
+										<option value="9">法定工作日&#40;智能跳过节假日&#41;</option>
+										<option value="8">法定节假日&#40;智能跳过工作日&#41;</option>
+										<option value="7">周一至周五</option>
+										<option value="6">周六&#44;周日</option>
+										<option value="5">每天</option>
+									</select>
+								</div>
+							</div>
+							<!-- 优惠分组 -->
+							<!-- <div class="layui-form-item">
+						<label class="layui-form-label label-left">享受该优惠的分组</label>
+						<div class="layui-input-inline updataDiscountGroupDuration">
+							<select>
+								<option value="1">1111</option>
+								<option value="2">2222</option>
+								<option value="3">3333</option>
+								<option value="4">4444</option>
+								<option value="5">5555</option>
+							</select>
+						</div>
+					</div> -->
+							<!-- 优惠分组 -->
+							<div class="layui-form-item">
+								<label class="layui-form-label label-left" for="updataDiscountGroupDuration">享受该优惠的分组</label>
+								<div class="layui-input-inline" style="outline:none">
+									<input type="text" id="updataDiscountGroupDuration" class="updataDiscountGroupDuration title layui-input" readonly="readonly"
+									 placeholder="请选择享受该优惠的分组" autocomplete="off">
+									<ul class="items">
+										<li class="item" id="1">1</li>
+										<li class="item" id="2">2</li>
+										<li class="item" id="3">3</li>
+										<li class="item" id="4">4</li>
+										<li class="item" id="5">5</li>
+										<li class="item" id="6">6</li>
+									</ul>
+								</div>
+							</div>
+							<div class="btnGroup">
+								<button class="layui-btn layui-btn-normal updataDurationTimeFreeSub">保存编辑</button>
+							</div>
+						</div>
+						<!-- 低峰期段免费 -->
+						<div class="lowPeakFree discountContainer layui-form">
+							<div class="layui-form-item">
+								<table class="layui-table" lay-skin="line">
+									<colgroup>
+										<col width="80%">
+										<col width="20%">
+									</colgroup>
+									<thead>
+										<tr>
+											<th>已有时间段</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody class="tbody">
+
+									</tbody>
+									<tfoot class="tfoot">
+										<tr>
+											<td colspan="2">
+												<label for="updataTime" class="addLowPeak">添加</label>
+												<div class="layui-input-inline" style="width:0px;height:0px;margin:0px;padding:0px;">
+													<input type="text" style="width:0px;height:0px;margin:0px;padding:0px;border:none;" class="layui-input" id="updataTime" placeholder=" - ">
+												</div>
+											</td>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
+							<!-- 添加时间段 -->
+
+							<!-- 优惠分组 -->
+							<!-- <div class="layui-form-item">
+						<label class="layui-form-label label-left">享受该优惠的分组</label>
+						<div class="layui-input-inline updataDiscountGroupLowPeak">
+							<select>
+								<option value="1" id="11">1111</option>
+								<option value="2">2222</option>
+								<option value="3">3333</option>
+								<option value="4">4444</option>
+								<option value="5">5555</option>
+							</select>
+						</div>
+					</div> -->
+							<!-- 优惠分组 -->
+							<div class="layui-form-item">
+								<label class="layui-form-label label-left" for="updataDiscountGroupLowPeak">享受该优惠的分组</label>
+								<div class="layui-input-inline" style="outline:none">
+									<input type="text" id="updataDiscountGroupLowPeak" class="updataDiscountGroupLowPeak title layui-input" readonly="readonly"
+									 placeholder="请选择享受该优惠的分组" autocomplete="off">
+									<ul class="items">
+										<li class="item" id="1">1</li>
+										<li class="item" id="2">2</li>
+										<li class="item" id="3">3</li>
+										<li class="item" id="4">4</li>
+										<li class="item" id="5">5</li>
+										<li class="item" id="6">6</li>
+									</ul>
+								</div>
+							</div>
+							<div class="btnGroup">
+								<button class="layui-btn layui-btn-normal updataLowPeakFreeSub">保存编辑</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+				<!-- 单个删除优惠方式 -->
+				<div class="layui-form bombBox deleteDiscountForm">
+					<div class="layui-form-item">
+						<p class="bombBoxTitle deleteTitle" style="padding:30px 0px;text-align: center;">确认删除该优惠方式吗&#63;</p>
+					</div>
+					<div class="submitBtn ">
+						<button class="layui-btn layui-btn-primary cancelDeletes">取消</button>
+						<button class="layui-btn layui-btn-normal deleteDiscount">确认</button>
+					</div>
+				</div>
+				<!-- 批量删除优惠方式 -->
+				<div class="layui-form bombBox deleteDiscountsForm">
+					<div class="layui-form-item">
+						<p class="bombBoxTitle deleteTitle" style="padding:30px 0px;text-align: center;">确认删除该优惠方式吗&#63;</p>
+					</div>
+					<div class="submitBtn ">
+						<button class="layui-btn layui-btn-primary cancelDeletes">取消</button>
+						<button class="layui-btn layui-btn-normal deleteDiscounts">确认</button>
+					</div>
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+<script src='./js/jquery.min.js'></script>
+<script src="../resource/layui/layui.js"></script>
+<script>
+	// 隐藏弹出框
+	init();
+
+	$(function () {
+		$('.body').show();
+		$('.loading').hide();
+	});
+
+	function init() {
+		hideBG();
+		$('.discountContainer').hide();
+		$('.discountForm').show();
+		$('.discountButton').removeClass('layui-btn-danger');
+		$('.discountBtn').addClass('layui-btn-danger');
+	}
+	// 隐藏阴影
+	function hideBG() {
+		$('.bg').fadeOut();
+		parent.ableBtn();
+		$('.bombBox').fadeOut();
+	}
+
+	function showBG(DOM) {
+		$('.bg').fadeIn();
+		// 本机运行跨域报错
+		parent.disableBtn();
+		$(DOM).fadeIn();
+	}
+
+	var lowPeakArray = [];
+	var updataLowPeakArray = [];
+	layui.use(['laypage', 'layer', 'laydate', 'form'], function () {
+		var form = layui.form;
+		var laypage = layui.laypage;
+		var layer = layui.layer;
+		var laydate = layui.laydate;
+		//时间范围
+		var data = laydate.render({
+			elem: '#selectTime',
+			type: 'time',
+			format: 'HH:mm',
+			done: function (value) {
+
+				if (value != '') {
+					var str = '<tr>';
+					str += '<td>' + value + '</td>';
+					str += '<td deleteTime="' + value + '" class = "deleteLowPeakTime">删除</td>';
+					str += '</tr>'
+					console.log(value);
+					lowPeakArray.push(value);
+					$('.tbody').append(str);
+				}
+
+			},
+			range: true
+		});
+		//时间范围
+		var updataTime = laydate.render({
+			elem: '#updataTime',
+			type: 'time',
+			format: 'HH:mm',
+			done: function (value) {
+
+				if (value != '') {
+					var str = '<tr>';
+					str += '<td>' + value + '</td>';
+					str += '<td deleteTime="' + value + '" class = "deleteLowPeakTime">删除</td>';
+					str += '</tr>'
+					console.log(value);
+					updataLowPeakArray.push(value);
+					$('.tbody').append(str);
+				}
+
+			},
+			range: true
+		});
+	})
+
+	function alertMsg(type, msg) {
+		var icon = '';
+		switch (true) {
+			case (type == ('success')):
+				icon = '&#x1005;';
+				break;
+			case (type == ('error')):
+				icon = '&#x1007;';
+				break;
+		}
+		layer.open({
+			type: 1,
+			title: false,
+			closeBtn: false,
+			area: ['400px', '200px'],
+			shade: 0.5,
+			id: 'LAY_layuipro',
+			btnAlign: 'c',
+			moveType: 1,
+			content: `<div style="text-align: center">
+							<i class="layui-icon" style="line-height: 150px;font-size: 100px; color: #000000;">` +
+				icon + `</i>  
+							<p style="font-size: 22px">` + msg + `</p>
+						</div>`,
+			time: 2000,
+		});
+	}
+
+
+
+	// 选择享有优惠的分组
+	$('.title').live('click', function (e) {
+		e.stopPropagation();
+		$('.items').toggle(150);
+	});
+
+	$('.items').live('click', function (e) {
+		e.stopPropagation();
+	});
+	$('.Container').live('click', function (e) {
+		e.stopPropagation();
+		$('.items').hide(150);
+	});
+	$('.item').live('click', function () {
+		$(this).toggleClass('selectedGroup');
+		var item = $(".selectedGroup")
+		var arr = [];
+		item.each(function (index, i) {
+			var date = $(i).attr("id")
+			arr.push(date);
+		});
+		console.log(arr);
+		$('.title').val(arr.join());
+	});
+
+
+
+
+
+	// 全选
+	var isSelectAll = false;
+	// 单个选择 需要存一个单个优惠ID
+	var selectArry = [];
+	$('.selectitem').live('click', function () {
+		var isSelected = $(this).attr('isSelected');
+		isSelected = (isSelected == 'false') ? false : true;
+		if (isSelected) {
+			// 选中状态
+			$(this).html("<i class='layui-icon unSelected'>&#xe63f;</i>");
+			$(this).attr('isSelected', !isSelected);
+		} else {
+			// 非选中
+			$(this).html("<i class='layui-icon selected'>&#xe616;</i>");
+			$(this).attr('isSelected', !isSelected);
+		}
+		// 存入最新的状态
+		$(this).attr('isSelected', !isSelected);
+		updataStatus()
+	});
+
+	$('.selectAll').live('click', function () {
+		var isSelected = $(this).attr('isSelected');
+		// 先改变原有状态再赋值判断
+		isSelected = (isSelected == 'false') ? false : true;
+		isSelectAll = isSelected;
+		console.log('是否全选' + isSelected);
+		if (isSelectAll) {
+			// 选中状态
+			selectArry = [1, 2, 3];
+			$(this).html("全选&nbsp;<i class='layui-icon selected'>&#xe616;</i>");
+			$('.selectitem').html("<i class='layui-icon selected'>&#xe616;</i>");
+			$('.selectitem').attr('isSelected', !isSelected);
+		} else {
+			// 非选中
+			selectArry = [];
+			$(this).html("全选&nbsp;<i class='layui-icon unSelected'>&#xe63f;</i>");
+			$('.selectitem').html("<i class='layui-icon unSelected'>&#xe63f;</i>");
+			$('.selectitem').attr('isSelected', !isSelected);
+		}
+		// 存入最新的状态
+		$(this).attr('isSelected', !isSelected);
+		updataStatus()
+	});
+
+	updataStatus();
+	$('.deleteDiscountsBtn').addClass('layui-btn-disabled');
+
+	function updataStatus() {
+		// console.group('是否禁用按钮');
+		// console.log(selectArry);
+		// console.log(selectArry.length != 0);
+		// console.groupEnd();
+		if (selectArry.length != 0) {
+			// console.log('启用');
+			$('.deleteDiscountsBtn').removeClass('layui-btn-disabled').removeAttr("disabled");
+		} else {
+			// console.log('禁用');
+			$('.deleteDiscountsBtn').addClass('layui-btn-disabled').attr('disabled', "true");
+		}
+	}
+
+
+
+	// 弹出框取消按钮被点击
+	$('.cancel ,.cancelDeletes').live('click', function () {
+		init();
+	});
+
+
+
+	// 添加优惠方式
+	$('.addDiscountBtn').live('click', function () {
+		showBG('.addDiscountForm');
+	});
+
+	// 更改默认按钮样式
+	var lastBtn = 0;
+	var nowBtn = 0;
+	$('.discountButton').live('click', function () {
+		nowBtn = $(this).index('.discountButton');
+		console.log(lastBtn);
+		console.log(nowBtn);
+
+
+		if (lastBtn != nowBtn) {
+			$('.title').val('');
+			lastBtn = nowBtn;
+		}
+		$('.item').removeClass('selectedGroup');
+		$('.discountButton').removeClass('layui-btn-danger');
+		$(this).addClass('layui-btn-danger');
+		$('.discountContainer').hide();
+	})
+
+	// 折扣
+	$('.discountBtn').live('click', function () {
+		$('.discountForm').show();
+	});
+	$('.addDiscountSub').live('click', function () {
+		var discountNum = $('.discountNum input').val();
+		var useTimes = $('.useTimes input').val();
+		var discountGroup = $('.discountGroup').val();
+
+		console.group('折扣方式');
+		console.log(discountNum);
+		console.log(useTimes);
+		console.log(discountGroup);
+		console.groupEnd();
+		init();
+	});
+
+	// 限时免费
+	$('.limitedFreeBtn').live('click', function () {
+		$('.limitedTimeFree').show();
+	});
+
+	$('.limitedTimeFreeSub').live('click', function () {
+		var freeTime = $('.freeTime input').val();
+		var useTimes = $('.useTimesFree input').val();
+		var discountGroup = $('.discountGroupFree').val();
+
+		console.group('限时免费方式');
+		console.log(freeTime);
+		console.log(useTimes);
+		console.log(discountGroup);
+		console.groupEnd();
+		init();
+	});
+
+	// 时间段免费
+	$('.durationFreeBtn').live('click', function () {
+		$('.durationTimeFree').show();
+	});
+
+	$('.durationFreeSub').live('click', function () {
+		var duration = $('.duration input').val();
+		var discountGroup = $('.discountGroupDuration').val();
+
+		console.group('时间段免费方式');
+		console.log(duration);
+		console.log(discountGroup);
+		console.groupEnd();
+		init();
+	})
+
+	// 低峰期免费
+	$('.lowPeakFreeBtn').live('click', function () {
+		$('.lowPeakFree').show();
+	});
+	// 提交低峰期免费信息
+	$('.lowPeakFreeSub').live('click', function () {
+		var discountGroup = $('.discountGroupLowPeak').val();
+
+		console.group('低峰期免费方式');
+		console.log(discountGroup);
+		console.log(lowPeakArray);
+
+		console.groupEnd();
+		init();
+	})
+
+
+
+	// 更新优惠方式
+	$('.updataDiscountBtn').live('click', function () {
+		showBG('.updataDiscountForm');
+	});
+	// 更新折扣方式
+	$('.updataDiscountSub').live('click', function () {
+		var discountNum = $('.updataDiscountNum input').val();
+		var useTimes = $('.updataUseTimes input').val();
+		var discountGroup = $('.updataDiscountGroup').val();
+
+		console.group('折扣方式');
+		console.log(discountNum);
+		console.log(useTimes);
+		console.log(discountGroup);
+		console.groupEnd();
+		init();
+	});
+	// 更新限时免费
+	$('.updataLimitedTimeFreeSub').live('click', function () {
+		var freeTime = $('.updataFreeTime input').val();
+		var useTimes = $('.updataUseTimesFree input').val();
+		var discountGroup = $('.updataDiscountGroupFree').val();
+
+		console.group('限时免费方式');
+		console.log(freeTime);
+		console.log(useTimes);
+		console.log(discountGroup);
+		console.groupEnd();
+		init();
+	});
+
+	// 更新时间段免费
+	$('.updataDurationTimeFreeSub').live('click', function () {
+		var duration = $('.updataDuration input').val();
+		var discountGroup = $('.updataDiscountGroupDuration').val();
+
+		console.group('时间段免费方式');
+		console.log(duration);
+		console.log(discountGroup);
+		console.groupEnd();
+		init();
+	});
+
+	// 更新低峰期免费
+	$('.updataLowPeakFreeSub').live('click', function () {
+		var discountGroup = $('.updataDiscountGroupLowPeak').val();
+		console.group('低峰期免费方式');
+		console.log(discountGroup);
+		console.log(updataLowPeakArray);
+
+		console.groupEnd();
+		init();
+	});
+
+
+	// 删除低峰期时间段
+	$('.deleteLowPeakTime').live('click', function () {
+		var deleteTime = $(this).attr('deleteTime');
+		for (let i = 0; i < lowPeakArray.length; i++) {
+			if (deleteTime == lowPeakArray[i]) {
+				lowPeakArray.splice(i, 1)
+			}
+		}
+		$(this).parent().remove();
+		console.log(deleteTime);
+		console.log(lowPeakArray);
+	});
+
+	// 确定删除
+	var deleteBtnIndex = 0;
+	$('.deleteDiscountBtn').live('click', function () {
+		deleteBtnIndex = $('.deleteDiscountBtn').index(this);
+		showBG('.deleteDiscountForm');
+	});
+
+	$('.deleteDiscount').live('click', function () {
+		$('.discountItem').eq(deleteBtnIndex).remove();
+
+		alertMsg('success', '删除成功！');
+
+		// 如果已经被选中  找到selectArray 中当前的item并删除之后更新批量删除按钮的状态
+		// 删除逻辑
+
+
+
+
+		hideBG();
+	});
+
+	// 批量删除
+	$('.deleteDiscountsBtn').live('click', function () {
+		showBG('.deleteDiscountsForm');
+	});
+	$('.deleteDiscounts').live('click', function () {
+		// 批量删除逻辑
+		alertMsg('success', '删除成功！');
+		hideBG();
+	});
+	switch (){
+		case value:
+			break;
+		default:
+			break;
+	}
+</script>

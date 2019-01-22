@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" href="./css/pageIndex.css">
+
+</head>
+<style>
+	.navHeader {
+		display: flex;
+		justify-content: flex-end;
+		background-color: rgba(242, 242, 242, 1);
+		padding: 20px 20px;
+	}
+
+	.icon {
+		width: 16px;
+		height: 16px;
+	}
+
+	.layui-form-item>.layui-form-label {
+		width: 90px;
+		padding: 9px 5px;
+	}
+
+	.name,
+	.account {
+		line-height: 38px;
+	}
+
+	.hide {
+		display: none;
+	}
+
+	.spaceBetween {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+
+	.totalAccount {
+		font-size: 16px;
+		line-height: 38px;
+	}
+
+	.red {
+		color: #ff0000;
+	}
+
+	#pageBtn {
+		display: flex;
+		justify-content: center;
+	}
+
+	td {
+		text-align: center;
+	}
+
+	.table {
+		border: 1px solid #f2f2f2;
+		padding: 20px;
+	}
+
+	.layui-table th {
+		text-align: center;
+		border-collapse: collapse;
+		border: 1px solid #E6E6E6;
+	}
+
+	.footBtn {
+		width: 500px;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		padding: 20px;
+	}
+
+	.footBtn>button {
+		margin-right: 40px;
+	}
+</style>
+
+<body>
+	<div class="loading"> </div>
+	<div class="body">
+		<!-- 客户分类详情 -->
+		<div>
+			<!-- 顶部客户按钮操作部分 -->
+			<div class="navHeader">
+
+				<button class="layui-btn">
+					<img class="icon" src="./img/export.png" alt="">导出
+				</button>
+			</div>
+		</div>
+
+
+		<div class="table">
+			<div class="tHead">
+				<h2 class="show_hide">请仔细检查您准备交班的内容</h2>
+				<h2 class="show_hide hide">
+					<span class="staffName">张三</span>已申请交班，请接班同事核对无误后接班。</h2>
+				<p class="totalAccount">
+					现金总汇&#58;
+					<span class="red">&yen;
+						<span class="totalNum">88888888.88</span>
+					</span>
+				</p>
+			</div>
+			<table class="layui-table" lay-skin="line row">
+				<colgroup>
+					<!-- 车牌 -->
+					<col width="10%">
+					<!-- 收费数 -->
+					<col width="10%">
+					<!-- 优惠数 -->
+					<col width="10%">
+					<!-- 付费方式 -->
+					<col width="12%">
+					<!-- 分组 -->
+					<col width="11%">
+					<!-- 优惠活动 -->
+					<col width="15%">
+					<!-- 停车时间 -->
+					<col width="20%">
+					<!-- 停车时长 -->
+					<col width="12%">
+				</colgroup>
+				<thead>
+					<tr>
+						<th>车牌</th>
+						<th>收费金额</th>
+						<th>优惠金额</th>
+						<th>收费方式</th>
+						<th>所在分组</th>
+						<th>优惠活动</th>
+						<th>停车时间</th>
+						<th>停车时长</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>京A12345</td>
+						<td>&yen;120</td>
+						<td>&yen;120</td>
+						<td>支付宝支付</td>
+						<td>普通员工</td>
+						<td>前两小时免费</td>
+						<td>2018/10/10 19:17 - 2018/10/10 20:30</td>
+						<td>10小时13分</td>
+					</tr>
+					<tr>
+						<td>京A12345</td>
+						<td>&yen;120</td>
+						<td>&yen;120</td>
+						<td>支付宝支付</td>
+						<td>普通员工</td>
+						<td>前两小时免费</td>
+						<td>2018/10/10 19:17 - 2018/10/10 20:30</td>
+						<td>10小时13分</td>
+					</tr>
+					<tr>
+						<td>京A12345</td>
+						<td>&yen;120</td>
+						<td>&yen;120</td>
+						<td>支付宝支付</td>
+						<td>普通员工</td>
+						<td>前两小时免费</td>
+						<td>2018/10/10 19:17 - 2018/10/10 20:30</td>
+						<td>10小时13分</td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- 分页 -->
+			<div id="pageBtn">
+
+			</div>
+		</div>
+
+		<!-- 交班信息按钮 -->
+		<div class="footBtn">
+			<button class="show_hide layui-btn layui-btn-normal shiftBtn">确定交班</button>
+			<button class="show_hide layui-btn layui-btn-normal subFinanceBtn">提交给财务</button>
+			<button class="show_hide layui-btn layui-btn-normal confirmShift hide">确定接班</button>
+		</div>
+
+		<!-- 弹出框 -->
+		<!-- 阴影 -->
+		<div class="bg">
+			<!-- 弹框容器 -->
+			<div class="Container">
+				<!-- 取消事件 -->
+				<div class="cancel">
+					<i class="layui-icon"> &#x1007;</i>
+				</div>
+				<!-- 申请交班弹框 -->
+				<div class="bombBox staffShift">
+					<div class="layui-form">
+						<div class="layui-form-item">
+							<label class="layui-form-label">交班人账号</label>
+							<div class="layui-input-block">
+								<span class="account">12345678901@abc.com</span>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">交班人姓名</label>
+							<div class="layui-input-block">
+								<span class="name">12345678901@abc.com</span>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label" for="password">账号密码</label>
+							<div class="layui-input-block">
+								<input type="password" id="password" placeholder="请输入您的账号登陆密码" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block" style="margin-top:20px;">
+								<button class="layui-btn layui-btn-normal staffShiftSub">我已认真检查，并保证现金金额没有问题</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 接班人信息弹框 -->
+				<div class="bombBox shiftLogin">
+					<div class="layui-form">
+						<div class="layui-form-item">
+							<label class="layui-form-label" for="account">接班人账号</label>
+							<div class="layui-input-block">
+								<input type="text" id="account" placeholder="请输入您的账号" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label" for="name">接班人姓名</label>
+							<div class="layui-input-block">
+								<input type="text" id="name" placeholder="请输入您的姓名" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label" for="newPassword">账号密码</label>
+							<div class="layui-input-block">
+								<input type="password" id="newPassword" placeholder="请输入您的账号登陆密码" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block" style="margin-top:20px;">
+								<button class="layui-btn layui-btn-normal shiftStaffSub">我已认真检查，并保证现金金额没有问题</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 接班成功状态弹框 -->
+				<div class="bombBox changeStaffAccount">
+					<div style="text-align: center">
+						<i class="layui-icon" style="line-height: 150px;font-size: 100px; color: #000000;">&#x1005;</i>
+						<p style="font-size: 22px">接班成功！</p>
+						<p style="margin:10px 0 20px 0;">请你切换账号直接登陆自己的账号</p>
+						<button class="layui-btn layui-btn-normal changeAccountBtn">切换账号</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+<script src='./js/jquery.min.js'></script>
+<script src="../resource/layui/layui.js"></script>
+<script>
+
+	
+	$(function () {
+		$('.body').show();
+		$('.loading').hide();
+	});
+
+	layui.use(['laypage', 'layer', 'form', 'laydate'], function () {
+		var form = layui.form;
+		var laypage = layui.laypage;
+		var layer = layui.layer;
+		var laydate = layui.laydate;
+		//监听提交
+		laypage.render({
+			elem: 'pageBtn',
+			count: 100,
+			layout: ['prev', 'page', 'next', 'skip', 'count', 'limit'],
+			jump: function (obj) {
+				console.log(obj)
+			}
+		});
+
+		laydate.render({
+			elem: '#date'
+		});
+	})
+
+	function alertMsg(type, msg) {
+		var icon = '';
+		switch (true) {
+			case (type == ('success')):
+				icon = '&#x1005;';
+				break;
+			case (type == ('error')):
+				icon = '&#x1007;';
+				break;
+		}
+		layer.open({
+			type: 1,
+			title: false,
+			closeBtn: false,
+			area: ['400px', '200px'],
+			shade: 0.5,
+			id: 'LAY_layuipro',
+			btnAlign: 'c',
+			moveType: 1,
+			content: '<div style="text-align: center"><i class="layui-icon" style="line-height: 150px;font-size: 100px; color: #000000;">' +
+				icon + '</i> <p style="font-size: 22px">' + msg + '</p></div>',
+			time: 2000,
+		});
+	}
+
+	// 显示弹框阴影
+	function showBG(DOM) {
+		parent.ableBtn();
+		$('.cancel').show();
+		$('.bombBox').hide();
+		$(DOM).fadeIn();
+		$('.bg').fadeIn();
+		parent.disableBtn();
+	}
+
+	// 隐藏弹框阴影
+	function hideBG() {
+		$('.bg').fadeOut();
+		parent.ableBtn();
+		$('.bombBox').fadeOut();
+		$('input').val('');
+	}
+
+	// 取消按钮
+	$('.cancel').live('click', function () {
+		hideBG();
+	});
+
+	var shiftTo = '';
+
+	// 申请交班
+	$('.shiftBtn').live('click', function () {
+		showBG('.staffShift');
+		shiftTo = 'staff';
+	});
+	// 提交接班
+	$('.staffShiftSub').live('click', function () {
+		var password = $('#password').val();
+		if (password == '') {
+			layer.msg('密码不能为空！');
+			return;
+		}
+		console.log(password);
+		if (shiftTo == 'account') {
+			alertMsg('success', '已经成功提交给财务！');
+			hideBG();
+			// 交接按钮隐藏
+			$('.show_hide').toggleClass('hide');
+			$('.confirmShift').hide();
+			$('.subFinanceBtn').show().addClass('layui-btn layui-btn-disabled').attr("disabled", "disabled");
+		} else {
+			alertMsg('success', '交班成功！');
+			hideBG();
+			// 交接按钮隐藏
+			$('.show_hide').toggleClass('hide');
+		}
+	});
+
+	// 确认接班
+	$('.confirmShift').live('click', function () {
+		showBG('.shiftLogin');
+	});
+	// 提交接班信息
+	$('.shiftStaffSub').live('click', function () {
+		var account = $('#account').val();
+		var newPassword = $('#newPassword').val();
+		var name = $('#name').val();
+
+		if (account == '') {
+			layer.msg('密码不能为空！');
+			return;
+		};
+		if (name == '') {
+			layer.msg('接班人姓名不能为空！');
+			return;
+		};
+		if (newPassword == '') {
+			layer.msg('登陆密码不能为空！');
+			return;
+		};
+		console.group('接班人信息');
+		console.log(account);
+		console.log(name);
+		console.log(newPassword);
+		console.groupEnd();
+
+		showBG('.changeStaffAccount');
+		$('.cancel').hide();
+	});
+
+
+	// 接班成功
+	$('.changeAccountBtn').live('click', function () {
+		parent.window.location.href = '../login.html';
+	});
+
+
+	// 提交给财务
+	$('.subFinanceBtn').live('click', function () {
+		shiftTo = 'account';
+		showBG('.staffShift');
+	});
+</script>

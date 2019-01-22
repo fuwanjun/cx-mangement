@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>员工管理</title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+
+
+
+	<style>
+		.goodsImg{
+			width: 50px;
+			height: 50px;
+		}
+		body{
+			background-color: #fff;
+		}
+		.headlabel{
+			width: 12px;
+			height: 18px;
+			background-color: #1194d6;
+			display: inline-block;
+			vertical-align: middle;
+			margin-right: 10px;
+		}
+		.layui-form-label{
+			width:100px;
+		}
+		.layui-form-item .layui-input-inline.address{
+			width:504px;
+		}
+		.tableResponse{
+			height: 120px;
+			overflow-y: auto;
+		}
+		.attachment{
+			border: 1px solid #999;
+			border-radius: 4px;
+			width: 80px;
+			display: inline-block;
+		}
+		.attachmentNumber{
+			width:30px;
+			border: none;
+			outline: none;
+		}
+		.attachment span{
+			padding: 0px 6px;
+		}
+		.layui-table[lay-skin=line] td{
+			border-width: 1px;
+		}
+		#searchBrand,#searchEffect,#searchSpot{
+			outline: none;
+			border-radius: 8px;
+			height: 27px;
+			padding:4px 6px;		
+		}
+		.brandContent{
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap
+		}
+		.brandLi{
+			padding: 3px 10px;
+			margin: 12px;
+			border: 1px solid #ddd;
+			height: 26px;
+			background-color: #fff;
+		}
+		.colorLi{
+			/*padding: 3px 10px;*/
+			margin: 12px;
+			border: 1px solid #ddd;
+			height: 26px;
+			width: 90px;
+			
+			display: flex;
+			flex-direction: row;
+			text-align: center;
+			align-items: center;
+			justify-content: center;
+		}
+		.brandLi-active{
+			background-color: #aaa;
+		}
+		.brandOperation{
+			display: none;
+		}
+		.colorOperation{
+			display: none;
+		}
+		.spotOperation{
+			display: none;
+		}
+		.effectOperation{
+			display: none;
+		}
+		.colorLi_child{
+			width: 45px;
+			height: 26px;
+		}
+		.colorLi_child:first-of-type{
+			text-align: right;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.colorLi_child:last-of-type{
+			text-align: left;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.shelfTitle{
+			background-color: rgba(0,0,0,.3);
+			color: #fff;
+			text-align: center;
+			overflow: hidden;
+			margin-bottom: 15px;
+		}
+		.shelfTitle div{
+			margin: 15px 0;
+			font-size: 25px;
+		}
+		.layui-select-title{
+			display: none;
+		}
+	</style>
+
+</head>
+
+<body>
+	<form class="layui-form layui-row" style="float: left; " id="search1">
+		<div class="layui-row">
+			<div class="layui-inline  orderManage" style="margin-top:10px">
+				<span class="headlabel"></span>员工管理列表
+			</div>
+		</div>
+		<!--<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin: 0 0 10px;">-->
+			<!--<div class="layui-input-inline" style="margin:0; width: 70%;">-->
+				<!--<input type="text" name="company" id="company"  placeholder="请输入账号" autocomplete="off" class="layui-input">-->
+			<!--</div>-->
+			<!--<button class="layui-btn layui-btn-normal" name="user" type="button">查询</button>-->
+		<!--</div>-->
+		<div class="layui-inline" style="float: right;margin-bottom: 10px;">
+			<button class="layui-btn layui-btn-normal" type="button" id="addOperation">新赠员工</button>
+		</div>
+	</form>
+		<!-- 下面是第三行表格 -->
+	<table class="layui-table" lay-skin="line" align="center">
+		<!-- <colgroup>
+			  <col width="150">
+			  <col width="150">
+			  <col width="200">
+			  <col>
+			</colgroup> -->
+		<thead>
+			<tr align="center">
+				<th><input type="checkbox" name="allSelect" id="allSelect" value="" /></th>
+				<th>姓名</th>
+				<th>账号</th>
+				<!--<th>密码</th>-->
+				<th>岗位</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!--<tr>-->
+				<!--<td class="check"><input type="checkbox" /></td>-->
+				<!--<td class="name">老薛</td>-->
+				<!--<td class="userNum">15956892345</td>-->
+				<!--&lt;!&ndash;<td class="userpassword">123456</td>&ndash;&gt;-->
+				<!--<td class="job">精洗</td>-->
+				<!--<td class="operation">-->
+					<!--<button class="layui-btn layui-btn-normal layui-btn-xs">编辑</button>-->
+					<!--<button class="layui-btn layui-btn-primary layui-btn-xs">删除</button>-->
+				<!--</td>-->
+			<!--</tr>-->
+		</tbody>
+	</table>
+	<!-- 这个下面是分页 -->
+	<div id="page"></div>
+	<div id="addCon" style="padding: 10px 25px 10px 0; display: none;">
+		<form class="layui-form" action="">
+			<div class="layui-form-item">
+				<label class="layui-form-label">用户名</label>
+				<div class="layui-input-block" style="margin-left: 100px">
+					<input id="addName" type="text" name="title" required  lay-verify="required" placeholder="新增用户名" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">账号</label>
+				<div class="layui-input-block" style="margin-left: 100px">
+					<input id="addCode" type="text" name="title" required  lay-verify="required" placeholder="新增账号" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">密码</label>
+				<div class="layui-input-inline">
+					<input id="addPassword" type="password" name="password" required lay-verify="required" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+				<div>
+					<label class="layui-form-label">选择岗位</label>
+					<select id="selectJob" style="display: block; height: 36px;border: 1px solid #e6e6e6;margin-left: 10px;"></select>
+				</div>
+				<div class="layui-form-item">
+					<button type="button" class="layui-btn" style="margin-left: 100px;margin-top: 10px" id="checkAdd">确认添加员工</button>
+				</div>
+		</form>
+	</div>
+</body>
+
+<script src='./js/jquery.min.js'></script>
+<script src="../resource/js/common.js"></script>
+<script src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script>
+	var animate="";
+	$(function(){
+	    layui.use('layer',function(){
+	        var layer=layui.layer;
+	        animate=layer.load();
+        	getStaff(1);
+	    })
+	});
+var job="";
+//	添加角色
+	$("#addOperation").click(function(){
+	    $.ajax({
+			url:globalUrl+"api/washRole/list;jsessionid=" + $.cookie("token"),
+			type:'get',
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+			success:function(data){
+			    console.log(data);
+			    for(var i=0;i<data.data.length;i++){
+			        var item='<option value="'+data.data[i].id+'">'+data.data[i].roleName+'</option>';
+			        $(item).appendTo($("#selectJob"))
+				}
+			}
+
+		});
+	   	layui.use('layer',function(){
+	   	    var layer=layui.layer;
+	   	    job=layer.open({
+						type:1,
+						content:$("#addCon"),
+						area:['500px','400px']
+					});
+		})
+	});
+
+	//	确定添加角色
+    $("#checkAdd").click(function(){
+
+        var username=$("#addName").val();
+        var usercode=$("#addCode").val();
+        var password=$("#addPassword").val();
+        var position=$("#selectJob").val();
+        animate=layer.load();
+        if(username&&usercode&&password&&position){
+            $.ajax({
+                url:globalUrl+"api/washUser/add;jsessionid=" + $.cookie("token"),
+                type:'post',
+                data:{
+                    username:username,
+                    usercode:usercode,
+                    password:password,
+                    roleId:position
+                },
+                crossDomain: true,
+                beforeSend: function (request) {
+                    request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                },
+                success:function(data){
+                    console.log(data);
+                    if(data.status==200){
+                        layer.close(job)
+                        alert(data.data);
+                        getStaff(1);
+                    }else{
+                        layer.close(animate);
+                        alert(data.msg);
+                    }
+
+                }
+            })
+		}else{
+            layer.close(animate);
+            alert("新增员工信息不能为空");
+		}
+
+    });
+
+//	删除员工
+	$(".del").live("click",function(){
+		var id=$(this).parent().attr("id");
+		layui.use('layer',function(){
+		    var layer=layui.layer;
+		    var pop=layer.open({
+				type:1,
+				content:"<p style='margin: 10px;'>确定删除该员工？</p>",
+				btn:["取消","确定"],
+				yes:function(){
+                    layer.close(pop);
+				},
+				btn2:function(){
+                    $.ajax({
+                        url:globalUrl+"api/washUser/delete;jsessionid=" + $.cookie("token"),
+                        type:'get',
+                        data:{id:id},
+                        crossDomain: true,
+                        beforeSend: function (request) {
+                            request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                        },
+                        success:function(data){
+                            console.log(data);
+                            if(data.status==200){
+                                layui.use("layer",function(){
+                                    var layer=layui.layer;
+                                    layer.alert("删除成功！");
+                                    getStaff(1);
+								})
+
+							}else{
+                                alert(data.msg);
+							}
+
+                        }
+                    })
+				}
+			})
+		});
+
+	});
+
+//	删除员工
+    $(".reset").live("click",function(){
+        var id=$(this).parent().attr("id");
+        layui.use('layer',function(){
+            var layer=layui.layer;
+            var pop=layer.open({
+                type:1,
+                content:"<p style='margin: 10px;'>确定重置密码？</p>",
+                btn:["取消","确定"],
+                yes:function(){
+                    layer.close(pop);
+                },
+                btn2:function(){
+                    animate=layer.load();
+                    $.ajax({
+                        url:globalUrl+"api/washUser/afresh;jsessionid=" + $.cookie("token"),
+                        type:'get',
+                        data:{userId:id},
+                        crossDomain: true,
+                        beforeSend: function (request) {
+                            request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                        },
+                        success:function(data){
+                            layer.alert("重置密码成功！");
+                            layer.close(animate);
+                        }
+                    })
+                }
+            })
+        });
+
+    });
+
+//	获取已创建的角色
+	function getStaff(page){
+	    $.ajax({
+			url:globalUrl+"api/washUser/list;jsessionid=" + $.cookie("token"),
+			type:'get',
+			data:{page:page},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+			success:function(data){
+//			    console.log(data);
+			    $("tbody").html("");
+			    for(var i=0;i<data.data.list.length;i++){
+			        var job="";
+			        if(data.data.list[i].roles[0].id==5){
+			            job="超级管理员";
+					}else if(data.data.list[i].roles[0].id==12){
+                        job="签收";
+					}else if(data.data.list[i].roles[0].id==13){
+                        job="分拣录入";
+                    }else if(data.data.list[i].roles[0].id==14){
+                        job="精洗";
+                    }else if(data.data.list[i].roles[0].id==15){
+                        job="普洗";
+                    }else if(data.data.list[i].roles[0].id==16){
+                        job="干洗";
+                    }else if(data.data.list[i].roles[0].id==17){
+                        job="洗鞋";
+                    }else if(data.data.list[i].roles[0].id==18){
+                        job="皮具护理";
+                    }else if(data.data.list[i].roles[0].id==19){
+                        job="整理/质检";
+                    }else if(data.data.list[i].roles[0].id==20){
+                        job="熨烫";
+                    }else if(data.data.list[i].roles[0].id==21){
+                        job="客服";
+                    }else if(data.data.list[i].roles[0].id==22){
+                        job="上架";
+                    }else if(data.data.list[i].roles[0].id==23){
+                        job="包装";
+                    }else if(data.data.list[i].roles[0].id==24){
+                        job="发货";
+                    }else if(data.data.list[i].roles[0].id==25){
+                        job="管理员";
+                    }
+			        var item='<tr>' +
+								'<td class="check"><input type="checkbox" /></td>' +
+								'<td class="name">'+data.data.list[i].username+'</td>' +
+								'<td class="userNum">'+data.data.list[i].usercode+'</td>' +
+//								'<td class="userpassword">123456</td>' +
+								'<td class="job">'+job+'</td>' +
+								'<td class="operation" id="'+data.data.list[i].id+'">' +
+								'<button class="layui-btn layui-btn-normal layui-btn-xs reset">重置密码</button>' +
+								'<button class="layui-btn layui-btn-primary layui-btn-xs del">删除</button>' +
+								'</td>' +
+							 '</tr>';
+			        $(item).appendTo($("tbody"));
+				}
+				layer.close(animate);
+				layui.use(['element', 'form', 'layer', 'laydate', 'laypage'],function(){
+                    var laypage = layui.laypage;
+
+                    laypage.render({
+                        elem:'page',
+                        count:data.data.total,
+                        limit:data.data.pageSize,
+                        curr:page,
+                        jump:function(obj,first){
+                            if(!first){
+                                animate=layer.load();
+                                getStaff(obj.curr);
+                            }
+                        }
+                    })
+				})
+			}
+		})
+	}
+</script>
+
+</html>

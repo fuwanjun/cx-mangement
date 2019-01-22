@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>加盟店管理</title>
+    <meta charset='utf-8'>
+    <meta name='renderer' content='webkit'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black'>
+    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <meta name='format-detection' content='telephone=no'>
+    <link rel="stylesheet" href="../resource/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href='css/pageIndex.css'/>
+    <link rel="stylesheet" type="text/css" href='css/orderManagement.css'/>
+    <style>
+        .goodsImg {
+            width: 50px;
+            height: 50px;
+        }
+
+        body {
+            background-color: #fff;
+        }
+
+        .headlabel {
+            width: 12px;
+            height: 18px;
+            background-color: #1194d6;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .layui-form-label {
+            width: 100px;
+        }
+
+        .layui-form-item .layui-input-inline.address {
+            width: 504px;
+        }
+
+        .tableResponse {
+            height: 120px;
+            overflow-y: auto;
+        }
+
+        .attachment {
+            border: 1px solid #999;
+            border-radius: 4px;
+            width: 80px;
+            display: inline-block;
+        }
+
+        .attachmentNumber {
+            width: 30px;
+            border: none;
+            outline: none;
+        }
+
+        .attachment span {
+            padding: 0px 6px;
+        }
+
+        .layui-table[lay-skin=line] td {
+            border-width: 1px;
+        }
+
+        #searchBrand, #searchEffect, #searchSpot {
+            outline: none;
+            border-radius: 8px;
+            height: 27px;
+            padding: 4px 6px;
+        }
+
+        .brandContent {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap
+        }
+
+        .brandLi {
+            padding: 3px 10px;
+            margin: 12px;
+            border: 1px solid #ddd;
+            height: 26px;
+            background-color: #fff;
+        }
+
+        .colorLi {
+            /*padding: 3px 10px;*/
+            margin: 12px;
+            border: 1px solid #ddd;
+            height: 26px;
+            width: 90px;
+
+            display: flex;
+            flex-direction: row;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brandLi-active {
+            background-color: #aaa;
+        }
+
+        .brandOperation {
+            display: none;
+        }
+
+        .colorOperation {
+            display: none;
+        }
+
+        .spotOperation {
+            display: none;
+        }
+
+        .effectOperation {
+            display: none;
+        }
+
+        .colorLi_child {
+            width: 45px;
+            height: 26px;
+        }
+
+        .colorLi_child:first-of-type {
+            text-align: right;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .colorLi_child:last-of-type {
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .shelfTitle {
+            background-color: rgba(0, 0, 0, .3);
+            color: #fff;
+            text-align: center;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .shelfTitle div {
+            margin: 15px 0;
+            font-size: 25px;
+        }
+
+        .regionBox {
+            width: 100%;
+        }
+
+        .regionBox > .layui-input-block .layui-input-inline {
+            width: 28%;
+            height: 38px;
+        }
+    </style>
+
+</head>
+
+<body>
+<form class="layui-form layui-row" style="float: left; " id="search1">
+    <div class="layui-row">
+        <div class="layui-inline  orderManage" style="margin-top:10px">
+            <span class="headlabel"></span>加盟店
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin: 0 0 10px;">
+        <div class="layui-input-inline" style="margin:0; width: 70%;">
+            <input type="text" name="company" id="company" placeholder="请输入店名" autocomplete="off" class="layui-input">
+        </div>
+        <button class="layui-btn layui-btn-normal" name="user" type="button" id="searchBtn">查询</button>
+    </div>
+    <div class="layui-inline" style="float: right;margin-bottom: 10px;">
+        <!--<button class="layui-btn layui-btn-primary">批量删除</button>-->
+        <button type="button" class="layui-btn" id="addShop">添加店铺</button>
+    </div>
+</form>
+<!-- 下面是第三行表格 -->
+<table class="layui-table" lay-skin="line" align="center" id="shops">
+    <thead>
+    <tr align="center">
+        <th>店铺名称</th>
+        <th>店铺地址</th>
+        <th>地区</th>
+        <th>联系人</th>
+        <th>店铺联系方式</th>
+        <th>格架类目</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<!-- 这个下面是分页 -->
+<div id="page"></div>
+</body>
+<div id="add-box" style="display: none; padding-right: 20px;padding-top: 10px;">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">格架类目</label>
+            <div class="layui-input-block">
+                <select id="shopType" lay-verify="required">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item regionBox">
+            <label class="layui-form-label">选择地区</label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline">
+                    <select name="P1" lay-filter="province">
+                        <option></option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="C1" lay-filter="city">
+                        <option></option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="A1" lay-filter="area">
+                        <option></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">店铺名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="shopName" required lay-verify="required" placeholder="请输入店铺名称" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">店铺地址</label>
+            <div class="layui-input-block">
+                <input type="text" id="shopAddress" required lay-verify="required" placeholder="请输入店铺地址"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系人</label>
+            <div class="layui-input-block">
+                <input type="text" id="contacts" required lay-verify="required" placeholder="请输入联系人姓名"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系方式</label>
+            <div class="layui-input-block">
+                <input type="text" id="shopCall" required lay-verify="required" placeholder="请输入店铺联系方式"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<script src='./js/jquery.min.js'></script>
+<script src="../resource/js/common.js"></script>
+<script src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script src="./js/citys.js"></script>
+<script type="text/javascript">
+    var nowPage = 1;
+    layui.use(['element', 'form', 'layer', 'table', 'laydate', 'laypage', 'colorpicker'], function () {
+        var element = layui.element;
+        var laydate = layui.laydate;
+        var form = layui.form;
+        var laypage = layui.laypage
+            , table = layui.table
+            , colorpicker = layui.colorpicker
+            , layer = layui.layer;
+        var $ = layui.jquery,
+            layer = layui.layer; //独立版的layer无需执行这一句
+
+        var pca = {};
+        pca.keys = {};
+        pca.ckeys = {};
+        var region={};
+        initRegion('select[name=P1]', 'select[name=C1]', 'select[name=A1]',"北京","北京","东城区");
+        getShops(nowPage);
+
+        function initRegion(province, city, area, initprovince, initcity, initarea){
+            if(!province || !$(province).length) return;
+            $(province).html('');
+            $(province).append('<option selected>全部</option>');
+            for(var i in citys){
+                $(province).append('<option>'+citys[i].name+'</option>');
+                pca.keys[citys[i].name] = citys[i];
+            }
+            form.render('select');
+            if(initprovince) $(province).next().find('[lay-value="'+initprovince+'"]').click();
+            if(!city || !$(city).length) return;
+            formRender(city);
+            form.on('select(province)', function(data){
+                var cs = pca.keys[data.value];
+                $(city).html('');
+                $(city).append('<option>全部</option>');
+                if(cs){
+                    cs = cs.city;
+                    for(var i in cs){
+                        $(city).append('<option>'+cs[i].name+'</option>');
+                        pca.ckeys[cs[i].name] = cs[i];
+                    }
+                    $(city).find('option:eq(1)').attr('selected', true);
+                }
+                form.render('select');
+                $(city).next().find('.layui-this').removeClass('layui-this').click();
+                formHidden('province', data.value);
+                //此处可以自己修改 显示的位置, 不想显示可以直接去掉
+                region.province=data.value;
+            });
+            if(initprovince) $(province).next().find('[lay-value="'+initprovince+'"]').click();
+            if(initcity) $(city).next().find('[lay-value="'+initcity+'"]').click();
+            if(!area || !$(area).length) return;
+            formRender(area);
+            form.on('select(city)', function(data){
+                var cs = pca.ckeys[data.value];
+                $(area).html('');
+                $(area).append('<option>全部</option>');
+                if(cs){
+                    cs = cs.area;
+                    for(var i in cs){
+                        $(area).append('<option>'+cs[i]+'</option>');
+                    }
+                    $(area).find('option:eq(1)').attr('selected', true);
+                }
+                form.render('select');
+                $(area).next().find('.layui-this').removeClass('layui-this').click();
+                formHidden('city', data.value);
+                //$('.pca-label-city').html(data.value);	//此处可以自己修改 显示的位置, 不想显示可以直接去掉
+                region.city=data.value;
+
+            });
+            form.on('select(area)', function(data){
+                formHidden('area', data.value);
+                //$('.pca-label-area').html(data.value);	//此处可以自己修改 显示的位置, 不想显示可以直接去掉
+                region.district=data.value;
+            });
+            if(initprovince) $(province).next().find('[lay-value="'+initprovince+'"]').click();
+            if(initcity) $(city).next().find('[lay-value="'+initcity+'"]').click();
+            if(initarea) $(area).next().find('[lay-value="'+initarea+'"]').click();
+        }
+        function formRender(obj){
+            $(obj).html('');
+            $(obj).append('<option>全部</option>');
+            form.render('select');
+        }
+
+        function formHidden(obj, val){
+            if(!$('#pca-hide-'+obj).length)
+                $('body').append('<input id="pca-hide-'+obj+'" type="hidden" value="'+val+'" />');
+            else
+                $('#pca-hide-'+obj).val(val);
+        }
+    });
+
+    var addPop = "";
+    //	新增店铺
+    $("#addShop").click(function () {
+        clearWrite();
+        getShopType();
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            addPop = layer.open({
+                type: 1,
+                area: ['500px'],
+                content: $('#add-box'),
+                btn: ['保存', '取消'],
+                yes: function () {
+                    var type = $("#shopType").val();
+                    var shopName = $("#shopName").val();
+                    var shopAddress = $("#shopAddress").val();
+                    var area = $("select[name='P1']").val()+"-"+$("select[name='C1']").val()+"-"+$("select[name='A1']").val();
+                    var contacts = $("#contacts").val();
+                    var shopCall = $("#shopCall").val();
+                    if (type == "") {
+                        layer.msg("请选择格架类目");
+                        return false
+                    }
+                    if (shopName == "") {
+                        layer.msg("请填写加盟店名称");
+                        return false
+                    }
+                    if (shopAddress == "") {
+                        layer.msg("请填写加盟店地址");
+                        return false
+                    }
+                    if (area == "") {
+                        layer.msg("请填写地区");
+                        return false
+                    }
+                    if (contacts == "") {
+                        layer.msg("请填写联系人姓名");
+                        return false
+                    }
+                    if (shopCall == "") {
+                        layer.msg("请填写加盟店联系方式");
+                        return false
+                    }
+                    $.ajax({
+                        url: globalUrl + "api/store/add;jsessionid=" + $.cookie("token"),
+                        type: 'post',
+                        data: {
+                            storeName: shopName,
+                            storePhone: shopCall,
+                            storeAddress: shopAddress,
+                            region: area,
+                            consumerName: contacts,
+                            styleId: type
+                        },
+                        crossDomain: true,
+                        beforeSend: function (request) {
+                            request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                        },
+                        success: function (data) {
+                            if (data.status == 200) {
+                                layer.msg('添加加盟店成功');
+                                getShops(nowPage);
+
+                                layer.close(addPop);
+                            } else {
+                                layer.msg(data.msg);
+                                layer.close(addPop);
+                            }
+                        }
+                    })
+                }
+            })
+        })
+    });
+
+    //	点击删除加盟店
+    var delPop = "";
+    $(".delBtn").live("click", function () {
+        var shopId = $(this).parent().parent().attr("shopId");
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            delPop = layer.open({
+                type: 1,
+                content: '<p style="font-size:16px;margin:0 20px;">确定删除该加盟店吗？</p>',
+                btn: ['确定', '取消'],
+                yes: function () {
+                    delShop(shopId);
+                },
+                btn2: function () {
+                    layer.close(delPop);
+                }
+            })
+        })
+    });
+
+    //	点击修改加盟店
+    $(".changeBtn").live("click", function () {
+        getShopType();
+        var shopId = $(this).parent().parent().attr("shopId");
+        thisShop(shopId);
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.open({
+                type: 1,
+                area: ['500px'],
+                content: $('#add-box'),
+                btn: ['保存', '取消'],
+                yes: function () {
+                    var type = $("#shopType").val();
+                    var shopName = $("#shopName").val();
+                    var shopAddress = $("#shopAddress").val();
+                    var area = $("select[name='P1']").val()+"-"+$("select[name='C1']").val()+"-"+$("select[name='A1']").val();
+                    var contacts = $("#contacts").val();
+                    var shopCall = $("#shopCall").val();
+                    $.ajax({
+                        url: globalUrl + "api/store/update;jsessionid=" + $.cookie("token"),
+                        type: 'post',
+                        data: {
+                            storeName: shopName,
+                            storePhone: shopCall,
+                            storeAddress: shopAddress,
+                            region: area,
+                            consumerName: contacts,
+                            styleId: type,
+                            id: shopId
+                        },
+                        crossDomain: true,
+                        beforeSend: function (request) {
+                            request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                        },
+                        success: function (data) {
+                            if (data.status == 200) {
+                                getShops(nowPage);
+                                layer.closeAll();
+                                layer.msg("修改加盟店成功");
+                            } else {
+                                layer.msg(data.msg);
+                            }
+                        }
+                    })
+                }, btn2: function () {
+                    layer.closeAll();
+                }
+
+            })
+        })
+    });
+
+    //	点击查询加盟店
+    $("#searchBtn").click(function () {
+        var shopName = $("#company").val();
+        getShops(1, shopName);
+    });
+
+    /**
+     *获取已添加的店铺信息
+     */
+    function getShops(page, shopName) {
+        $.ajax({
+            url: globalUrl + "api/store/list;jsessionid=" + $.cookie("token"),
+            type: 'get',
+            data: {page: page, storeName: shopName},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success: function (data) {
+                if (data.status == 200) {
+                    $("#shops tbody").html("");
+                    for (var i = 0; i < data.data.list.length; i++) {
+                        var item = '<tr shopId="' + data.data.list[i].id + '">' +
+                            '<td>' + data.data.list[i].storeName + '</td>' +
+                            '<td>' + data.data.list[i].storeAddress + '</td>' +
+                            '<td>' + data.data.list[i].region + '</td>' +
+                            '<td>' + data.data.list[i].consumerName + '</td>' +
+                            '<td>' + data.data.list[i].storePhone + '</td>' +
+                            '<td>' + data.data.list[i].styleId + '</td>' +
+                            '<td>' +
+                            '<button class="layui-btn layui-btn-sm layui-btn-normal changeBtn">修改</button>' +
+                            '<button class="layui-btn layui-btn-sm layui-btn-danger delBtn">删除</button>' +
+                            '</td>' +
+                            '</tr>';
+                        $(item).appendTo($("#shops tbody"))
+                    }
+                    layui.use('laypage', function () {
+                        var laypage = layui.laypage;
+                        laypage.render({
+                            elem: 'page',
+                            count: data.data.total,
+                            limit: data.data.pageSize,
+                            curr: page,
+                            jump: function (obj, first) {
+                                if (!first) {
+                                    nowPage = obj.curr;
+                                    getShops(obj.curr, shopName);
+                                }
+                            }
+                        })
+                    })
+                }
+            }
+        })
+    }
+
+    //	修改加盟店
+    function changeShop() {
+
+        var type = $("#shopType").val();
+        var shopName = $("#shopName").val();
+        var shopAddress = $("#shopAddress").val();
+        var shopCall = $("#shopCall").val();
+    }
+
+    //	删除加盟店
+    function delShop(shopId) {
+        $.ajax({
+            url: globalUrl + "api/store/delete;jsessionid=" + $.cookie("token"),
+            type: 'get',
+            data: {ids: shopId},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success: function (data) {
+                if (data.status == 200) {
+                    getShops(nowPage);
+                    layer.close(delPop);
+                    layer.msg("店铺删除成功！");
+                } else {
+                    layer.msg(data.msg);
+                }
+            }
+        })
+    }
+
+    /**
+     *获取格架类目
+     */
+    function getShopType() {
+        $.ajax({
+            url: globalUrl + "api/Trellis/list;jsessionid=" + $.cookie("token"),
+            type: 'get',
+            async: false,
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success: function (data) {
+                console.log(data);
+                if (data.status == 200) {
+                    layui.use('form',function(){
+                        var form=layui.form;
+                        $("#shopType").html("");
+                        for (var i = 0; i < data.data.length; i++) {
+                            var item = '<option value="' + data.data[i].id + '">' + data.data[i].trellisName + '</option>';
+                            $(item).appendTo($("#shopType"));
+                        }
+                        form.render();
+                    });
+
+                } else {
+                    layer.msg(data.msg);
+                }
+            }
+        })
+    }
+
+    //	查询店铺信息
+    function thisShop(shopId) {
+        $.ajax({
+            url: globalUrl + "api/store/getById;jsessionid=" + $.cookie("token"),
+            type: 'get',
+            data: {id: shopId},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success: function (data) {
+                if (data.status == 200) {
+                    var area=data.data.region.split("-");
+                    $("#shopType").val(data.data.styleId);
+                    $("#shopName").val(data.data.storeName);
+                    $("#shopAddress").val(data.data.storeAddress);
+                    $("select[name='P1']").val(area[0]);
+                    $("select[name='C1']").val(area[1]);
+                    $("select[name='A1']").val(area[2]);
+                    $("#contacts").val(data.data.consumerName);
+                    $("#shopCall").val(data.data.storePhone);
+                }
+            }
+        })
+    }
+
+    //	清空弹窗信息
+    function clearWrite() {
+        $("#shopType").val("");
+        $("#shopName").val("");
+        $("#shopAddress").val("");
+        $("#shopCall").val("");
+        $("select[name='P1']").val('全部');
+        $("select[name='C1']").val('全部');
+        $("select[name='A1']").val('全部');
+        $("#contacts").val("");
+    }
+
+</script>
+</html>

@@ -1,0 +1,786 @@
+.layui-row {
+    width: 100%;
+    height: 100%;
+
+    /*background-color: red;*/
+    /*min-width: 1200px;*/
+}
+
+.layui-btn {
+    padding: 0 10px !important;
+
+
+}
+
+.layui-form-item {
+    /*margin-right: 20px;*/
+    /*background-color: red;*/
+    /*width: 20%;*/
+
+}
+
+
+
+.layui-form-item>.layui-input-inline {
+    width: 50%;
+
+}
+
+
+
+.orderManage {
+    line-height: 38px;
+    font-weight: bold;
+    font-size: 18px
+}
+
+tr>td {
+    text-align: center;
+    cursor: pointer;
+
+}
+
+tr>th {
+    text-align: center !important;
+    cursor: pointer;
+
+}
+
+
+/* 这边是增加任务的弹框 */
+.shadow {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+
+
+}
+
+
+.createRenwu {
+    width: 50%;
+    max-width: 600px;
+    height: 500px;
+    padding-top: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 5px;
+
+    background-color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
+
+/* 这个下面是标题 */
+
+.tip{
+
+text-align: center;
+font-size: 20px;
+font-weight: bold;
+
+border-radius: 5px;
+
+
+}
+
+.bianhoa{
+
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 30px;
+}
+
+
+.form_box{
+    margin-top: 15px;
+}
+
+
+.anniuBox{
+    display: flex;
+}
+
+.anniuBox div{
+   flex: 1;
+}
+
+
+
+.cancerOrsure{
+
+    display: flex
+
+}
+
+.cancerOrsure div{
+    flex: 4;
+    
+}
+
+.cancerOrsure div layui-btn{
+    flex: 1;
+    height: 60px;
+}
+
+
+/* 这边是转移空托盘的任务弹框 */
+
+.zhuanyi_shadow{
+
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+
+
+}
+
+.zhanyikongtuopan_shadow{
+
+    width: 50%;
+    max-width: 500px;
+    min-height:400px;
+    padding: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    border-radius: 5px;
+   
+    background-color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 这边是操作的弹框 */
+
+
+.caozuoShadow{
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+
+}
+
+.caozuoShadow_sonBox{
+
+    width: 40%;
+    max-width: 400px;
+    min-height: 460px;
+    padding: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    border-radius: 5px;
+   
+
+    background-color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
+.caozuoBtnBox{
+
+    margin-top: 15px;
+
+}
+
+.guanbi_box{
+    width: 150px;
+    margin: 0 auto;
+}
+
+
+/* 这边是现金取车对应的弹框 */
+
+.xianjing_shadow{
+
+    width: 50%;
+    max-width: 500px;
+    min-height:400px;
+    padding: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    border-radius: 5px;
+   
+    background-color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
+
+
+
+.pictureOrText{
+
+display: flex;
+margin-top: 30px;
+
+
+}
+
+.pictureOrText > div{
+    
+     height: 210px;
+    /* background-color: red; */
+     line-height: 30px;
+     font-weight: bold;
+    font-size: 16px; 
+     
+}
+
+.pictureOrTextOne{
+  flex: 2;
+
+
+}
+
+.pictureOrTextOne div{
+    margin-top: 5px;
+}
+
+.pictureOrTextTwo{
+    flex: 1
+
+}
+
+.cheImg{
+
+   width: 180px;
+   height: 180px;
+   /* background-color: red */
+}
+
+
+
+/* 车主已付款对应的弹框 */
+
+.chezhuPay_shadow{
+
+    width: 50%;
+    max-width: 500px;
+    min-height:400px;
+    padding: 25px;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    border-radius: 5px;
+   
+    background-color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+
+}
+
+
+
+
+
+
+
+
+
+
+/* 这边是取物次数对应的逻辑 */
+
+.cishu_shadow{
+
+
+    width: 50%;
+    max-width: 500px;
+    min-height:400px;
+    padding: 25px;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    border-radius: 5px;
+   
+    background-color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+
+}
+
+
+
+
+
+
+/* 这边是修改车牌号对应的阴影 */
+
+.CarNumber_shadow{
+
+    width: 50%;
+    max-width: 500px;
+    min-height:400px;
+    padding: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    border-radius: 5px;
+   
+    background-color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
+.oldNumber{
+
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 40px;
+}
+
+.duOldNumber{
+
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 30px;
+    text-align: center;
+
+}
+
+.newNumberBox{
+
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 25px;
+
+
+}
+
+.newNumberBox_inputBox{
+
+    margin-top: 10px;
+}
+
+.newNumberBox_inputBox  input{
+
+    font-size: 16px;
+ 
+}
+
+
+.zhanting_shadow{
+
+    width: 50%;
+    max-width: 500px;
+    min-height:400px;
+    padding: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    border-radius: 5px;
+   
+    background-color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
+
+
+
+/* 这边是取物超时对应的阴影 */
+
+.quwu_shadow{
+
+
+    width: 50%;
+    max-width: 500px;
+    min-height:400px;
+    padding: 25px;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    border-radius: 5px;
+   
+    background-color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+
+
+}
+
+.quwuTip{
+
+     font-size: 16px;
+     font-weight: bold;
+
+     text-align: center;
+     margin-top: 80px;
+
+
+}
+
+.wenxintip{
+
+    font-size: 14px;
+
+    text-align: center;
+    margin-top: 130px;
+
+    font-weight: bold;
+  
+
+}
+
+
+/* 这边是取车超时对应的设置 */
+
+.quche_shadow{
+
+
+    width: 50%;
+    max-width: 500px;
+    min-height:400px;
+    padding: 25px;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    border-radius: 5px;
+   
+    background-color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+
+
+}
+
+
+/*这边是详情页面对应的设置*/
+
+
+
+.xiangqing_shadow{
+
+    width: 50%;
+    /* max-width: 500px; */
+    min-height:520px;
+    /* padding: 25px; */
+    padding-top: 0;
+    padding-bottom: 0; 
+
+    border-radius: 5px;
+   
+    background-color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+   
+
+}
+
+
+.details_box{
+   overflow-y: auto;
+   height: 475px;
+
+   /* border: 1px solid #787878; */
+
+
+}
+
+
+.details_box_sure{
+margin: 0 auto;
+
+}
+
+#details_sure{
+
+display: block;
+margin: 0 auto;
+
+
+
+}
+
+
+
+
+/* 暂停任务和次数增需要用到的弹框*/
+
+.common_shadow{
+
+width: 50%;
+max-width: 500px;
+min-height:400px;
+padding: 25px;
+padding-top: 0;
+padding-bottom: 0;
+border-radius: 5px;
+background-color: #ffffff;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+
+}
+
+/* 
+
+commonTip
+commonNext */
+
+
+
+/* 这边是历史订单的样式*/
+
+
+#riqiBox{
+    position: relative;
+   
+
+}
+
+#timeList_box{
+   width: 80px;
+   position: absolute;
+   top: 38px;
+   left: 0;
+   z-index: 5;
+   background-color: white;
+   border: 1px solid #dadada;
+   text-align: center;
+   border-radius: 5px;
+   box-shadow: 0 0 1px #999999;
+   
+}
+
+#timeList_box div{
+ height: 38px;
+ 
+ line-height: 38px;
+
+ cursor: pointer;
+ /* color: #e6e6e6; */
+ /* color: #e6e6e6;
+  */
+/* color: #999999; */
+
+}
+
+#timeList_box div:hover{
+
+    background-color:#f2f2f2;
+
+    /* color: #999999; */
+}
+
+
+
+/* 下面是机器人列表的样式 */
+
+.top_tip{
+   font-size: 18px;
+   font-weight: bold;
+   line-height: 38px;
+   font-weight: bold;
+   font-size: 18px;
+
+}
+
+/* 这边是增加机器人列表的阴影 */
+.add_Robot_shadow{
+
+ width: 50%;
+max-width: 500px;
+min-height:470px;
+padding: 25px;
+padding-top: 0;
+padding-bottom: 0;
+border-radius: 5px;
+background-color: #ffffff;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+
+
+}
+
+/* 这边是删除机器人的的东西 */
+
+.reduce_Robot_shadow{
+    width: 50%;
+    max-width: 700px;
+    min-height:470px;
+    /* padding: 25px; */
+    padding-bottom: 30px;
+
+    padding-top: 0;
+    padding-bottom: 0;
+    border-radius: 5px;
+    background-color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+
+}
+
+
+.allDetal{
+
+
+height: 369px;
+
+overflow-y: auto;
+
+
+
+}
+
+
+
+/* 这边是去充电对应的代码 */
+
+
+.gochongdian_shadow{
+
+
+width: 50%;
+max-width: 500px;
+min-height:400px;
+padding: 25px;
+padding-top: 0;
+padding-bottom: 0;
+border-radius: 5px;
+background-color: #ffffff;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+
+
+}
+
+.changeIP_shadow{
+
+width: 50%;
+max-width: 500px;
+min-height:400px;
+padding: 25px;
+padding-top: 0;
+padding-bottom: 0;
+border-radius: 5px;
+background-color: #ffffff;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+
+
+}
+
+
+.stopUsing_shadow{
+
+
+ width: 50%;
+max-width: 500px;
+min-height:400px;
+padding: 25px;
+padding-top: 0;
+padding-bottom: 0;
+border-radius: 5px;
+background-color: #ffffff;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+
+}
+
+
+.tatalselect{
+    vertical-align: top;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

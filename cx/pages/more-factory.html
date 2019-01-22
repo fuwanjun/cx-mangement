@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>工厂分流</title>
+    <meta charset='utf-8'>
+    <meta name='renderer' content='webkit'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black'>
+    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <meta name='format-detection' content='telephone=no'>
+    <link rel="stylesheet" href="../resource/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href='css/pageIndex.css'/>
+    <link rel="stylesheet" type="text/css" href='css/orderManagement.css'/>
+    <style>
+        .cancel {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 2px gray;
+            cursor: pointer;
+        }
+
+        .cancel > i {
+            padding-top: 3px;
+
+            font-size: 30px;
+            line-height: 36px;
+            color: gray;
+        }
+
+        .details_box td {
+            width: 50% !important;
+
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .layui-form-label {
+            width: 120px;
+        }
+
+        .layui-input-block {
+            margin-left: 120px;
+        }
+
+        .select-box {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .line {
+            display: flex;
+        }
+
+        .select-box .line .layui-input-block {
+            margin: 0;
+        }
+
+        .line-tit {
+            line-height: 36px;
+            margin-right: 10px;
+        }
+
+        .layui-form-select dl {
+            padding: 0;
+        }
+
+        .cancelSub, .addStaffSub, .changeStaff,.cancelSub2, .addStaffSub2, .changeStaff2 {
+            float: right;
+            /*margin-left:20px;*/
+        }
+    </style>
+
+</head>
+
+<body>
+<!-- 下面是一些第二行的东西 -->
+<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+    <ul class="layui-tab-title">
+        <li class="layui-this">指定工厂</li>
+        <li>指定地区</li>
+    </ul>
+    <div class="layui-tab-content"></div>
+</div>
+<div class="layui-tab-item layui-show">
+    <div class="layui-row">
+        <div class="layui-inline  orderManage" style="margin-top:10px">工厂分流</div>
+        <button style="float: right;" type="button" class="layui-btn" id="addfactory">新增工厂分流</button>
+    </div>
+
+    <table class="layui-table" id="table1" lay-skin="line" align="center">
+        <thead>
+        <tr align="center">
+            <th>现工厂</th>
+            <th>指定工厂</th>
+            <th>创建时间</th>
+            <th>是否可用</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <!-- 这个下面是分页 -->
+    <div id="page"></div>
+    <!--<button id="excel" class="layui-btn layui-btn-primary" type="button">导出EXCEL表格</button>-->
+    <div class="bg">
+
+    </div>
+</div>
+
+<div class="layui-tab-item">
+    <div class="layui-row">
+        <div class="layui-inline  orderManage" style="margin-top:10px">区域分流</div>
+        <button style="float: right;" type="button" class="layui-btn" id="addfactory2">新增区域分流</button>
+    </div>
+
+    <table class="layui-table" id="table2" lay-skin="line" align="center">
+        <thead>
+        <tr align="center">
+            <th>指定区域</th>
+            <th>指定工厂</th>
+            <th>创建时间</th>
+            <th>是否可用</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <!-- 这个下面是分页 -->
+    <div id="page2"></div>
+    <!--<button id="excel" class="layui-btn layui-btn-primary" type="button">导出EXCEL表格</button>-->
+    <div class="bg">
+
+    </div>
+</div>
+</body>
+<div id="addBox" style="display: none;padding: 10px 20px;">
+    <form id="userAdmin" class="layui-form" name="userAdmin">
+        <div class="select-box">
+            <div class="line">
+                <p class="line-tit">原工厂</p>
+                <div class="layui-input-block">
+                    <select name="type" id="factory1"></select>
+                </div>
+            </div>
+            <div class="line">
+                <p class="line-tit">指定工厂</p>
+                <div class="layui-input-block">
+                    <select name="type" id="factory2"></select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 30px;">
+            <label class="layui-form-label" style="text-align: left">是否可用</label>
+            <div class="layui-input-block">
+                <input class="gender" type="radio" name="sex" value="0" title="是" checked>
+                <input class="gender" type="radio" name="sex" value="1" title="否">
+            </div>
+        </div>
+        <div class="layui-form-item" style="position: absolute;bottom: 0;right:20px;">
+            <div class="layui-input-block" style="overflow: hidden">
+                <button type="button" class="layui-btn layui-btn-primary cancelSub" style="margin-left: 10px;">取消</button>
+                <button type="button" class="layui-btn layui-btn-normal addStaffSub">确定</button>
+                <button type="button" class="layui-btn layui-btn-normal changeStaff">修改</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="addBox2" style="display: none;padding: 10px 20px 0 0;">
+    <form class="layui-form" name="userAdmin">
+        <div class="layui-form-item regionBox">
+            <label class="layui-form-label">选择地区</label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline">
+                    <select name="P1" lay-filter="province">
+                        <option></option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="C1" lay-filter="city">
+                        <option></option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="A1" lay-filter="area">
+                        <option></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择工厂</label>
+            <div class="layui-input-block">
+                <select name="type" id="factory3"></select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">可用</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status" value="0" title="是" checked>
+                <input type="radio" name="status" value="1" title="否">
+            </div>
+        </div>
+        <div class="layui-form-item" style="position: absolute;bottom: 0;right:20px;">
+            <div class="layui-input-block" style="overflow: hidden">
+                <button type="button" class="layui-btn layui-btn-primary cancelSub2" style="margin-left: 10px;">取消</button>
+                <button type="button" class="layui-btn layui-btn-normal addStaffSub2">确定</button>
+                <button type="button" class="layui-btn layui-btn-normal changeStaff2">修改</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script src='./js/citys.js'></script>
+<script>
+    var page1 = 1;
+    var page2 = 1;
+    var pageSize = 8;
+    getAllFactory();
+    layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+        var element = layui.element
+            , laydate = layui.laydate
+            , laypage = layui.laypage
+            , form = layui.form
+            , layer = layui.layer;
+        var $ = layui.jquery; //独立版的layer无需执行这一句
+
+        allShutProgramme(page1, pageSize);
+
+        var pca = {};
+        pca.keys = {};
+        pca.ckeys = {};
+        var region={};
+
+        initRegion('select[name=P1]', 'select[name=C1]', 'select[name=A1]',"北京","北京","东城区");
+
+        function initRegion(province, city, area, initprovince, initcity, initarea){
+            if(!province || !$(province).length) return;
+            $(province).html('');
+            $(province).append('<option selected>全部</option>');
+            for(var i in citys){
+                $(province).append('<option>'+citys[i].name+'</option>');
+                pca.keys[citys[i].name] = citys[i];
+            }
+            form.render('select');
+            if(initprovince) $(province).next().find('[lay-value="'+initprovince+'"]').click();
+            if(!city || !$(city).length) return;
+            formRender(city);
+            form.on('select(province)', function(data){
+                var cs = pca.keys[data.value];
+                $(city).html('');
+                $(city).append('<option>全部</option>');
+                if(cs){
+                    cs = cs.city;
+                    for(var i in cs){
+                        $(city).append('<option>'+cs[i].name+'</option>');
+                        pca.ckeys[cs[i].name] = cs[i];
+                    }
+                    $(city).find('option:eq(1)').attr('selected', true);
+                }
+                form.render('select');
+                $(city).next().find('.layui-this').removeClass('layui-this').click();
+                formHidden('province', data.value);
+                //此处可以自己修改 显示的位置, 不想显示可以直接去掉
+                region.province=data.value;
+            });
+            if(initprovince) $(province).next().find('[lay-value="'+initprovince+'"]').click();
+            if(initcity) $(city).next().find('[lay-value="'+initcity+'"]').click();
+            if(!area || !$(area).length) return;
+            formRender(area);
+            form.on('select(city)', function(data){
+                var cs = pca.ckeys[data.value];
+                $(area).html('');
+                $(area).append('<option>全部</option>');
+                if(cs){
+                    cs = cs.area;
+                    for(var i in cs){
+                        $(area).append('<option>'+cs[i]+'</option>');
+                    }
+                    $(area).find('option:eq(1)').attr('selected', true);
+                }
+                form.render('select');
+                $(area).next().find('.layui-this').removeClass('layui-this').click();
+                formHidden('city', data.value);
+                //$('.pca-label-city').html(data.value);	//此处可以自己修改 显示的位置, 不想显示可以直接去掉
+                region.city=data.value;
+
+            });
+            form.on('select(area)', function(data){
+                formHidden('area', data.value);
+                //$('.pca-label-area').html(data.value);	//此处可以自己修改 显示的位置, 不想显示可以直接去掉
+                region.district=data.value;
+            });
+            if(initprovince) $(province).next().find('[lay-value="'+initprovince+'"]').click();
+            if(initcity) $(city).next().find('[lay-value="'+initcity+'"]').click();
+            if(initarea) $(area).next().find('[lay-value="'+initarea+'"]').click();
+        }
+
+        function formRender(obj){
+            $(obj).html('');
+            $(obj).append('<option>全部</option>');
+            form.render('select');
+        }
+
+        function formHidden(obj, val){
+            if(!$('#pca-hide-'+obj).length)
+                $('body').append('<input id="pca-hide-'+obj+'" type="hidden" value="'+val+'" />');
+            else
+                $('#pca-hide-'+obj).val(val);
+        }
+
+    });
+    $(".layui-tab-title li").click(function () {
+        var i = $(this).index();
+        $(".layui-tab-item").removeClass("layui-show");
+        $(".layui-tab-item").eq(i).addClass("layui-show");
+        if (i == 0) {
+            allShutProgramme(page1, pageSize);
+        } else if (i == 1) {
+            allAreaProgramme();
+        }
+    });
+
+    //    禁用
+    $(".offBtn").live("click", function () {
+        var id = $(this).parent().parent().attr("proId");
+        offPro(id);
+    });
+
+    //    启用
+    $(".openBtn").live("click", function () {
+        var id = $(this).parent().parent().attr("proId");
+        openPro(id);
+    });
+
+    $("#addfactory").live("click", function () {
+        $(".addStaffSub").show();
+        $(".changeStaff").hide();
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.open({
+                title: '新增分流路线',
+                type: 1,
+                content: $("#addBox"),
+                area: ['600px', '300px']
+            })
+        })
+    });
+
+    $("#addfactory2").live("click",function(){
+        $(".addStaffSub2").show();
+        $(".changeStaff2").hide();
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.open({
+                title: '新增区域分流',
+                type: 1,
+                content: $("#addBox2"),
+                area: ['800px','400px']
+            })
+        })
+    });
+
+    //新增
+    $(".addStaffSub").live("click", function () {
+        var nowFactory = $("#factory1").val();
+        var nowFactoryId = $("#factory1").find("option:selected").attr("factoryId");
+        var toFactory = $("#factory2").val();
+        var toFactoryId = $("#factory2").find("option:selected").attr("factoryId");
+        var state = $("input[name='sex']:checked").val();
+        if (nowFactoryId == toFactoryId) {
+            layer.msg("请选择正确的工厂分流路线");
+            return false
+        }
+        addRoute(nowFactoryId, nowFactory, toFactoryId, toFactory, state);
+    });
+
+    $(".addStaffSub2").live("click", function () {
+        var address=$("select[name='P1']").val()+"-"+$("select[name='C1']").val()+"-"+$("select[name='A1']").val();
+        var toFactory = $("#factory3").val();
+        var toFactoryId = $("#factory3").find("option:selected").attr("factoryId");
+        var state = $("input[name='status']:checked").val();
+        if(address==""){
+            layer.msg("请填写需要分流的区域");
+            return false
+        }
+        addRoute2(address,toFactoryId,toFactory,state);
+    });
+
+
+    $(".cancelSub").live("click", function () {
+        layer.closeAll();
+    });
+
+    //删除工厂分流方案
+    $(".delBtn").live("click", function () {
+        var id = $(this).parent().parent().attr("proId");
+        layer.confirm('确定删除该分流方案吗？', {title: '删除分流方案'}, function () {
+            delPro(id);
+        })
+    });
+
+    /**
+     * 获取选项中的所有工厂
+     */
+    function getAllFactory() {
+        $.ajax({
+            url: globalUrl + "shop/getShopList",
+            type: "get",
+            async: false,
+            data: {pageNum: 1, pageSize: 100},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                if (data.code == 0) {
+                    for (var i = 0; i < data.data.list.length; i++) {
+                        var item = '<option factoryId="' + data.data.list[i].id + '" value="' + data.data.list[i].shopName + '">' + data.data.list[i].shopName + '</option>';
+                        $(item).appendTo($("#factory1"));
+                        $(item).appendTo($("#factory2"));
+                        $(item).appendTo($("#factory3"));
+                    }
+                }
+            }
+        })
+    }
+
+
+    /**
+     * 初始化工厂分流
+     * @param page    页数
+     * @param pageSize  单页信息数
+     */
+    function allShutProgramme(page, pageSize) {
+        $.ajax({
+            url: globalUrl + "orderAllot/getOrderAllotList",
+            type: "get",
+            data: {type: 0},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                if (data.code == 0) {
+                    $("#table1 tbody").html("");
+                    for (var i = 0; i < data.data.list.length; i++) {
+                        var state = '';
+                        if (data.data.list[i].state == 0) {
+                            state = '<button class="layui-btn layui-btn-sm layui-btn-danger offBtn">否</button>' +
+                                '<button class="layui-btn layui-btn-sm layui-btn-disabled openBtn" disabled>是</button>';
+                        } else {
+                            state = '<button class="layui-btn layui-btn-sm layui-btn-danger layui-btn-disabled offBtn" disabled>否</button>' +
+                                '<button class="layui-btn layui-btn-sm openBtn">是</button>';
+                        }
+                        var item = '<tr proId="' + data.data.list[i].id + '">' +
+                            '<td>' + data.data.list[i].shopName + '</td>' +
+                            '<td>' + data.data.list[i].tranShopName + '</td>' +
+                            '<td>' + timestampToTime(data.data.list[i].createTime) + '</td>' +
+                            '<td>' + state + '</td>' +
+                            '<td>' +
+                            //                            '<button class="layui-btn layui-btn-sm layui-btn-normal">编辑</button>' +
+                            '<button class="layui-btn layui-btn-sm layui-btn-danger delBtn">删除</button>' +
+                            '</td>' +
+                            '</tr>';
+                        $(item).appendTo($("#table1 tbody"));
+                    }
+                    layui.use('laypage', function () {
+                        var laypage = layui.laypage;
+                        laypage.render({
+                            elem: 'page',
+                            count: data.data.total,
+                            limit: pageSize,
+                            curr: page,
+                            jump: function (obj, first) {
+                                page1 = obj.curr;
+                                if (!first) {
+                                    allShutProgramme(obj.curr, pageSize);
+                                }
+                            }
+                        })
+                    })
+                }
+            }
+        })
+    }
+
+    /**
+     * 初始化区域分流
+     * @param page    页数
+     * @param pageSize  单页信息数
+     */
+    function allAreaProgramme(page, pageSize) {
+        $.ajax({
+            url: globalUrl + "orderAllot/getOrderAllotList",
+            type: "get",
+            data: {type: 1},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                if(data.code==0){
+                    $("#table2 tbody").html("");
+                    for(var i=0;i<data.data.list.length;i++){
+                        var state='';
+                        if(data.data.list[i].state==0){
+                            state='<button class="layui-btn layui-btn-sm layui-btn-danger offBtn">否</button>' +
+                                '<button class="layui-btn layui-btn-sm layui-btn-disabled openBtn" disabled>是</button>';
+                        }else{
+                            state='<button class="layui-btn layui-btn-sm layui-btn-danger layui-btn-disabled offBtn" disabled>否</button>' +
+                                '<button class="layui-btn layui-btn-sm openBtn">是</button>';
+                        }
+                        var item='<tr proId="'+data.data.list[i].id+'">' +
+                            '<td>'+data.data.list[i].keyword+'</td>' +
+                            '<td>'+data.data.list[i].tranShopName+'</td>' +
+                            '<td>'+timestampToTime(data.data.list[i].createTime)+'</td>' +
+                            '<td>'+state+'</td>' +
+                            '<td>' +
+                            //                            '<button class="layui-btn layui-btn-sm layui-btn-normal">编辑</button>' +
+                            '<button class="layui-btn layui-btn-sm layui-btn-danger delBtn">删除</button>' +
+                            '</td>' +
+                            '</tr>';
+                        $(item).appendTo($("#table2 tbody"));
+                    }
+                    layui.use('laypage',function(){
+                        var laypage=layui.laypage;
+                        laypage.render({
+                            elem:'page',
+                            count:data.data.total,
+                            limit:pageSize,
+                            curr:page,
+                            jump:function(obj,first){
+                                page2=obj.curr;
+                                if(!first){
+                                    allAreaProgramme(obj.curr,pageSize);
+                                }
+                            }
+                        })
+                    })
+                }
+            }
+        })
+    }
+
+    /**
+     * 新增工厂分流方案
+     * @param shopId    原厂ID
+     * @param shopName  原厂名
+     * @param tranShopId    分流工厂ID
+     * @param tranShopName  分流工厂名
+     * @param type  是否可用
+     */
+    function addRoute(shopId, shopName, tranShopId, tranShopName, state) {
+        $.ajax({
+            url: globalUrl + "orderAllot/putOrderAllot",
+            type: "post",
+            data: {
+                shopId: shopId,
+                shopName: shopName,
+                tranShopId: tranShopId,
+                tranShopName: tranShopName,
+                state: state,
+                type: 0
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                if (data.code == 0) {
+                    allShutProgramme(page1, pageSize);
+                    layer.closeAll();
+                    layer.msg(data.message);
+                } else {
+                    layer.msg(data.message);
+                }
+            }
+        })
+    }
+
+    /**
+     * 新增区域分流方案
+     * @param area   地址
+     * @param tranShopId    分流工厂ID
+     * @param tranShopName  分流工厂名
+     * @param state  是否可用
+     */
+    function addRoute2(area, tranShopId, tranShopName, state) {
+        $.ajax({
+            url: globalUrl + "orderAllot/putOrderAllot",
+            type: "post",
+            data: {
+                keyword:area,
+                tranShopId: tranShopId,
+                tranShopName: tranShopName,
+                state: state,
+                type: 1
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                if (data.code == 0) {
+                    allAreaProgramme(page2, pageSize);
+                    layer.closeAll();
+                    layer.msg(data.message);
+                } else {
+                    layer.msg(data.message);
+                }
+            }
+        })
+    }
+
+    /**
+     * 删除工厂分流方案
+     * @param id
+     */
+    function delPro(id) {
+        $.ajax({
+            url: globalUrl + "orderAllot/deleteOrderAllot",
+            type: "post",
+            data: {id: id},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                if (data.code == 0) {
+                    allShutProgramme(page1, pageSize);
+                    allAreaProgramme(page2, pageSize);
+                    layer.closeAll();
+                    layer.msg(data.message);
+                } else {
+                    layer.msg(data.message);
+                }
+            }
+        })
+    }
+
+    /**
+     * 禁用工厂分流
+     * @param id
+     */
+    function offPro(id) {
+        $.ajax({
+            url: globalUrl + "orderAllot/disableOrderAllot",
+            type: "post",
+            data: {id: id},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                if (data.code == 0) {
+                    allShutProgramme(page1, pageSize);
+                    allAreaProgramme(page2, pageSize);
+                    layer.msg(data.message);
+                } else {
+                    layer.msg(data.message);
+                }
+            }
+        })
+    }
+
+    /**
+     * 启用工厂分流
+     * @param id
+     */
+    function openPro(id) {
+        $.ajax({
+            url: globalUrl + "orderAllot/enableOrderAllot",
+            type: "post",
+            data: {id: id},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                if (data.code == 0) {
+                    allShutProgramme(page1, pageSize);
+                    allAreaProgramme(page2, pageSize);
+                    layer.msg(data.message);
+                } else {
+                    layer.msg(data.message);
+                }
+            }
+        })
+    }
+</script>
+</html>

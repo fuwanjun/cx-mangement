@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>设置管理</title>
+    <meta charset='utf-8'>
+    <meta name='renderer' content='webkit'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black'>
+    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <meta name='format-detection' content='telephone=no'>
+    <link rel="stylesheet" href="../resource/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+    <link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+    <link rel="stylesheet" href="../resource/wangEditor-3.1.1/release/wangEditor.min.css">
+    <style>
+        .box-bottom{
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .upload{
+            display: flex;
+            margin-bottom: 10px;
+
+        }
+        .imgCon{
+            width:80px;
+            height:80px;
+            margin-left:10px;
+            border:1px solid #999;
+        }
+        .imgCon img{
+            width:100%;
+            height:100%;
+            margin-left: 14px;
+            margin-bottom: 20px;
+        }
+        .goodsFile {
+            display: inline-block;
+            height: 38px;
+            line-height: 38px;
+            padding: 0 18px;
+            background-color: #009688;
+            color: #fff;
+            white-space: nowrap;
+            text-align: center;
+            font-size: 14px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            opacity: 0;
+            width: 92px;
+            position: absolute;
+            left: 0;
+            top: 9px;
+        }
+        #demo1{
+            width: 80px;
+            height: 80px;
+        }
+        #saveBtn,#changeBtn{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+    <div class="layui-tab-content">
+        <button class="layui-btn" id="addBook" style="float: right;margin-bottom: 10px;">新增标准</button>
+        <table class="layui-table" id="table1">
+            <thead>
+                <tr>
+                    <th width="100px"><input type="checkbox"></th>
+                    <th>图标</th>
+                    <th>标题</th>
+                    <th>是否可用</th>
+                    <th>时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+</body>
+<div class="addBookBox" style="padding: 10px;display: none;">
+
+    <div style="display:flex;margin-bottom: 10px;">
+        <label class="layui-form-label">
+            <button type="button" class="layui-btn" id="upImg" style="margin-left: 0;margin-top: 10px;">上传图标</button>
+            <input class="goodsFile" name="file" lay-verify="file" type="file" value="" autocomplete="off">
+        </label>
+        <div class="layui-input-block" style="margin-left: 15px" id="imgCon">
+            <img class="layui-upload-img" id="demo1">
+        </div>
+    </div>
+    <div class="layui-form-item" style="overflow: hidden">
+        <label class="layui-form-label">标题</label>
+        <div class="layui-input-block">
+            <input id="tit" type="text" name="title" required lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="overflow: hidden">
+        <label class="layui-form-label">排序号</label>
+        <div class="layui-input-block">
+            <input id="sort" type="number" placeholder="请输入排序号" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div id="main"></div>
+    <div class="box-bottom">
+        <button type="button" class="layui-btn layui-btn-normal" id="saveBtn">保存</button>
+        <button type="button" class="layui-btn layui-btn-normal" id="changeBtn">编辑</button>
+        <button type="button" class="layui-btn layui-btn-primary clearBtn">取消</button>
+    </div>
+</div>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script src="../resource/wangEditor-3.1.1/release/wangEditor.min.js"></script>
+<script>
+    var editorText = window.wangEditor;
+    var editor = new editorText('#main');
+    editor.customConfig.uploadImgShowBase64 = true;
+    editor.create();
+    layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+        var element = layui.element;
+        var laydate = layui.laydate;
+        var laypage = layui.laypage
+            , layer = layui.layer;
+
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+        allArticle();
+
+        $(".goodsFile").on("change", function () {
+            this_file = this;
+            var file_input = document.getElementsByClassName("goodsFile")[0].files[0];
+            if (file_input.name != '') {
+                showImg(this_file)
+            }
+        });
+        //图片回显函数
+        var file;
+        function showImg(obj) {
+            file = obj.files[0];
+            var readerFile = new FileReader();
+            readerFile.onload = function (ev) {
+                var data = ev.target.result;
+                $("#demo1").attr("src", data)
+            };
+            readerFile.readAsDataURL(file);
+        }
+    });
+
+
+    $("#saveBtn").live("click",function(){
+        var data=new FormData();
+        var file=document.getElementsByClassName("goodsFile")[0].files[0];
+        var title=$("#tit").val();
+        var sort=$("#sort").val();
+        var con=editor.txt.html();
+        data.append("file",file);
+        data.append("title",title);
+        data.append("content",con);
+        data.append("sort",sort);
+        addArticle(data);
+    });
+
+    $("#changeBtn").live("click",function(){
+        var data=new FormData();
+        var file=document.getElementsByClassName("goodsFile")[0].files[0];
+        var title=$("#tit").val();
+        var sort=$("#sort").val();
+        var con=editor.txt.html();
+        data.append("id",changeId);
+        if(file){
+            data.append("file",file);
+        }
+        data.append("title",title);
+        data.append("content",con);
+        data.append("sort",sort);
+        changeArticle(data);
+    });
+
+    $(".clearBtn").live("click",function(){
+        layer.closeAll();
+    });
+
+    $(".offBtn").live("click",function(){
+        var id=$(this).parent().parent().attr('bookId');
+        disableBook(id)
+    });
+    $(".onBtn").live("click",function(){
+        var id=$(this).parent().parent().attr('bookId');
+        enableBook(id)
+    });
+
+    $("#addBook").live("click",function(){
+        $("#saveBtn").show();
+        $("#changeBtn").hide();
+        clearBook();
+        layui.use('layer',function(){
+            var layer=layui.layer;
+            layer.open({
+                type:1,
+                content:$(".addBookBox"),
+                area:['800px']
+            })
+        })
+    });
+
+    function allArticle(){
+        $.ajax({
+            url: globalUrl + "/introduce/getListForBack",
+            type: "get",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                if (data.code == 0) {
+                    $("#table1 tbody").html("");
+                    for(var i=0;i<data.data.list.length;i++){
+                        var state="";
+                        if(data.data.list[i].state==0){
+                            state='<button class="layui-btn layui-btn-sm layui-btn-danger offBtn">否</button>' +
+                                '<button class="layui-btn layui-btn-sm layui-btn-disabled onBtn" disabled>是</button>';
+                        }else if(data.data.list[i].state==-1){
+                            state='<button class="layui-btn layui-btn-sm layui-btn-danger layui-btn-disabled offBtn" disabled>否</button>' +
+                                '<button class="layui-btn layui-btn-sm onBtn">是</button>';
+                        }
+                        var item='<tr bookId="'+data.data.list[i].id+'">' +
+                            '<td><input type="checkbox"></td>' +
+                            '<td><img style="width: 50px;height: 50px;" src="http://'+data.data.list[i].picture+'" alt=""></td>' +
+                            '<td>'+data.data.list[i].title+'</td>' +
+                            '<td>'+state+'</td>' +
+                            '<td>'+timestampToTime(data.data.list[i].createTime)+'</td>' +
+                            '<td>' +
+                            '<button class="layui-btn layui-btn-sm layui-btn-normal lookBtn">查看</button>' +
+                            '<button class="layui-btn layui-btn-sm layui-btn-danger delBtn">删除</button>' +
+                            '</td>' +
+                            '</tr>';
+                        $(item).appendTo($("#table1 tbody"));
+                    }
+                } else {
+                    layer.msg(data.message);
+                }
+            }
+        })
+    };
+    var changeId="";
+    $(".lookBtn").live("click",function(){
+        $("#saveBtn").hide();
+        $("#changeBtn").show();
+        clearBook();
+        changeId=$(this).parent().parent().attr("bookId");
+        searchBook(changeId);
+        layui.use('layer',function(){
+            var layer=layui.layer;
+            layer.open({
+                type:1,
+                content:$(".addBookBox"),
+                area:['800px']
+            })
+        })
+    });
+
+    $(".delBtn").live("click",function(){
+        var id=$(this).parent().parent().attr("bookId");
+        layer.confirm("确定删除该文章吗？",{title:'删除'},function(){
+            delBook(id);
+        });
+
+    });
+
+    /**
+     * 新增说明
+     */
+    function addArticle(data){
+        console.log(data);
+        $.ajax({
+            url: globalUrl + "/introduce/putIntroduce",
+            type: "post",
+            contentType:false,
+            processData:false,
+            cache:false,
+            data:data,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:function(data){
+                if(data.code==0){
+                    allArticle();
+                    layer.closeAll();
+                    layer.msg(data.message);
+                }else{
+                    layer.msg(data.message);
+                }
+            }
+        })
+    }
+
+    /**
+     * 修改
+     */
+    function changeArticle(data){
+        console.log(data);
+        $.ajax({
+            url: globalUrl + "/introduce/updateIntroduce",
+            type: "post",
+            contentType:false,
+            processData:false,
+            cache:false,
+            data:data,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:function(data){
+                if(data.code==0){
+                    allArticle();
+                    layer.closeAll();
+                    layer.msg(data.message);
+                }else{
+                    layer.msg(data.message);
+                }
+            }
+        })
+    }
+
+    function delBook(id){
+        $.ajax({
+            url: globalUrl + "/introduce/deleteIntroduce",
+            type: "post",
+            data:{id:id},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:function(data){
+                if(data.code==0){
+                    allArticle();
+                    layer.closeAll();
+                    layer.msg(data.message);
+                }else{
+                    layer.msg(data.message);
+                }
+            }
+        })
+    }
+
+    function searchBook(id){
+        $.ajax({
+            url: globalUrl + "/introduce/getIntroduceById",
+            type: "get",
+            data:{id:id},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:function(data){
+                if(data.code==0){
+                    $("#demo1").attr("src","http://"+data.data.picture);
+                    $("#tit").val(data.data.title);
+                    $("#sort").val(data.data.sort);
+                    editor.txt.html(data.data.content);
+                }
+            }
+        })
+    }
+
+    function clearBook(){
+        document.getElementsByClassName("goodsFile")[0].files[0]="";
+        $("#demo1").attr("src","");
+        $("#tit").val("");
+        $("#sort").val("");
+        editor.txt.html("");
+    }
+
+    function disableBook(id){
+        $.ajax({
+            url: globalUrl + "/introduce/disable",
+            type: "post",
+            data:{id:id},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:function(data){
+                if(data.code==0){
+                    allArticle();
+                    layer.closeAll();
+                    layer.msg(data.message);
+                }else{
+                    layer.msg(data.message);
+                }
+            }
+        })
+    }
+
+    function enableBook(id){
+        $.ajax({
+            url: globalUrl + "/introduce/enable",
+            type: "post",
+            data:{id:id},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:function(data){
+                if(data.code==0){
+                    allArticle();
+                    layer.closeAll();
+                    layer.msg(data.message);
+                }else{
+                    layer.msg(data.message);
+                }
+            }
+        })
+    }
+</script>
+</html>

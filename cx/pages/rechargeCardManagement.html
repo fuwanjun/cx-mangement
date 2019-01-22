@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+
+
+
+	<style>
+		.cancel {
+			position: absolute;
+			top: -10px;
+			right: -10px;
+			width: 30px;
+			height: 30px;
+			background-color: #ffffff;
+			border-radius: 50%;
+			box-shadow: 0 0 2px gray;
+			cursor: pointer;
+		}
+
+		.cancel>i {
+			padding-top: 3px;
+
+			font-size: 30px;
+			line-height: 36px;
+			color: gray;
+		}
+
+
+		.details_box td {
+			width: 50% !important;
+
+		}
+		.goodsImg{
+			width: 50px;
+			height: 50px;
+		}
+		#goodList tbody{
+			/* max-height: 300px; */
+			overflow-y: auto;
+		}
+		
+	</style>
+
+</head>
+
+<body>
+
+	<form class="layui-form   layui-row" style="float: left; " id="search">
+		<div class="layui-row">
+			<div class="layui-form-item layui-inline" style="width: 60%;">
+				<div class="layui-input-inline" style="width: 40%;">
+					<input type="text" name="criticalWord" id="criticalWord" placeholder="请输入充值码编号" autocomplete="off" class="layui-input">
+				</div>
+				<div class="layui-input-inline">
+					<!--null-全部，USED-已使用，USABLE-未使用-->
+					<select name="quiz2" id="status">
+						<option value="">全部</option>
+						<option value="USED">已使用</option>
+						<option value="USABLE">未使用</option>
+					</select>
+				</div>
+				<button class="layui-btn searchSubBtn" name="user" type="button">搜索</button>
+			</div>	
+		</div>
+		<div class="layui-row">
+			<div class="layui-form-item layui-inline" style="width: 20%;">
+				<div class="layui-input-inline" style="width: 100%;">
+					<input type="text" name="money" id="money" placeholder="充值卡面值/元" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item layui-inline">+</div>
+			<div class="layui-form-item   layui-inline" style="width: 20%;">			
+				<div class="layui-input-inline" style="width:60%;display: flex;">
+					<input type="text"  id="count" placeholder="创建数量" autocomplete="off" class="layui-input">
+					<div class="layui-form-item layui-inline" style="margin: 10px 5px;">+</div>
+					<input type="text" id="discount" placeholder="折扣" autocomplete="off" class="layui-input">
+				</div>
+				<button style="margin-left: 10px;" class="layui-btn createBtn" name="user" type="button">创建</button>
+			</div>
+		</div>
+	</form>
+	<!-- 下面是一些第二行的东西 -->
+	<div class="layui-row">
+
+		<div class="layui-inline  orderManage" style="margin-top:10px">
+			商品管理列表
+		</div>
+
+		<div class="layui-inline" style="float:right;margin-top:10px">
+			<button class="layui-btn  layui-btn-normal layui-btn-disabled" disabled="disabled" id="saveBtn">保存</button>
+			<button class="layui-btn layui-btn-normal layui-btn-disabled" disabled="disabled" id="outputBtn">导出当前</button>
+		</div>
+	</div>
+	<!-- 下面是第三行表格 -->
+	<table class="layui-table" id="goodList" lay-skin="line" align="center">
+		<!-- <colgroup>
+			  <col width="150">
+			  <col width="150">
+			  <col width="200">
+			  <col>
+			</colgroup> -->
+		<thead>
+			<tr align="center">
+				<th>卡密</th>
+				<th>面值</th>
+				<th>折扣</th>
+				<th>是否可用</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td colspan="3">暂无数据</td>
+			</tr>
+		</tbody>
+	</table>
+	<div id="demo7"></div>
+</body>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+
+<script type="text/javascript">
+	var para={type:1,pageSize:5,pageNum:1};
+	layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+		var element = layui.element
+		,laydate = layui.laydate
+		,laypage = layui.laypage
+		, layer = layui.layer
+		,form=layui.form;
+
+		var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句	
+	});
+	function formVerify(){
+		var reg=/^[0-9]*$/;
+		var bol=true;
+		var money=$("#money").val();
+		var count=$("#count").val();
+		if(money==""){
+			layer.msg("请输入充值卡面值",{time:2000});
+			bol=false;
+			return bol;
+		}
+		if(!reg.test(money)){
+			layer.msg("请输入正确数字",{time:2000});
+			bol=false;
+			return bol;
+		}
+		if(count==""){
+			layer.msg("请输入充值卡数量",{time:2000});
+			bol=false;
+			return bol;
+		}
+		if(!reg.test(count)){
+			layer.msg("请输入正确数字",{time:2000});
+			bol=false;
+			return bol;
+		}
+		return bol;
+		
+	}
+	var params={};
+	$(".createBtn").click(function(){
+		var money=$("#money").val();
+		var count=$("#count").val();
+		var discount=$("#discount").val();
+		if(formVerify()){
+			
+			$.ajax({
+				type:"get",
+				url:globalUrl+"rechargeCard/createCards",
+				async:true,
+				data:{worth:money,count:count,discount:discount},
+				beforeSend: function (xhr) {
+	                xhr.setRequestHeader("token", $.cookie("token"));
+	            },
+	            crossDomain: true,
+	            success:function(res){
+	            	console.log(res);
+	            	$("#saveBtn").removeAttr("disabled");
+	            	$("#saveBtn").removeClass("layui-btn-disabled");
+	            	var str="";
+					if(res.data!=null&&res.data.length>0){
+						params=res.data;
+						$.each(res.data, function(index,value) {
+							str+='<tr>';
+							str+='<td>'+value.cardId+'</td>';
+							str+='<td>'+value.worth+'</td>';
+                            if(value.discount){
+                                str+='<td>'+value.discount+'</td>'
+                            }else{
+                                str+='<td>无折扣</td>'
+                            }
+							if(value.state=="USABLE"){
+								str+='<td>可使用</td>'
+							}else{
+								str+='<td>已使用</td>'
+							}
+							
+							str+='</tr>'
+						});
+						
+					}else{
+						str+='<td colspan="2" align="center">暂无数据</td>'
+					}
+					$("#goodList tbody").html(str);
+	           },
+	           error:function(err){
+	           		console.log(err);
+	           }
+			});
+		}
+	});
+	$("#saveBtn").click(function(){
+		layer.confirm("要保存所创建的充值卡吗？",{
+			btn : [ '确定', '取消' ]
+		},function(index){
+			$.ajax({
+				type:"get",
+				url:globalUrl+"rechargeCard/saveCreateCards",
+				async:true,
+				beforeSend: function (xhr) {
+	                xhr.setRequestHeader("token", $.cookie("token"));
+	            },
+	            crossDomain: true,
+	            success:function(res){
+	            	$("#saveBtn").attr("disabled","disabled");
+	            	$("#saveBtn").addClass("layui-btn-disabled");
+	            	$("#outputBtn").removeAttr("disabled");
+	            	$("#outputBtn").removeClass("layui-btn-disabled");
+	            	layer.close(index);
+	            	layer.msg(res.message,{time:2000})
+	            }
+			});
+			//进行后台的上架请求接口
+		})
+	});
+	$("#outputBtn").click(function(){
+		$("#saveBtn").attr("disabled","disabled");
+    	$("#saveBtn").addClass("layui-btn-disabled");
+    	$("#outputBtn").attr("disabled","disabled");
+    	$("#outputBtn").addClass("layui-btn-disabled");
+		window.open(globalUrl+"rechargeCard/excelExportCards");
+	});
+	$(".onSale").click(function(){
+		layer.confirm("要上架该商品吗？",{
+			btn : [ '确定', '取消' ]
+		},function(index){
+			layer.close(index);
+			//进行后台的上架请求接口
+		})
+	});
+	$(".outSale").click(function(){
+		layer.confirm("要下架该商品吗？",{
+			btn : [ '确定', '取消' ]
+		},function(index){
+			layer.close(index);
+			//进行后台的下架请求接口
+		})
+	});
+	$(".deleteBtn").click(function(){
+		layer.confirm("要删除该商品吗？",{
+			btn : [ '确定', '取消' ]
+		},function(index){
+			layer.close(index);
+			//进行后台的下架请求接口
+		})
+	});
+	$(".changeBtn").click(function(){
+		layer.open({
+			type:2,
+			content:"goodsDetailsManagement.html",
+			area:["800px","560px"],
+			btn:["修改","取消"]
+		})
+	});
+	var data={cardId:null,state:null};
+	function initCard(){
+		$.ajax({
+			type:"get",
+			url:globalUrl+"rechargeCard/getCardByParam",
+			async:true,
+			data:data,
+			beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:function(res){
+            	$("#outputBtn").removeAttr("disabled");
+	            $("#outputBtn").removeClass("layui-btn-disabled");
+	            var str="";
+	            if(res.data!=null&&res.data.length>0){
+					params=res.data;
+					$.each(res.data, function(index,value) {
+						str+='<tr>';
+						str+='<td>'+value.cardId+'</td>';
+						str+='<td>'+value.worth+'</td>';
+                        if(value.discount){
+                            str+='<td>'+value.discount+'</td>'
+                        }else{
+                            str+='<td>无折扣</td>'
+                        }
+						if(value.state=="USABLE"){
+							str+='<td>可使用</td>'
+						}else{
+							str+='<td>已使用</td>'
+						}			
+						str+='</tr>'
+					});
+					
+				}else{
+					str+='<td colspan="2" align="center">暂无数据</td>'
+				}
+				$("#goodList tbody").html(str).css({"maxHeight":"300px"});
+            }
+			
+		});
+	}
+	//条件查询
+	$("#search .searchSubBtn").click(function(){
+		data.state=$("#status").val();
+		data.cardId=$("#criticalWord").val();
+//		alert(data.pageNum);
+		initCard();
+	});
+	//点击查看详情
+	layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+		var element = layui.element;
+		var laydate = layui.laydate;
+		var laypage = layui.laypage
+			, layer = layui.layer;
+		var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+		$("#goodList button.operation").live("click",function(){
+			var id=$(this).parent().attr("data-id");
+			layer.open({
+				type:2,
+				title:"订单详情信息展示",
+				content:"goodsDetailsManagement.html?id="+id,
+				area:["100%","100%"],
+				btn:["取消"],
+		        btn2: function(){
+		          layer.closeAll();
+		        },
+		        zIndex: layer.zIndex, //重点1
+		        success: function(layero){
+		          layer.setTop(layero); //重点2
+		          //这句话表示弹框成功打开
+		        }
+			});
+		})
+		
+		
+		
+		
+	})
+	
+	$(".changeExpress").click(function(){
+		$(this).next().toggle();
+	})
+	$(".expressList").on("click","li",function(){
+		var text=$(this).text();
+		//此时还要进行改派的接口请求 并刷新列表
+		$(this).parent().siblings("span").text(text);
+		$(this).parent().toggle();
+	})
+	$("#goodList .operationDelete").live("click",function(){
+		var id=$(this).parent().attr("data-id");
+		layer.confirm("要删除该商品吗？",{
+			btn : [ '确定', '取消' ]
+		},function(index){
+			layer.close(index);
+			//进行后台的下架请求接口
+			$.ajax({
+				type:"post",
+				data:{id:id},
+				url:globalUrl+"goods/deleteGoods",
+				async:true,
+				beforeSend: function (xhr) {
+	                xhr.setRequestHeader("token", $.cookie("token"));
+	            },
+	            crossDomain: true,
+				success:function(res){
+					if(res.code==0){
+						initData();
+					}else{
+						layer.msg(res.message,{
+							time:2000
+						})
+					}
+				},
+				error:function(err){
+					
+				}
+			});
+		})
+	})
+	
+	$("#goodList .onSale").live("click",function(){
+		var id=$(this).parent().attr("data-id");
+		layer.confirm("要上架该商品吗？",{
+			btn : [ '确定', '取消' ]
+		},function(index){
+			layer.close(index);
+			//进行后台的下架请求接口
+			$.ajax({
+				type:"post",
+				data:{id:id},
+				url:globalUrl+"goods/upShelves",
+				async:true,
+				beforeSend: function (xhr) {
+	                xhr.setRequestHeader("token", $.cookie("token"));
+	            },
+	            crossDomain: true,
+				success:function(res){
+					if(res.code==0){
+						initData();
+					}else{
+						layer.msg(res.message,{
+							time:2000
+						})
+					}
+				},
+				error:function(err){
+					
+				}
+			});
+		})
+	})
+	
+	$("#goodList .outSale").live("click",function(){
+		var id=$(this).parent().attr("data-id");
+		layer.confirm("要下架该商品吗？",{
+			btn : [ '确定', '取消' ]
+		},function(index){
+			layer.close(index);
+			//进行后台的下架请求接口
+			$.ajax({
+				type:"post",
+				data:{id:id},
+				url:globalUrl+"goods/downShelves",
+				async:true,
+				beforeSend: function (xhr) {
+	                xhr.setRequestHeader("token", $.cookie("token"));
+	            },
+	            crossDomain: true,
+				success:function(res){
+					if(res.code==0){
+						initData();
+					}else{
+						layer.msg(res.message,{
+							time:2000
+						})
+					}
+				},
+				error:function(err){
+					
+				}
+			});
+		})
+	})
+	
+	window.onload = function () {
+ 		//禁止F5刷新
+	    document.onkeydown = function (e) {
+	        if (e.keyCode === 116) {
+	             return false;
+	        }
+	    };
+ 		//靜止右鍵
+        document.oncontextmenu = function() {
+        	event.returnValue = false;
+        }
+    }
+
+</script>
+
+</html>

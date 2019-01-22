@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>衣物信息查询</title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+	<style>
+		.layui-form-label{
+			padding: 9px 0px;
+		}
+	</style>
+</head>
+<body style="background: #fff;">
+<div class="layui-tab-item layui-show">
+	<form class="layui-form layui-row" style="float: left; " id="search1">
+		<div class="layui-row">
+			<div class="layui-inline  orderManage" style="margin-top:10px">
+				<span class="headlabel"></span>衣物状态查询
+			</div>
+		</div>
+	</form>
+	<form class="layui-form   layui-row" style="display: flex;">
+		<div class="layui-form-item" style="display: flex;margin-bottom: 0;margin-top: 10px;">
+			<label class="layui-form-label">条码号：</label>
+			<div class="layui-input-block" style="margin-left: 0px;">
+				<input type="text" name="title" required  lay-verify="required" id="barCode" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<button class="layui-btn layui-btn-normal" style="margin:10px 0 0 0" type="button" id="barSearch">查询</button>
+		<div class="layui-form-item" style="display: flex;margin-bottom: 0;margin-top: 10px;">
+			<label class="layui-form-label">订单号：</label>
+			<div class="layui-input-block" style="margin-left: 0px;">
+				<input type="text" name="title" required  lay-verify="required" id="orderCode" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<button class="layui-btn layui-btn-normal" style="margin:10px 0 0 0" type="button" id="orderSearch">查询</button>
+		<!--<div class="layui-form-item" style="display: flex;margin-bottom: 0;margin-top: 10px;">-->
+			<!--<label class="layui-form-label">手机号：</label>-->
+			<!--<div class="layui-input-block" style="margin-left: 0px;">-->
+				<!--<input type="text" name="title" required  lay-verify="required" id="phoneNum" autocomplete="off" class="layui-input">-->
+			<!--</div>-->
+		<!--</div>-->
+		<!--<button class="layui-btn layui-btn-normal" style="margin:10px 0 0 0" type="button" id="phoneSearch">查询</button>-->
+	</form>
+	<div id="con"></div>
+</div>
+</body>
+<div id="detail" style="display: none;padding: 15px;">
+	<table class="layui-table">
+		<thead>
+			<tr align="center">
+				<th>岗位</th>
+				<th>操作人</th>
+				<th>时间</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+</div>
+<div id="photos" style="display:none;overflow: hidden;"></div>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script src="../resource/js/common.js"></script>
+<script src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript">
+	layui.use(['element', 'form', 'layer','table', 'laydate', 'laypage','colorpicker'], function () {
+		var element = layui.element;
+		var laydate = layui.laydate;
+		var laypage = layui.laypage
+			,table = layui.table
+			,colorpicker = layui.colorpicker
+			, layer = layui.layer;
+
+		var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+		
+	});
+
+	$("#barSearch").click(function(){
+	   	var barCode=$("#barCode").val();
+	   	if(barCode){
+            barSearch(barCode);
+		}else{
+	   	    layer.msg('请输入条码号');
+		}
+
+	});
+
+	$("#orderSearch").click(function(){
+	    var orderCode=$("#orderCode").val();
+	    if(orderCode){
+            orderSearch(orderCode);
+		}else{
+	        layer.msg('请输入订单号');
+		}
+
+	});
+
+    //	查看图片
+    $(".lookPhoto").live("click", function () {
+        var pics = $(this).next("p").html();
+        if (!pics) {
+            layer.msg("该商品无图片");
+            return
+        }
+        if (!pics.indexOf(",")) {
+            var item = '<div class="photoImg" style="float: left;">' +
+                '<img src="http://' + pics + '" alt="">' +
+                '</div>';
+            $(item).appendTo($("#photos"));
+        } else {
+            var picArr = [];
+            picArr = pics.split(',');
+            $("#photos").html("");
+            for (var i = 0; i < picArr.length; i++) {
+                var item = '<div class="photoImg" style="float: left;">' +
+                    '	<img src="http://' + picArr[i] + '" alt="">' +
+                    '</div>';
+                $(item).appendTo($("#photos"));
+            }
+        }
+
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.open({
+                title: '商品图片',
+                type: 1,
+                content: $("#photos"),
+                area: ['900px', '620px'],
+                scrollbar: false
+            })
+        })
+    });
+
+	$(".seeDetail").live("click",function(){
+		var id=$(this).parent().parent().attr("itemId");
+		$.ajax({
+            url: globalUrl + "api/statistical/viewByItemId;jsessionid=" + $.cookie("token"),
+            type: 'GET',
+            data: {itemId:id},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+			success:function(data){
+                if(data.status==200){
+                    $("#detail tbody").html("");
+                    for(var i=0;i<data.data.length;i++){
+							var item='<tr>' +
+								'<td>'+data.data[i].statusName+'</td>' +
+                                '<td>'+data.data[i].userName+'</td>' +
+                                '<td>'+timestampToTime(data.data[i].createTime)+'</td>' +
+								'</tr>';
+							$(item).appendTo($("#detail tbody"))
+					}
+				}
+				layui.use('layer',function(){
+				    var layer=layui.layer;
+				    layer.open({
+						title:'流程详情',
+						type:1,
+						content:$("#detail")
+					})
+				})
+			}
+		})
+	});
+
+//	根据条码号查询
+	function barSearch(code){
+	    $.ajax({
+            url: globalUrl + "api/statistical/findByBarCode;jsessionid=" + $.cookie("token"),
+            type: 'GET',
+            data: {barCode:code},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+			success:function(data){
+				if(data.status==200){
+                    $("#con").html("");
+				    var clotheName=data.data.afterName?data.data.afterName:data.data.beforeName;
+                    var pics = data.data.picture ? data.data.picture : "";
+				    var item='<p style="text-align: center;">条码号:<span></span></p>' +
+						'<table class="layui-table" lay-skin="line" align="center" id="table1">'+
+								'<thead>'+
+									'<tr align="center">' +
+										'<th>订单号</th>' +
+										'<th>衣物名称</th>' +
+										'<th>品牌</th>' +
+										'<th>颜色</th>' +
+										'<th width="300px">瑕疵</th>' +
+										'<th width="300px">洗后效果</th>' +
+										'<th>图片</th>' +
+//										'<th>上道岗位</th>' +
+										'<th>详情</th>'+
+									'</tr>'+
+								'</thead>'+
+								'<tbody>' +
+									'<tr itemId="'+data.data.id+'">' +
+										'<td>'+data.data.orderNo+'</td>' +
+                        				'<td>'+clotheName+'</td>' +
+                        				'<td>'+checkcheckEmpty(data.data.brand)+'</td>' +
+                        				'<td>'+checkcheckEmpty(data.data.colour)+'</td>' +
+                        				'<td>'+checkcheckEmpty(data.data.flaw)+'</td>' +
+                        				'<td>'+checkcheckEmpty(data.data.effect)+'</td>' +
+                        				'<td>' +
+										'<button class="layui-btn layui-btn-sm layui-btn-primary lookPhoto">查看图片</button>' +
+										'<p class="pics" style="display: none;">' + pics + '</p>' +
+										'</td>' +
+//                        				'<td>'+data.data.previousWork+'</td>' +
+                        				'<td><button class="layui-btn layui-btn-sm layui-btn-normal seeDetail">查看详情</button></td>' +
+									'</tr>'+
+								'</tbody>'+
+							'</table>';
+				    $(item).appendTo($("#con"));
+
+				}
+			}
+		})
+	}
+
+//	根据订单号查询
+	function orderSearch(code){
+	    $.ajax({
+            url: globalUrl + "api/statistical/findByOrderNo;jsessionid=" + $.cookie("token"),
+            type: 'GET',
+            data: {orderNo:code},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success:function(data){
+				if(data.status==200){
+                    $("#con").html("");
+				    var goods="";
+                    for(var i=0;i<data.data.length;i++){
+                        var beforeName=data.data[i].beforeName;
+                        var prevJob=data.data[i].previousWork?data.data[i].previousWork:'未处理';
+                        var goodsItem='<tr itemId="'+data.data[i].id+'">' +
+                            '<td>'+data.data[i].orderNo+'</td>' +
+                            '<td>'+beforeName+'</td>' +
+                            '<td>'+checkEmpty(data.data[i].brand)+'</td>' +
+                            '<td>'+checkEmpty(data.data[i].colour)+'</td>' +
+                            '<td>'+checkEmpty(data.data[i].flaw)+'</td>' +
+                            '<td>'+checkEmpty(data.data[i].effect)+'</td>' +
+                            '<td><button class="layui-btn layui-btn-sm layui-btn-primary">查看图片</button></td>' +
+                            '<td>'+prevJob+'</td>' +
+							'<td><button class="layui-btn layui-btn-sm layui-btn-normal seeDetail">查看详情</button></td>' +
+                            '</tr>';
+                        goods+=goodsItem
+                    }
+
+                    var item= '<table class="layui-table" lay-skin="line" align="center" id="table2">'+
+                        '<thead>'+
+                        '<tr align="center">' +
+                        '<th>订单号</th>' +
+                        '<th>衣物名称</th>' +
+                        '<th>品牌</th>' +
+                        '<th>颜色</th>' +
+                        '<th width="300px">瑕疵</th>' +
+                        '<th width="300px">洗后效果</th>' +
+                        '<th>图片</th>' +
+                        '<th>上道岗位</th>' +
+						'<th>详情</th>'+
+                        '</tr>'+
+                        '</thead >' +
+						'<tbody>'+goods+'</tbody>'+
+                        '</table>';
+                    $(item).appendTo($("#con"));
+				}
+            }
+		})
+	}
+
+
+function checkEmpty(con){
+	    if(con){
+	        return con;
+		}else{
+	        return '';
+		}
+}
+</script>
+
+</html>

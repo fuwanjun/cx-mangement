@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+
+	<style>
+		.goodsImg{
+			width: 50px;
+			height: 50px;
+		}
+		body{
+			background-color: #fff;
+		}
+		.headlabel{
+			width: 12px;
+			height: 18px;
+			background-color: #1194d6;
+			display: inline-block;
+			vertical-align: middle;
+			margin-right: 10px;
+		}
+		.layui-form-label{
+			width:100px;
+		}
+		.layui-form-item .layui-input-inline.address{
+			width:504px;
+		}
+		.tableResponse{
+			height: 120px;
+			overflow-y: auto;
+		}
+		.attachment{
+			border: 1px solid #999;
+			border-radius: 4px;
+			width: 80px;
+			display: inline-block;
+		}
+		.attachmentNumber{
+			width:30px;
+			border: none;
+			outline: none;
+		}
+		.attachment span{
+			padding: 0px 6px;
+		}
+		.layui-table[lay-skin=line] td{
+			border-width: 1px;
+		}
+		#searchBrand,#searchEffect,#searchSpot{
+			outline: none;
+			border-radius: 8px;
+			height: 27px;
+			padding:4px 6px;		
+		}
+		.brandContent{
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap
+		}
+		.brandLi{
+			padding: 3px 10px;
+			margin: 12px;
+			border: 1px solid #ddd;
+			height: 26px;
+			background-color: #fff;
+		}
+		.colorLi{
+			/*padding: 3px 10px;*/
+			margin: 12px;
+			border: 1px solid #ddd;
+			height: 26px;
+			width: 90px;
+			
+			display: flex;
+			flex-direction: row;
+			text-align: center;
+			align-items: center;
+			justify-content: center;
+		}
+		.brandLi-active{
+			background-color: #aaa;
+		}
+		.brandOperation{
+			display: none;
+		}
+		.colorOperation{
+			display: none;
+		}
+		.spotOperation{
+			display: none;
+		}
+		.effectOperation{
+			display: none;
+		}
+		.colorLi_child{
+			width: 45px;
+			height: 26px;
+		}
+		.colorLi_child:first-of-type{
+			text-align: right;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.colorLi_child:last-of-type{
+			text-align: left;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.shelfTitle{
+			background-color: rgba(67,67,67);
+			color: #fff;
+			text-align: center;
+			overflow: hidden;
+			margin-bottom: 15px;
+		}
+		.shelfTitle div{
+			margin: 15px 0;
+			font-size: 25px;
+		}
+		.pics {
+			display: none;
+		}
+
+		#photos .photoImg {
+			width: 290px;
+			height: 280px;
+		}
+
+		#photos .photoImg img {
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+
+</head>
+
+<body>
+		<!--<div class="layui-row shelfTitle">-->
+			<!--<div><span>格架号:</span><span id="latNum"></span></div>-->
+			<!--<div><span>条码号:</span><span id="code"></span></div>-->
+		<!--</div>-->
+		<form class="layui-form layui-row" style="float: left; " id="search1">
+			<div class="layui-row">
+				<div class="layui-inline  orderManage" style="margin-top:10px">
+					<span class="headlabel"></span>上架
+				</div>
+			</div>
+		</form>
+		<!-- 下面是一些第二行的东西 -->
+		<form class="layui-form">
+			<div class="layui-form-item">
+			    <div class="layui-inline">
+			      <label class="layui-form-label">条码号</label>
+			      <div class="layui-input-inline">
+			        <input type="text"  id="barCode" autocomplete="off" placeholder="输入条码号" class="layui-input">
+			      </div>
+			    </div>
+			    <div class="layui-inline">
+			      <label class="layui-form-label">订单号</label>
+			      <div class="layui-input-inline">
+			        <input type="text" id="orderNo" readonly autocomplete="off" class="layui-input">
+			      </div>
+			    </div>
+				<div class="layui-inline">
+					<label class="layui-form-label">电话</label>
+					<div class="layui-input-inline">
+						<input type="text" id="phone" readonly  lay-verify="phone" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">用户名</label>
+					<div class="layui-input-inline">
+						<input type="text" id="userName" readonly autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">地址</label>
+					<div class="layui-input-inline">
+						<input type="text" id="address" readonly autocomplete="off" class="layui-input" style="width: 150%;">
+					</div>
+				</div>
+			  </div>
+			<button type="button" class="layui-btn layui-btn-normal" id="packing" style="float: right;margin-bottom: 10px;">确认包装发货</button>
+		</form>
+		<!-- 下面是第三行表格 -->
+		<table class="layui-table" lay-skin="line" align="center" id="table1">
+			<thead>
+				<tr align="center">
+					<th>条码号</th>
+					<th>衣物名称</th>
+					<th>颜色</th>
+					<td>照片</td>
+					<td>格架号</td>
+					<td>上架状态</td>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<!-- 这个下面是分页 -->
+		<div id="page"></div>
+</body>
+<div id="photos" style="display:none;overflow: hidden;"></div>
+<div id="upBox" style="display:none;padding: 10px 20px 0 20px;">
+	<div class="barCode" style="font-size: 20px;font-weight: bold;text-align: center">条码号:<span></span></div>
+	<div class="name" style="font-size: 20px;font-weight: bold;text-align: center">衣物名称:<span></span></div>
+	<div class="boxCode" style="font-size: 200px;font-weight: bold;text-align: center"><span></span></div>
+</div>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script src="../resource/js/common.js"></script>
+<script src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript">
+	var orderNo="";
+	var codeNo="";
+	layui.use(['element', 'form', 'layer','table', 'laydate', 'laypage','colorpicker'], function () {
+		var element = layui.element;
+		var laydate = layui.laydate;
+		var laypage = layui.laypage
+			,table = layui.table
+			,colorpicker = layui.colorpicker
+			, layer = layui.layer;
+
+		var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+		$("#barCode").val("").focus();
+	});
+
+    //  扫码
+    var excute = true;
+    $("#barCode").bind("input propertychange", function () {
+        var codeNum = $("#barCode").val();
+
+        if (codeNum.length == 16 && excute) {
+            animate=layer.load();
+            excute = codeWrite(codeNum);
+            upper(codeNum);
+        } else {
+            excute = true;
+        }
+        return true
+    });
+
+    //	查看图片
+    $(".lookPhoto").live("click", function () {
+        var pics = $(this).next("p").html();
+        if (!pics) {
+            layer.msg("该商品无图片");
+            return
+        }
+        if (!pics.indexOf(",")) {
+            var item = '<div class="photoImg" style="float: left;">' +
+                '<img src="http://' + pics + '" alt="">' +
+                '</div>';
+            $(item).appendTo($("#photos"));
+        } else {
+            var picArr = [];
+            picArr = pics.split(',');
+            $("#photos").html("");
+            for (var i = 0; i < picArr.length; i++) {
+                var item = '<div class="photoImg" style="float: left;">' +
+                    '	<img src="http://' + picArr[i] + '" alt="">' +
+                    '</div>';
+                $(item).appendTo($("#photos"));
+            }
+        }
+
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.open({
+                title:'商品图片',
+                type: 1,
+                content: $("#photos"),
+                area: ['900px', '620px'],
+                scrollbar: false
+            })
+        })
+    });
+
+//    上架
+    $(".lattice").live("click",function(){
+        var id=$(this).parent().parent().attr("listId");
+        var barCode=$(this).parent().parent().find($(".barCode")).html();
+        var latNo=$(this).parent().parent().find($(".latNo")).html();
+        layui.use('layer',function(){
+            var layer=layui.layer;
+            layer.open({
+                type:1,
+                content:'<p style="padding: 10px;font-size: 20px;">确定上架该商品？</p>',
+                btn:['确定','取消'],
+                yes:function(){
+                    $.ajax({
+                        url: globalUrl + "api/deliver/pickUp;jsessionid=" + $.cookie("token"),
+                        type: 'post',
+                        data: {id:id,orderNo:orderNo},
+                        crossDomain: true,
+                        beforeSend: function (request) {
+                            request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                        },
+                        success:function(data){
+                            if(data.status==200){
+                                codeWrite(codeNo);
+                                $('#latNum').html(latNo);
+                                $("#code").html(barCode);
+                                layer.closeAll();
+                                layer.msg('上架完成');
+                            }else{
+                                layer.msg(data.msg);
+                            }
+                        }
+                    })
+                },
+                btn2:function(){
+                    layer.closeAll();
+                }
+            })
+        })
+    });
+
+//    包装
+	$("#packing").click(function(){
+		layui.use('layer',function(){
+		    var layer=layui.layer;
+		    $.ajax({
+                url: globalUrl + "api/deliver/deliverShow;jsessionid=" + $.cookie("token"),
+                type: 'get',
+                data: {orderNo:orderNo},
+                crossDomain: true,
+                beforeSend: function (request) {
+                    request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                },
+				success:function(data){
+                    if(data.status==200){
+                        var con="";
+						if(data.data>0){
+						    con='<div style="font-size: 18px;padding: 10px;text-align: center">' +
+								'<p>还有'+data.data+'件衣服还未完成上架</p>' +
+                                '<p>是否需要包装发货</p>' +
+								'</div>'
+						}else{
+                            con='<div style="font-size: 18px;padding: 10px;text-align: center">' +
+                                '<p>商品已全部上架</p>' +
+                                '<p>是否需要包装发货</p>' +
+                                '</div>'
+						}
+                        layer.open({
+							type:1,
+							content:con,
+							btn:['确定','取消'],
+							yes:function(){
+                                packing(orderNo);
+                                codeWrite(codeNo);
+							},
+							btn2:function(){
+							    layer.closeAll();
+							}
+						})
+					}else{
+                        layer.msg(data.msg);
+					}
+				}
+			})
+		})
+	});
+
+//  根据条码获取订单信息
+    function codeWrite(code){
+        $.ajax({
+            url: globalUrl + "api/deliver/pickUpShow;jsessionid=" + $.cookie("token"),
+            type: 'get',
+			async:false,
+            data: {barCode:code},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+			success:function(data){
+				if(data.status==200){
+				    $("#orderNo").val(data.data.washItems[0].orderNo);
+				    orderNo=data.data.washItems[0].orderNo;
+				    codeNo=code;
+				    var phone=data.data.address.tel?data.data.address.tel:data.data.address.phone;
+				    var name=data.data.address.consumerName?data.data.address.consumerName:data.data.address.userName;
+				    var dAddress=data.data.address.shopAddress?data.data.address.shopAddress:data.data.address.detailAddress;
+				    $("#phone").val(phone);
+				    $("#userName").val(name);
+				    $("#address").val(data.data.address.region+'-'+dAddress);
+				    $("#table1 tbody").html("");
+				    for(var i=0;i<data.data.washItems.length;i++){
+                        var pics = data.data.washItems[i].picture ? data.data.washItems[i].picture : "";
+                        var colour=data.data.washItems[i].colour?data.data.washItems[i].colour:"";
+                        var upBtns="";
+                        if(data.data.washItems[i].tab){
+                            upBtns='<button type="button" class="layui-btn layui-btn-sm layui-btn-primary" disabled>已上架</button>'
+						}else{
+                            upBtns='<button type="button" class="layui-btn layui-btn-sm lattice" disabled>未上架</button>';
+						}
+				        var item='<tr listId="'+data.data.washItems[i].id+'">' +
+							'<td class="barCode">'+data.data.washItems[i].barCode+'</td>' +
+                            '<td>'+data.data.washItems[i].beforeName+'</td>' +
+                            '<td>'+colour+'</td>' +
+                            '<td>' +
+							'<button class="layui-btn layui-btn-sm layui-btn-primary lookPhoto">查看照片</button>' +
+                            '<p class="pics" style="display: none;">' + pics + '</p>' +
+							'</td>' +
+                            '<td class="latNo">'+data.data.washItems[i].grillageNo+'</td>' +
+							'<td class="btn">' +
+							 upBtns+
+							'</td>' +
+							'</tr>';
+                        if(data.data.washItemId==data.data.washItems[i].id){
+							$(item).prependTo($("#table1 tbody"));
+                        }else{
+                            $(item).appendTo($("#table1 tbody"));
+						}
+                        $('#latNum').html(data.data.washItems[i].grillageNo);
+                        $("#code").html(code);
+					}
+
+				}else{
+				    layer.msg(data.msg);
+				}
+                layer.close(animate)
+			},error:function(){
+			    layer.close(animate)
+			}
+		});
+        layer.close(animate)
+	}
+
+//	确认包装
+	function packing(orderNo){
+        $.ajax({
+            url: globalUrl + "api/deliver/deliverOk;jsessionid=" + $.cookie("token"),
+            type: 'post',
+			async:false,
+            data: {orderNo:orderNo},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+			success:function(data){
+                if(data.status==200){
+                    layer.closeAll();
+                    layer.msg('包装完成');
+				}else{
+                    layer.msg(data.msg);
+				}
+			}
+		})
+	}
+
+	function upper(code){
+	    if(code==$("#table1 tbody tr").eq(0).find("td").eq(0).html()){
+            if($("#table1 tbody tr").eq(0).find(".btn button").html()=="已上架"){
+                layer.msg('商品已上架,不能重复上架');
+                return;
+            }
+	        var listId=$("#table1 tbody tr").eq(0).attr("listId");
+	        $("#upBox .barCode span").html($("#table1 tbody tr").eq(0).find(".barCode").html());
+            $("#upBox .name span").html($("#table1 tbody tr").eq(0).find("td").eq(1).html());
+            $("#upBox .boxCode span").html($("#table1 tbody tr").eq(0).find(".latNo").html());
+			layui.use('layer',function(){
+			    var layer=layui.layer;
+			    layer.open({
+					title:'是否上架',
+					type:1,
+					content:$("#upBox"),
+					area:['70%','60%'],
+					btn:['上架','取消'],
+					yes:function(){
+                        $.ajax({
+                            url: globalUrl + "api/deliver/pickUp;jsessionid=" + $.cookie("token"),
+                            type: 'post',
+							async:false,
+                            data: {id:listId,orderNo:orderNo},
+                            crossDomain: true,
+                            beforeSend: function (request) {
+                                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                            },
+                            success:function(data){
+                                if(data.status==200){
+									codeWrite(code);
+                                    layer.closeAll();
+                                    layer.msg('上架完成');
+                                }else{
+                                    layer.msg(data.msg);
+                                }
+                            }
+                        })
+					}
+				})
+			})
+		}else{
+	        layer.msg('商品已处理');
+		}
+	}
+
+</script>
+</html>

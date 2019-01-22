@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" href="./css/pageIndex.css">
+	<link rel="stylesheet" href="./css/customerGroup.css">
+
+</head>
+<style>
+	.bombBox>.layui-form-item>.layui-form-label {
+		padding: 9px 0;
+	}
+
+	.submitBtn {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+	}
+
+	.submitBtn>button {
+		width: auto;
+		text-align: center;
+		min-width: 92px;
+	}
+
+	.layui-form-label {
+		width: 120px;
+	}
+	.layui-p-relative{
+		position: relative;
+	}
+	#picture{
+		width: 120px;
+		position: absolute;
+		top: 0;
+		left:0;
+		display: block;
+		height: 38px;
+		opacity: 0;
+	}
+
+	.layui-input-block {
+		margin-left: 140px;
+	}
+	.spaceBetween {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	.layui-label-left{
+		padding: 8px 0px;
+	}
+	.title{
+		padding:8px 0px;
+		background-color: #f4f4f4;
+	}
+	.tip{
+		color: rgba(110,110,110);
+		font-size: 15px;
+	}
+	.tip--text-right{
+		text-align: right;
+	}
+	.banner_list_detail{
+		margin: 8px 0;
+		background-color: #f3f3f3;
+	}
+	.grid-demo{
+		padding: 6px 4px;
+	}
+	#demo1{
+		width: 167px;
+		height: 60px;
+	}
+</style>
+
+<body>
+	<div class="loading"> </div>
+	<div class="body">
+		<div class="layui-row">
+			<!-- 左侧客户分类 -->
+			<div class="navInnerLeft layui-col-md2 layui-col-lg1 layui-col-sm2">
+				<div class="layui-label-left">图片标签列表</div>
+				<div class="layui-collapse layui-col-md9" lay-accordion>
+					<div class="listMenu">
+						
+					</div>
+					<div class="layui-colla-item addList">
+						<h2 class="layui-colla-title">
+							<i class="layui-icon" style="font-size: 18px; color: #333333;">&#xe654;</i>添加轮播图</h2>
+					</div>
+				</div>
+				<div class="operating layui-col-md2">
+					<i class="layui-icon updataList" style="font-size: 18px; color: #787878 100%">&#xe642;</i>
+					<i class="layui-icon deleteList" style="font-size: 18px; color: #787878 100%">&#xe640;</i>
+				</div>
+			</div>
+			<!-- 客户分类详情 -->
+			<div class="layui-col-md10 layui-col-lg11 layui-col-sm10">
+				<!-- 顶部客户按钮操作部分 -->
+				<div class="searchContainer layui-row">
+					
+					<div class="layui-carousel" id="test10">
+						<div carousel-item="">
+						    
+						</div>
+					</div>
+				</div>
+				<div class="tip tip--text-right">*建议banner图上传尺寸大小为750*270</div>
+				<div class="tableContainer">
+					<div class="title title-style-padding">图片详情信息展示</div>
+					<div class="banner_list_detail">
+						<div class="layui-row">
+						    <div class="layui-col-xs3">
+						      <div class="grid-demo">名称：</div>
+						    </div>
+						    <div class="layui-col-xs9">
+						      <div class="grid-demo">情人节活动</div>
+						    </div>
+						</div>
+						<div class="layui-row">
+						    <div class="layui-col-xs3">
+						      <div class="grid-demo">链接：</div>
+						    </div>
+						    <div class="layui-col-xs9">
+						      <div class="grid-demo">http://www.baidu.com/detail.html</div>
+						    </div>
+						</div>
+						<div class="layui-row">
+						    <div class="layui-col-xs3">
+						      <div class="grid-demo">是否显示：</div>
+						    </div>
+						    <div class="layui-col-xs9">
+						      <div class="grid-demo">是</div>
+						    </div>
+						</div>
+						<div class="layui-row">
+						    <div class="layui-col-xs3">
+						      <div class="grid-demo">当前排序：</div>
+						    </div>
+						    <div class="layui-col-xs9">
+						      <div class="grid-demo">1</div>
+						    </div>
+						</div>						
+					</div>
+				
+				</div>
+				<div class="searchContainer layui-row">
+					<div class="layui-carousel" id="test9">
+						<div carousel-item="">
+						    
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- 弹框 -->
+			<div class="bg">
+				<div class="Container">
+
+					<!-- 取消事件 -->
+					<div class="cancel">
+						<i class="layui-icon"> &#x1007;</i>
+					</div>
+
+					<!-- 添加分组 -->
+					<!--<form>-->
+						<div class="layui-form bombBox addListForm">
+
+							<div class="layui-form-item">
+								<p class="bombBoxTitle">添加轮播图</p>
+							</div>
+							<div class="layui-form-item layui-p-relative">
+							  	<label class="layui-form-label layui-btn layui-btn-normal">上传轮播图片</label>
+							  	<div class="layui-input-block">
+							    	<img class="layui-upload-img" id="demo1">
+							  	</div>
+							  	<input type="file" name="file" id="picture" value="" />
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label">名称</label>
+								<div class="groupTitle layui-input-block">
+									<input class="layui-input" id="remark" name="remark" type="text" lay-verify="remark" placeholder="请输入标题" autocomplete="off">
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label">跳转链接</label>
+								<div class="groupTitle layui-input-block">
+									<input class="layui-input" type="text" id="imgHref" name="imgHref" lay-verify="imgHref" placeholder="请输入跳转链接" autocomplete="off">
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label">是否显示</label>
+								<div class="groupTitle layui-input-block">
+									<input class="showStatus" type="radio" name="state" value="NORMAL" title="是" checked="">
+									<input class="showStatus" type="radio" name="state" value="disabled" title="否">
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label">排序序号</label>
+								<div class="groupTitle layui-input-block">
+									<input class="layui-input" type="text" id="sort" name="sort" lay-verify="sort" placeholder="请输入排序序号" autocomplete="off">
+								</div>
+							</div>
+							<div class="submitAdd submitBtn">
+								<button lay-submit="" lay-filter="demo1"  class="layui-btn layui-btn-normal">确认添加</button>
+							</div>
+						</div>
+					<!--</form>--> 
+					
+					<!-- 修改分组 -->
+					<div class="layui-form bombBox updataListForm">
+						<div class="layui-form-item">
+							<p class="bombBoxTitle">修改分组</p>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">分组名称</label>
+							<div class="updataTitle layui-input-block">
+								<input class="layui-input" type="text" placeholder="请输入标题" autocomplete="off">
+							</div>
+						</div>
+
+						<div class="layui-form-item">
+							<label class="layui-form-label">优惠方式</label>
+							<div class="layui-input-block updataDiscountType">
+								<select>
+									<option value=""></option>
+									<option value="0">折扣</option>
+									<option value="1">闲时免费</option>
+									<option value="2">时间段免费</option>
+									<option value="3">低峰期免费</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">禁停时间</label>
+							<div class="layui-input-block updataNoParkingTime">
+								<select>
+									<option value=""></option>
+									<option value="0">上午&#40;6:00-12:00&#41;</option>
+									<option value="1">下午&#40;12:00-18:00&#41;</option>
+									<option value="2">晚上&#40;18:00-24:00&#41;</option>
+									<option value="3">凌晨&#40;0:00-6:00&#41;</option>
+								</select>
+							</div>
+						</div>
+						<div class="submitUpdata submitBtn">
+							<button class="layui-btn layui-btn-normal">确认修改</button>
+						</div>
+					</div>
+					<!-- 删除分组 -->
+					<div class="layui-form bombBox deleteListForm">
+						<div class="layui-form-item">
+							<p class="bombBoxTitle" style="padding:30px 0px;text-align: center;">确认删除“
+								<span class="deleteItemName"></span>”分组吗？</p>
+						</div>
+
+						<div class="submitBtn">
+							<button class="layui-btn layui-btn-primary cancelDelete">取消</button>
+							<button class="layui-btn layui-btn-normal confirmDelete">确认</button>
+						</div>
+					</div>
+					<!-- 添加客户 -->
+					<div class="layui-form bombBox addCustomer">
+						<div class="layui-form-item">
+							<p class="bombBoxTitle">添加客户</p>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">姓名</label>
+							<div class="layui-input-block">
+								<input class="layui-input addCustomerName" type="text" placeholder="请输入用户姓名" autocomplete="off">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">手机号</label>
+							<div class="layui-input-block">
+								<input class="layui-input addCustomerPhone" type="text" placeholder="请输入用户手机号" autocomplete="off">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">车牌号</label>
+							<div class="layui-input-block spaceBetween">
+								<div class="layui-input-inline" style="width: 100px;">
+									<input type="text" class="firstName layui-input" placeholder="如：京A" autocomplete="off">
+								</div>
+								<div class="layui-input-inline" style="width: 270px;margin: 0px;">
+									<input type="text" class="lastNum layui-input" placeholder="车牌号后五位" autocomplete="off">
+								</div>
+							</div>
+						</div>
+
+						<div class="submitAddCustomer submitBtn">
+							<button class="layui-btn layui-btn-normal">确认添加</button>
+						</div>
+					</div>
+
+					<!-- 编辑客户 -->
+					<div class="layui-form bombBox updataCustomer">
+						<div class="layui-form-item">
+							<p class="bombBoxTitle">编辑客户</p>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">姓名</label>
+							<div class="layui-input-block">
+								<input class="layui-input updataCustomerName" type="text" placeholder="请输入用户姓名" autocomplete="off">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">手机号</label>
+							<div class="layui-input-block">
+								<input class="layui-input updataCustomerPhone" type="text" placeholder="请输入用户手机号" autocomplete="off">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">车牌号</label>
+							<div class="layui-input-block spaceBetween">
+								<div class="layui-input-inline" style="width: 100px;">
+									<input type="text" class="updataFirstName layui-input" placeholder="如：京A" autocomplete="off">
+								</div>
+								<div class="layui-input-inline" style="width: 270px;margin: 0px;">
+									<input type="text" class="updataLastNum layui-input" placeholder="车牌号后五位" autocomplete="off">
+								</div>
+							</div>
+						</div>
+
+						<div class="submitUpdataCustomer submitBtn">
+							<button class="layui-btn layui-btn-normal">保存编辑</button>
+						</div>
+					</div>
+					<!-- 删除用户 -->
+					<div class="layui-form bombBox deleteCustomer">
+						<div class="layui-form-item">
+							<p class="bombBoxTitle" style="padding:30px 0px;text-align: center;">确认删除该用户吗？</p>
+						</div>
+
+						<div class="submitBtn">
+							<button class="layui-btn layui-btn-primary cancelDelete">取消</button>
+							<button class="layui-btn layui-btn-normal confirmDeleteCustomer">确认</button>
+						</div>
+					</div>
+					<!-- 转移分组 -->
+					<div class="layui-form bombBox changeCustomerGroup">
+						<div class="layui-form-item">
+							<p class="bombBoxTitle">转移分组</p>
+						</div>
+						<div class="layui-form-item">
+							<h2>请选择要将客户转移至那个分组</h2>
+						</div>
+						<!-- 分组情况 -->
+						<div class="changeGroupContainer" style="border: 1px solid #787878;padding-top:20px;">
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="submitBtn" style="margin-top:20px;">
+							<button class="changeGroupSub layui-btn layui-btn-normal">确认转移</button>
+						</div>
+					</div>
+
+					<!-- 批量删除 -->
+					<div class="layui-form bombBox deleteCustomerGroup">
+						<div class="layui-form-item">
+							<p class="bombBoxTitle" style="padding:30px 0px;text-align: center;">确认删除所选中的客户吗？</p>
+						</div>
+
+						<div class="submitBtn">
+							<button class="layui-btn layui-btn-primary cancelDeletes">取消</button>
+							<button class="layui-btn layui-btn-normal deleteCustomer">确认</button>
+						</div>
+					</div>
+
+
+					<!-- 删除分组时是否保留原有客户 -->
+					<div class="layui-form bombBox changeItem">
+						<div class="layui-form-item">
+							<p class="bombBoxTitle">转移分组</p>
+						</div>
+						<div class="layui-form-item">
+							<h2>请选择要将客户转移至那个分组</h2>
+						</div>
+						<!-- 分组情况 -->
+						<div class="changeGroupContainer" style="border: 1px solid #787878;padding-top:20px;">
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="submitBtn" style="margin-top:20px;">
+							<button class="layui-btn layui-btn-primary notTranslate">不转移,全部删除</button>
+							<button class="layui-btn layui-btn-normal translate">确认转移</button>
+						</div>
+					</div>
+
+					<!-- 删除操作信息 -->
+					<div class="layui-form bombBox deleteMessage">
+						<div class="layui-form-item">
+							<p class="bombBoxTitle message" style="padding:30px 0px;text-align: center;"></p>
+						</div>
+
+						<div class="submitBtn">
+							<button class="layui-btn layui-btn-normal messageBtn">我知道了</button>
+						</div>
+					</div>
+
+					<!-- 批量转移 -->
+					<div class="layui-form bombBox changeGroups">
+						<div class="layui-form-item">
+							<p class="bombBoxTitle">批量转移</p>
+						</div>
+						<div class="layui-form-item">
+							<h2>请选择要将客户转移至那个分组</h2>
+						</div>
+						<!-- 分组情况 -->
+						<div class="changeGroupContainer" style="border: 1px solid #787878;padding-top:20px;">
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline changeItems">
+								<div class="layui-form-item">
+									<label class="layui-form-label">单选框</label>
+									<div class="layui-input-block">
+										<input type="radio" name="groupTitle" value="">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="submitBtn" style="margin-top:20px;">
+							<button class="changeGroupsSub layui-btn layui-btn-normal">确认转移</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+<script src='./js/jquery.min.js'></script>
+<script src="../resource/layui/layui.js"></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.form.js"></script>
+<script>
+
+	var token=$.cookie("token");
+	$(function () {
+		$('.body').show();
+		$('.loading').hide();
+	});
+
+	layui.use(['laypage', 'layer', 'form','upload','carousel','table'], function () {
+		var form = layui.form
+		,laypage = layui.laypage
+		,layer = layui.layer
+		,carousel = layui.carousel
+		,table = layui.table
+		,upload=layui.upload;
+		$(function(){
+			getBannerList();
+			if(!token){
+				layer.msg('未登录，将前往登录！');
+				window.location.href="../login.html";
+			}
+		})
+		
+		function getBannerList(){
+			var str='';
+			var banner='';
+			$.ajax({
+				type:"get",
+				data:{},
+				url:globalUrl+"rotationMap/getRotaionMapAll",
+				async:true,
+				crossDomain:true,
+				beforeSend:function(request){
+					request.setRequestHeader("token",$.cookie("token"));
+				},
+				success:function(res){
+					console.log(res)
+					if(res.code>-1){
+						
+						$.each(res.data, function(index,val) {
+							str+='<div class="layui-colla-item list" data-id="'+val.id+'">'
+							str+='<h2 class="layui-colla-title">'+val.remark+'</h2>'
+							str+='</div>';
+							
+							banner+='<div><img src="http://'+val.imgUrl+'"></div>'
+						});
+						
+					}
+					$(".listMenu").html(str);
+					$('.listMenu .layui-colla-title').eq(0).addClass('selectedStatus');
+					//初始数据展示
+					$(".banner_list_detail .layui-row").eq(0).find(".grid-demo").eq(1).text(res.data[0].remark)
+					$(".banner_list_detail .layui-row").eq(1).find(".grid-demo").eq(1).text(res.data[0].imgHref)
+					if(res.data[0].state=="NORMAL"){
+						$(".banner_list_detail .layui-row").eq(2).find(".grid-demo").eq(1).text("是")
+					}else{
+						$(".banner_list_detail .layui-row").eq(2).find(".grid-demo").eq(1).text("否")
+					}
+					$(".banner_list_detail .layui-row").eq(3).find(".grid-demo").eq(1).text(res.data[0].sort);
+					$("#test9>div").html('<div><img src="http://'+res.data[0].imgUrl+'" /></div>');
+					carousel.render({
+					    elem: '#test9'
+					    ,width: '750px'
+					    ,height: '270px'
+					    ,interval: 4000
+					});
+					$("#test10>div").html(banner);
+					carousel.render({
+					    elem: '#test10'
+					    ,width: '750px'
+					    ,height: '270px'
+					    ,interval: 4000
+					});
+				}
+			});
+		}
+		
+		function list_byId(data){
+			$.ajax({
+				type:"get",
+				data:{id:data},
+				url:globalUrl+"rotationMap/getRotationMapgetById",
+				async:true,
+				crossDomain:true,
+				beforeSend:function(request){
+					request.setRequestHeader("token",$.cookie("token"));
+				},
+				success:function(res){
+					console.log(res);
+					if(res.remark){
+						$(".banner_list_detail .layui-row").eq(0).find(".grid-demo").eq(1).text(res.data.remark)
+					}
+					if(res.imgHref){
+						$(".banner_list_detail .layui-row").eq(1).find(".grid-demo").eq(1).text(res.data.imgHref)
+					}
+					if(res.state=="NORMAL"){
+						$(".banner_list_detail .layui-row").eq(2).find(".grid-demo").eq(1).text("是")
+					}else{
+						$(".banner_list_detail .layui-row").eq(2).find(".grid-demo").eq(1).text("否")
+					}
+					if(res.sort){
+						$(".banner_list_detail .layui-row").eq(3).find(".grid-demo").eq(1).text(res.data.sort)
+					}
+					$("#test9>div").html('<div><img src="http://'+res.data.imgUrl+'" /></div>');
+					carousel.render({
+					    elem: '#test9'
+					    ,width: '750px'
+					    ,height: '270px'
+					    ,interval: 4000
+					});
+				},
+				error:function(err){
+					
+				}
+			});
+		}
+	var f_input=document.getElementById("picture");
+	var formData;
+	$("#picture").change(function(res){
+		formData=new FormData();
+		show(this);
+		formData.append("file",f_input.files[0]);
+	})
+	//图片回显函数
+	function show(obj) {
+		var file = obj.files[0];
+		var readerFile = new FileReader();
+		readerFile.onload = function(ev) {
+			var data = ev.target.result;
+			$("#demo1").attr("src",data);
+		}
+		readerFile.readAsDataURL(file);
+	}
+	//传统方法提交数据
+	$(".submitAdd button").live("click",function(){
+		var remark=$("#remark").val();
+		var imgHref=$("#imgHref").val();
+		var state=$("input[name='state']:checked").val();
+		var sort=$("#sort").val();
+		if(!remark){
+			layer.msg("请填写图片名称")
+	        return false;
+	   }
+		formData.append("imgHref",imgHref);
+		formData.append("sort",sort);
+		formData.append("state",state);
+		formData.append("remark",remark);
+		$.ajax({
+			type:"post",
+			url:globalUrl+'rotationMap/putRotationMap',
+			async:true,
+			data:formData,
+			crossDomain:true,
+			beforeSend:function(request){
+				request.setRequestHeader("token",$.cookie("token"));
+			},
+			cache:false,
+			contentType:false,
+			processData:false,
+			success:function(res){
+				console.log(res);
+				$("#imgHref").val();
+				$("#sort").val();
+				$("#state").val();
+				$("#remark").val();
+			}
+		});
+	})
+	function alertMsg(type, msg) {
+		var icon = '';
+		switch (true) {
+			case (type == ('success')):
+				icon = '&#x1005;';
+				break;
+			case (type == ('error')):
+				icon = '&#x1007;';
+				break;
+		}
+		layer.open({
+			type: 1,
+			title: false,
+			closeBtn: false,
+			area: ['400px', '200px'],
+			shade: 0.5,
+			id: 'LAY_layuipro',
+			btnAlign: 'c',
+			moveType: 1,
+			content: `<div style="text-align: center">
+							<i class="layui-icon" style="line-height: 150px;font-size: 100px; color: #000000;">` +
+				icon + `</i>  
+							<p style="font-size: 22px">` + msg + `</p>
+						</div>`,
+			time: 2000,
+		});
+	}
+
+	// 显示弹框阴影
+	function showBG(DOM,map_id) {
+		parent.ableBtn();
+		$('.bombBox').hide();
+		$(DOM).fadeIn();
+		$('.bg').fadeIn();
+		parent.disableBtn();
+	}
+
+	// 隐藏弹框阴影
+	function hideBG() {
+		$('.bg').fadeOut();
+		parent.ableBtn();
+		$('.bombBox').fadeOut();
+	}
+	var sortNum = 0;
+	$('.bg').fadeOut();
+	$('.bombBox').fadeOut();
+	$('.list').live('click', function () {
+
+		var index = $('.layui-colla-item').index(this);
+		console.log(index);
+		var id=$(this).attr("data-id");
+		// 添加选中样式
+		$('.layui-colla-title').removeClass('selectedStatus');
+		$('.layui-colla-title').eq(index).addClass('selectedStatus');
+		list_byId(id);
+		sortNum = index;
+		var itemHight = $('.layui-colla-item').outerHeight(true) + 1;
+		var offSetHeight = index * itemHight;
+		$('.operating').css({
+			'position': 'relative',
+			'top': offSetHeight + 'px',
+		});
+		$('.operating').attr("data-id",id);
+		$('.operating').show();
+		$('.form').show();
+		console.log('获取分组数据')
+	});
+	
+	// 黑名单
+	$('.blacklist').live('click', function () {
+		var index = $('.layui-colla-item').index(this);
+		$('.layui-colla-title').removeClass('selectedStatus');
+		$('.layui-colla-title').eq(index).addClass('selectedStatus');
+		// 黑名单不可操作无优惠
+		$('.operating').hide();
+		$('.form').hide();
+		console.log('获取黑名单数据');
+	})
+
+	// 添加客户分组
+	$('.addList').live('click', function () {
+		console.log('添加分组');
+		showBG('.addListForm');
+		// $('.addListForm').fadeIn();
+		form.render();
+	})
+
+	// 取消弹框操作
+	// 两个dom节点，插好按钮和取消按钮
+	$('.cancel ,.cancelDelete').live('click', function () {
+		hideBG();
+	});
+
+	// 修改分组
+	$('.updataList').live('click', function () {
+		var id=$(this).parent().attr("data-id");
+		showBG('.updataListForm');
+		// $('.updataListForm').fadeIn();
+	});
+	function updataList(){
+		$.ajax({
+			type:"post",
+			url:globalUrl+"rotationMap/updateRotationMap",
+			data:rotationMap,
+			async:true,
+			crossDomain:true,
+			beforeSend:function(request){
+				request.setRequestHeader("token",$.cookie("token"));
+			},
+			success:function(res){
+				console.log(res);
+				//刷新页面
+			},
+			error:function(err){
+				console.log(err);
+			}
+		});
+	}
+	$('.submitUpdata button').live('click', function () {
+		console.log('提交更新');
+		var updataDiscountTitle = $('.updataTitle input').val();
+		var updataDiscountType = $('.updataDiscountType input').val();
+		var noParkingTime = $('.updataNoParkingTime input').val();
+		if (!updataDiscountTitle) {
+			layer.msg('分组名不能为空！');
+			return
+		}
+		console.group('发送获取的数据')
+		console.log(updataDiscountTitle);
+		console.log(updataDiscountType);
+		console.log(noParkingTime);
+		console.groupEnd();
+		hideBG();
+	});
+
+	// 添加客户
+	$('.addCustomerBtn').live('click', function () {
+		showBG('.addCustomer');
+		// $('.addCustomer').fadeIn();
+	})
+
+
+	// 提交添加的客户
+	$('.submitAddCustomer').live('click', function () {
+		var firstName = $('.firstName').val();
+		var lastNum = $('.lastNum').val();
+		var customerName = $('.addCustomerName').val();
+		var customerPhone = $('.addCustomerPhone').val();
+		var fullCarNum = firstName + lastNum;
+		// 车牌号验证
+		var express = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/;
+		var isCarNum = express.test(fullCarNum);
+		if (fullCarNum == '') {
+			layer.msg('车牌号不能为空！');
+			return;
+		};
+
+		if (!isCarNum) {
+			layer.msg('请输入正确的车牌号！');
+			return;
+		};
+
+
+
+		// 验证手机号
+		var phoneNum = /^1(3|4|5|7|8)\d{9}$/;
+		var isPhoneNum = phoneNum.test(customerPhone)
+		if (customerPhone != '' && !isPhoneNum) {
+			layer.msg('手机号格式不正确！');
+			return;
+		}
+
+		var data = [{
+			customerName,
+			customerPhone,
+			fullCarNum,
+		}]
+		addCustomer(data)
+
+		hideBG();
+	})
+
+	// 搜索
+	$('.search').live('click', function () {
+		var carNum = $('#carNum').val();
+		var name = $('#name').val();
+		var phoneNum = $('#phoneNum').val();
+		console.log(carNum);
+		console.log(name);
+		console.log(phoneNum);
+	})
+
+	// 编辑客户
+	var customerIndex = 0;
+	$('.updataCustomerBtn').live('click', function () {
+		customerIndex = $('.updataCustomerBtn').index(this);
+		showBG('.updataCustomer');
+		// $('.updataCustomer').fadeIn();
+	});
+
+	// 提交编辑客户
+	$('.submitUpdataCustomer').live('click', function () {
+		var updataCustomerName = $('.updataCustomerName').val();
+		var updataCustomerPhone = $('.updataCustomerPhone').val();
+		var firstName = $('.updataFirstName').val();
+		var lastNum = $('.updataLastNum').val();
+		var fullCarNum = firstName + lastNum;
+
+		// 验证车牌
+		var carNum = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/;
+		var isCarNum = carNum.test(fullCarNum);
+		if (fullCarNum == '') {
+			layer.msg('车牌号不能为空！');
+			return;
+		};
+		if (!isCarNum) {
+			layer.msg('请输入正确的车牌号！');
+			return;
+		};
+
+		// 验证手机号
+		var phoneNum = /^1(3|4|5|7|8)\d{9}$/;
+		var isPhoneNum = phoneNum.test(updataCustomerPhone)
+		if (updataCustomerPhone != '' && !isPhoneNum) {
+			layer.msg('手机号格式不正确！');
+			return;
+		}
+
+
+		console.group('updata');
+		console.log(fullCarNum);
+		console.log(customerIndex);
+		console.groupEnd();
+		$('.customerName').eq(customerIndex).text(updataCustomerName == '' ? '---' : updataCustomerName);
+		$('.customerPhone').eq(customerIndex).text(updataCustomerPhone == '' ? '---' : updataCustomerPhone);
+		$('.customerCarNum').eq(customerIndex).text(fullCarNum);
+		hideBG();
+	});
+
+	// 删除用户
+	$('.deleteCustomerBtn').live('click', function () {
+		customerIndex = $('.deleteCustomerBtn').index(this);
+		showBG('.deleteCustomer');
+		// $('.deleteCustomer').fadeIn();
+	});
+	$('.confirmDeleteCustomer').live('click', function () {
+		// 删除成功后的操作
+		$('.customItem').eq(customerIndex).remove();
+		alertMsg('success', '删除成功！');
+		hideBG();
+	});
+
+	// 转移分组
+	$('.changeGroupBtn').live('click', function () {
+		customerIndex = $('.changeGroupBtn').index(this);
+		console.log(customerIndex);
+		showBG('.changeCustomerGroup');
+		// $('.changeCustomerGroup').fadeIn();
+	});
+	$('.changeGroupSub').live('click', function () {
+		console.log('转移分组单个');
+
+
+		hideBG();
+	});
+
+
+	// 批量删除
+	$('.deleteCustomers').live('click', function () {
+		showBG('.deleteCustomerGroup');
+		// $('.deleteCustomerGroup').fadeIn();
+	});
+	$('.deleteCustomer').live('click', function () {
+		// 批量删除逻辑
+		console.group('批量删除');
+		console.log('缺逻辑数据');
+		console.groupEnd()
+		hideBG();
+	})
+	$('.cancelDeletes').live('click', function () {
+		hideBG();
+	})
+
+	// 批量转移
+	$('.changeCustomers').live('click', function () {
+		showBG('.changeGroups');
+		// $('.changeGroups').fadeIn();
+	});
+	$('.changeGroupsSub').live('click', function () {
+		console.log('批量转移分组');
+
+		hideBG();
+	});
+
+
+	// 删除分组
+	$('.deleteList').live('click', function () {
+		var id=$(this).parent().attr("data-id");	
+		showBG('.deleteListForm',id);
+	})
+	function deleteList(map_id){
+		$.ajax({
+			type:"post",
+			url:globalUrl+"rotationMap/deleteRotaionMap",
+			async:true,
+			data:{id:map_id},
+			crossDomain:true,
+			beforeSend:function(request){
+				request.setRequestHeader("token",$.cookie("token"));
+			},
+			success:function(res){
+				if(res){
+					console.log("删除成功");
+					//刷新当前页面
+				}
+			}
+		});
+	}
+
+	// 确认删除
+	// 删除后要将所删除分组内的客户安排
+	$('.confirmDelete').live('click', function () {
+		$('.deleteListForm').hide();
+		deleteList(id);
+	});
+
+	// 不保留原有客户
+	var itemMsg = '';
+	$('.notTranslate').live('click', function () {
+		itemMsg = '操作提示信息';
+		$('.message').html(itemMsg);
+		showBG('.deleteMessage');
+	});
+	// 保留原有客户
+	$('.translate').live('click', function () {
+		itemMsg = '操作提示信息';
+		$('.message').html(itemMsg);
+		showBG('.deleteMessage');
+	});
+	$('.messageBtn').live('click', function () {
+		itemMsg = '';
+		// 移除删除的框并添加选中样式
+		$('.layui-colla-title').eq(sortNum).parent().remove();
+		$('.layui-colla-title').eq(0).addClass('selectedStatus');
+		hideBG();
+	})
+
+
+	// 全选和非全选状态选择
+	var selectAllBtn = false;
+	updataBtn();
+	$('#selectAll').live('click', function () {
+		var isSelectAll = $('#selectAll').prop('checked');
+		selectAllBtn = !selectAllBtn;
+		console.log(isSelectAll);
+		$('.customSelect').prop('checked', isSelectAll);
+		updataBtn();
+	});
+
+	// 判断是否又选中的条目，如果没有则禁用批量按钮
+	function updataBtn() {
+		if (!selectAllBtn) {
+			// 禁用按钮
+			$('.changeCustomers ,.deleteCustomers').addClass('layui-btn-disabled').attr('disabled', "true");;
+		} else {
+			// 接近按钮
+			$('.changeCustomers ,.deleteCustomers').removeClass('layui-btn-disabled').removeAttr("disabled");;
+		}
+	}
+
+	// 优惠活动状态
+	var discountStatus = false;
+	var discountStatusStr = '已关闭';
+	$(".layui-form-switch").live('click', function () {
+		discountStatus = !discountStatus;
+		discountStatusStr = (discountStatus) ? '已开启' : '已关闭';
+		$('.discountStatus').text(discountStatusStr);
+	});
+
+	// 添加客户item
+	function addCustomer(data) {
+		var Str = ``;
+		data.forEach(item => {
+			Str +=
+				`<tr class="customItem">
+				<td>
+					<input type="checkbox" class="customSelect">
+				</td>
+				<td>` + (item.customerName ==
+					'' ? '-' : item.customerName) + `</td>
+				<td>` + (item.customerPhone == '' ? '-' : item.customerPhone) +
+				`</td>
+				<td>` + item.fullCarNum +
+				`</td>
+				<td>
+					<button class="layui-btn layui-btn-sm layui-btn-primary">编辑</button>
+					<button class="layui-btn layui-btn-sm layui-btn-primary">删除</button>
+					<button class="layui-btn layui-btn-sm layui-btn-primary">转移分组</button>
+				</td>
+			</tr>`;
+		});
+		$('.customerItemContainer').html(Str);
+	}
+	
+})
+</script>

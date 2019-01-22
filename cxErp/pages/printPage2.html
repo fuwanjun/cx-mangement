@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单详情</title>
+    <style>
+        .orderMsg,.btn-box{
+            width:1000px;
+            margin:50px auto;
+            border:1px solid #000;
+        }
+        .line{
+            display: flex;
+        }
+        .item{
+            padding:20px 10px;
+            border:1px solid #000;
+            text-align: center;
+        }
+        .flex1{
+            flex:1;
+        }
+        .flex2{
+            flex:2;
+        }
+        .flex3{
+            flex:3;
+        }
+        .flex6{
+            flex:6;
+        }
+        .flex95{
+            flex:0.95;
+        }
+        .layui-btn {
+            display: inline-block;
+            height: 38px;
+            line-height: 38px;
+            padding: 0 18px;
+            background-color: #1E9FFF;
+            color: #fff;
+            white-space: nowrap;
+            text-align: center;
+            font-size: 14px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="orderMsg">
+    <div class="line">
+        <div class="item flex1">店铺名称</div>
+        <div class="item flex2" id="myShop">我的店</div>
+        <div class="item flex1">店铺订单</div>
+        <div class="item flex3" id="myOrder"></div>
+    </div>
+    <div class="line">
+        <div class="item flex1">客户电话</div>
+        <div class="item flex2" id="userPhone"></div>
+        <div class="item flex1">客户地址</div>
+        <div class="item flex3" id="userAddress"></div>
+    </div>
+    <div class="line">
+        <div class="item flex1">衣物名称</div>
+        <div class="item flex2">价格</div>
+        <div class="item flex1">数量</div>
+        <div class="item flex3">颜色</div>
+    </div>
+    <div class="goods">
+        <!--<div class="line">-->
+            <!--<div class="item flex1">衬衫</div>-->
+            <!--<div class="item flex2">50</div>-->
+            <!--<div class="item flex1">10</div>-->
+            <!--<div class="item flex3">白色</div>-->
+        <!--</div>-->
+    </div>
+    <div class="line">
+        <div class="item flex1">衣物总件数</div>
+        <div class="item flex2" id="allNum">50</div>
+        <div class="item flex1">衣物总价格</div>
+        <div class="item flex3" id="allPrice">20</div>
+    </div>
+    <div class="line">
+        <div class="item flex1">瑕疵</div>
+        <div class="item flex2">衣物有少量破洞</div>
+        <div class="item flex1">洗后效果</div>
+        <div class="item flex3">洗后会有褶皱</div>
+    </div>
+</div>
+<div class="btn-box" style="border: none;">
+    <button class="layui-btn" style="float: right;">打印清单</button>
+</div>
+</body>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script>
+$(function(){
+    getOrderMsg(shopId);
+});
+var shopId=$.cookie("shopId");
+//    获取订单信息
+    function getOrderMsg(shopId){
+        $.ajax({
+            url:globalUrl+"api/work/actingSortSubmit;jsessionid=" + $.cookie("token"),
+            type:'post',
+            data:{id:shopId},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success:function(data){
+                console.log(data);
+                $("#myShop").html(data.data.agent.shopName);
+                $("#myOrder").html(data.data.agent.orderId);
+                $("#userPhone").html(data.data.agent.tel);
+                $("#userAddress").html(data.data.agent.shopAddress);
+                var num=0;
+                var allPrice=0;
+                for(var i=0;i<data.data.washItems.length;i++){
+                    num+=parseFloat(data.data.washItems[i].status);
+                    allPrice+=parseFloat(data.data.washItems[i].beforePrice);
+                    var item='<div class="line">'+
+                                '<div class="item flex1">'+data.data.washItems[i].afterName+'</div>'+
+                                '<div class="item flex2">'+data.data.washItems[i].afterPrice+'</div>'+
+                                '<div class="item flex1">'+data.data.washItems[i].status+'</div>'+
+                                '<div class="item flex3">'+data.data.washItems[i].beforePrice+'</div>'+
+                            '</div>';
+                    $(item).appendTo($(".goods"));
+                }
+                $("#allNum").html(num);
+                $("#allPrice").html(allPrice);
+            }
+        });
+    }
+</script>
+</html>

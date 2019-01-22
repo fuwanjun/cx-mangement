@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>污渍终止处理</title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+	<style>
+		.headlabel {
+			width: 12px;
+			height: 18px;
+			background-color: #1194d6;
+			display: inline-block;
+			vertical-align: middle;
+			margin-right: 10px;
+		}
+		.layui-form-label{
+			width: 100px;
+		}
+		.layui-input-block{
+			margin-left: 100px;
+		}
+	</style>
+</head>
+<body style="background: #fff;">
+<div class="layui-tab-item layui-show">
+	<form class="layui-form layui-row" style="float: left; " id="search1">
+		<div class="layui-row">
+			<div class="layui-inline  orderManage" style="margin-top:10px">
+				<span class="headlabel"></span>加工商
+			</div>
+		</div>
+	</form>
+	<form class="layui-form">
+		<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
+			<div class="layui-input-inline" style="margin:0; width: 70%;">
+				<input type="text" id="searchDate1" placeholder="加工商名称" class="layui-input">
+			</div>
+			<button class="layui-btn layui-btn-normal" type="button" id="searchBtn1">查询</button>
+		</div>
+		<button type="button" class="layui-btn" id="addShop" style="margin-top:10px;float: right;">新增加工商</button>
+	</form>
+
+	<table class="layui-table" lay-skin="line" align="center" id="table1">
+		<thead>
+		<tr align="center">
+			<th><input type="checkbox"></th>
+			<th>加工商名称</th>
+			<th>联系方式</th>
+			<th>地址</th>
+			<th>操作</th>
+		</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+	<div id="page1"></div>
+</div>
+</body>
+<div id="shop" style="padding: 10px 20px 10px 0;display:none;">
+	<form class="layui-form" action="">
+		<div class="layui-form-item">
+			<label class="layui-form-label">商户名</label>
+			<div class="layui-input-block">
+				<input type="text" id="shopName" placeholder="加工商名称" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">联系方式</label>
+			<div class="layui-input-block">
+				<input type="text" id="shopPhone" placeholder="加工商联系方式" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">地址</label>
+			<div class="layui-input-block">
+				<input type="text" id="shopAddress" placeholder="加工商地址" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+	</form>
+</div>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script src="../resource/js/common.js"></script>
+<script src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript">
+    var page1=1;
+    layui.use(['element', 'form', 'layer','table', 'laydate', 'laypage','colorpicker'], function () {
+        var element = layui.element;
+        var laydate = layui.laydate;
+        var laypage = layui.laypage
+            ,table = layui.table
+            ,colorpicker = layui.colorpicker
+            , layer = layui.layer;
+
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+        table1Show(page1);
+    });
+    $("#searchBtn1").click(function(){
+    	var searchName=$("#searchDate1").val();
+    	page1=1;
+        table1Show(page1,searchName);
+    });
+
+    $("#addShop").click(function(){
+        $("#shopName").val("");
+        $("#shopPhone").val("");
+        $("#shopAddress").val("");
+        layui.use('layer',function() {
+            var layer = layui.layer;
+            layer.open({
+				title:'新增加工商',
+				type:1,
+				content:$("#shop"),
+				area:['500px'],
+				btn:['保存','取消'],
+				yes:function(){
+					var addName=$("#shopName").val();
+					var addPhone=$("#shopPhone").val();
+					var addAddress=$("#shopAddress").val();
+					if(addName||addPhone||addAddress){
+                        $.ajax({
+                            url: globalUrl + "api/partner/add;jsessionid=" + $.cookie("token"),
+                            type: 'post',
+                            data: {partnerName:addName,partnerPhone:addPhone,partnerAddress:addAddress},
+                            crossDomain: true,
+                            beforeSend: function (request) {
+                                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                            },
+                            success:function(data){
+                                if(data.status==200){
+                                    table1Show(page1);
+                                    layer.closeAll();
+                                    layer.msg('新增加工商成功！');
+                                }else{
+                                    layer.msg(data.msg);
+                                }
+                            }
+                        });
+					}else{
+                        layer.msg('加工商信息未填写完整');
+					}
+				},
+				btn2:function(){
+				    layer.closeAll();
+				}
+			})
+        })
+	});
+
+//    编辑加工商
+	$(".changeBtn").live("click",function(){
+        var id=$(this).parent().parent().attr("shopId");
+        layui.use('layer',function(){
+            var layer=layui.layer;
+            $.ajax({
+                url: globalUrl + "api/partner/getById;jsessionid=" + $.cookie("token"),
+                type: 'get',
+                data: {id:id},
+                crossDomain: true,
+                beforeSend: function (request) {
+                    request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                },
+                success:function(data){
+					if(data.status==200){
+                        $("#shopName").val(data.data.partnerName);
+                        $("#shopPhone").val(data.data.partnerPhone);
+                        $("#shopAddress").val(data.data.partnerAddress);
+					    layer.open({
+							title:'编辑加工商',
+							type:1,
+							content:$("#shop"),
+                            area:['500px'],
+                            btn:['保存','取消'],
+							yes:function(){
+                                var addName=$("#shopName").val();
+                                var addPhone=$("#shopPhone").val();
+                                var addAddress=$("#shopAddress").val();
+                                if(addName||addPhone||addAddress){
+                                    $.ajax({
+                                        url: globalUrl + "api/partner/update;jsessionid=" + $.cookie("token"),
+                                        type: 'post',
+                                        data: {id:id,partnerName:addName,partnerPhone:addPhone,partnerAddress:addAddress},
+                                        crossDomain: true,
+                                        beforeSend: function (request) {
+                                            request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                                        },
+                                        success:function(data){
+                                            if(data.status==200){
+                                                table1Show(page1);
+                                                layer.closeAll();
+                                                layer.msg('更新成功！');
+                                            }else{
+                                                layer.msg(data.msg);
+                                            }
+                                        }
+                                    })
+								}else{
+                                    layer.msg('加工商信息未填写完整');
+								}
+
+							},
+							btn2:function(){
+							    layer.closeAll();
+							}
+						})
+					}
+                }
+            })
+		});
+
+	});
+
+//    删除加工商
+	$(".delBtn").live("click",function(){
+	    var id=$(this).parent().parent().attr("shopId");
+	    var name=$(this).parent().parent().find($(".shop-name")).html();
+	   	layui.use('layer',function(){
+	   	    var layer=layui.layer;
+	   	    layer.open({
+				title:'加工商删除',
+				type:1,
+				content:'<p style="padding: 10px;">确定删除加工商：'+name+'？</p>',
+				btn:['确定','取消'],
+				yes:function(){
+				    $.ajax({
+                        url: globalUrl + "api/partner/delete;jsessionid=" + $.cookie("token"),
+                        type: 'get',
+                        data: {ids:id},
+                        crossDomain: true,
+                        beforeSend: function (request) {
+                            request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                        },
+						success:function(data){
+                            if(data.status==200){
+                                table1Show(page1);
+                                layer.closeAll();
+                                layer.msg('删除成功');
+							}else{
+                                layer.msg(data.msg);
+							}
+						}
+					})
+				},
+				btn2:function(){
+				    layer.closeAll();
+				}
+			})
+		})
+	});
+
+    function table1Show(page,shopName){
+        animate=layer.load();
+        $.ajax({
+            url: globalUrl + "api/partner/list;jsessionid=" + $.cookie("token"),
+            type: 'get',
+            data: {page:page,partnerName:shopName},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success:function(data){
+                if(data.status==200){
+                    $("#table1 tbody").html("");
+                    for(var i=0;i<data.data.list.length;i++){
+                        var item='<tr shopId="'+data.data.list[i].id+'">' +
+							'<td><input type="checkbox"></td>' +
+							'<td class="shop-name">'+data.data.list[i].partnerName+'</td>' +
+							'<td>'+data.data.list[i].partnerPhone+'</td>' +
+							'<td>'+data.data.list[i].partnerAddress+'</td>' +
+							'<td>' +
+							'<button class="layui-btn layui-btn-sm layui-btn-normal changeBtn">编辑</button>' +
+							'<button class="layui-btn layui-btn-sm layui-btn-danger delBtn">删除</button>' +
+							'</td>' +
+							'</tr>';
+                        $(item).appendTo($("#table1 tbody"));
+					}
+					layui.use('laypage',function(){
+					    var laypage=layui.laypage;
+					    laypage.render({
+                            elem: "page1",
+                            count: data.data.total,
+                            limit: data.data.pageSize,
+                            curr: page,
+							jump:function(obj,first){
+                                page1=obj.curr;
+                                if(!first){
+                                    table1Show(page1,shopName)
+								}
+							}
+						})
+					})
+                }
+            }
+        });
+        layer.close(animate);
+    }
+</script>
+
+</html>

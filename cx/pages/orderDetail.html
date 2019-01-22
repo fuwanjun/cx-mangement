@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" href="./css/pageIndex.css">
+	<link rel="stylesheet" href="./css/customerGroup.css">
+
+</head>
+<style>
+	.bombBox>.layui-form-item>.layui-form-label {
+		padding: 9px 0;
+	}
+	.submitBtn {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+	}
+	.submitBtn>button {
+		width: auto;
+		text-align: center;
+		min-width: 92px;
+	}
+	.spaceBetween {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	.bombBoxTitle{
+		width: 80px;
+		text-align:right;
+	}
+	.bombBox{
+		width: 100%;
+	}
+	.express .layui-form-select .layui-input{
+		padding-right: 0px;
+	}
+	.remark{
+		width:100%;
+	}
+	.orderManage {
+	    line-height: 38px;
+	    font-weight: bold;
+	    font-size: 18px
+	}
+	.layui-table img{
+		width: 50px;
+		height: 50px;
+	}
+</style>
+
+<body>
+	<div class="body">
+		<div class="layui-row">
+			<!-- 编辑客户 -->
+			<form class="layui-form bombBox" lay-filter="orderForm">
+				<!--<div class="layui-form-item">
+					<p class="bombBoxTitle">增加分销商</p>
+				</div>-->
+				<div class="layui-form-item layui-inline">
+					<label class="layui-form-label">订单编号</label>
+					<div class="layui-input-block">
+						<input class="layui-input orderNumber" type="text" value="520" autocomplete="off">
+					</div>
+				</div>
+				<div class="layui-form-item layui-inline">
+					<label class="layui-form-label">用户姓名</label>
+					<div class="layui-input-block">
+						<input class="layui-input userName" type="text" readonly="readonly" value="小妞" placeholder="请输入用户姓名" autocomplete="off">
+					</div>
+				</div>
+				<div class="layui-form-item layui-inline">
+					<label class="layui-form-label">用户手机</label>
+					<div class="layui-input-block">
+						<input class="layui-input userPhone" type="text" readonly="readonly" value="13143700505" placeholder="请输入用户手机号" autocomplete="off">
+					</div>
+				</div>
+				<div class="layui-form-item layui-inline">
+					<label class="layui-form-label">快递方式</label>
+					<div class="layui-input-block">
+						<input class="layui-input expressWay" type="text" readonly="readonly" value="顺丰" autocomplete="off">
+					</div>
+				</div>
+				<div class="layui-form-item layui-inline">
+					<label class="layui-form-label">订单金额</label>
+					<div class="layui-input-block">
+						<input class="layui-input orderPrice" type="text" readonly="readonly" value="无价" autocomplete="off">
+					</div>
+				</div>
+				<!--<div class="layui-form-item layui-inline">
+					<label class="layui-form-label">关联门店</label>
+					<div class="layui-input-block">
+						<input class="layui-input relativeStop" type="text" readonly="readonly" value="广东广州番禺区" autocomplete="off">
+					</div>
+				</div>-->
+				<div class="layui-form-item layui-inline">
+				    <label class="layui-form-label">订单状态</label>
+				    <div class="layui-input-block">
+				      <input class="layui-input status" type="text" readonly="readonly" value="未支付" autocomplete="off">
+				    </div>
+				</div>
+				<div class="layui-form-item layui-inline">
+					<label class="layui-form-label">需补差价</label>
+					<div class="layui-input-block">
+						<input class="layui-input addMoney" type="text" readonly="readonly" value="" autocomplete="off">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">订单备注</label>
+					<div class="layui-input-block">
+						<input class="layui-input remark" type="text" readonly="readonly" value="" autocomplete="off">
+					</div>
+				</div>
+			</form>
+			<div class="layui-row">
+				<div class="layui-inline orderManage" style="margin-top:10px">订单商品列表</div>
+			</div>
+			<table class="layui-table" id="orderList" lay-skin="line" align="center">
+				<thead>
+					<tr align="center">
+						<th>商品名称</th>
+						<th>商品图片</th>
+						<th>单价</th>
+						<th>数量</th>
+						<th>已补价</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+</body>
+
+</html>
+<script src='./js/jquery.min.js'></script>
+<script src="../resource/layui/layui.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script src="../resource/js/common.js"></script>
+<script>
+	var addPrice=0;
+	var id=getQueryString("id");
+	var token=$.cookie("token");
+	layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+		var element = layui.element
+		,laydate = layui.laydate
+		,laypage = layui.laypage
+		, layer = layui.layer
+		,form=layui.form;
+		var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+		if(!token){
+			window.location.href="login.html";
+			return false;
+		}
+		if(id!=null&&id!=''){
+			initData(id);
+		}
+		function initData(orderNo){
+			$.ajax({
+				type:"post",
+				data:{orderNo:orderNo},
+				url:globalUrl+"order/orderView",
+				async:true,
+				crossDomain:true,
+				beforeSend:function(request){
+					request.setRequestHeader("token",$.cookie("token"));
+				},
+				success:function(res){
+					var res=res.data;
+					var str="";
+					
+					//10-未付款，20-已付款，30-已取件，35 取件完成 40-待送，45-在送，50-送件完成，60-交易成功
+					if(res.status==10){
+						$(".status").val("未支付")
+					}else if(res.status==20){
+						$(".status").val("已付款")
+					}else if(res.status==30){
+						$(".status").val("已取件")
+					}else if(res.status==35){
+						$(".status").val("取件完成")
+					}else if(res.status==40){
+						$(".status").val("待送")
+					}else if(res.status==45){
+						$(".status").val("在送")
+					}else if(res.status==50){
+						$(".status").val("送件完成")
+					}else if(res.status==60){
+						$(".status").val("交易成功")
+					}
+					if(res.message!=""){
+						$(".remark").val(res.message)
+					}else{
+						$(".remark").val("暂无备注")
+					}
+					if(res.orderItems!=null&&res.orderItems.length>0){
+						$.each(res.orderItems, function(index,value) {
+							str+='<tr><td>'+value.productName+'</td>'
+							str+='<td><img src="http://'+value.productImage+'"/></td>'
+							str+='<td>'+value.currentUnitPrice+'</td>'
+							str+='<td>'+value.quantity+'</td>'
+							if(value.fillPrice!=undefined&&value.fillPrice!=null){
+								addPrice+=value.fillPrice;
+								str+='<td>'+value.fillPrice+'</td>'
+							}else{
+								str+='<td>0</td>'
+							}
+							str+='<tr>'
+						});
+					}else{
+						str+='<tr><td>暂无商品数据</td></tr>'
+					}
+					$(".addMoney").val(addPrice);
+					$(".orderNumber").val(res.orderNo);
+					$(".userName").val(res.address.userName);
+					$(".userPhone").val(res.address.phone);
+					$(".expressWay").val("顺丰");
+					$(".orderPrice").val(res.payment);
+					form.render(null,"orderForm");
+					form.render();
+					$("#orderList tbody").html(str);
+				}
+			});		
+		}
+	});
+</script>

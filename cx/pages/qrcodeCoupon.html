@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+
+
+
+	<style>
+		.cancel {
+			position: absolute;
+			top: -10px;
+			right: -10px;
+			width: 30px;
+			height: 30px;
+			background-color: #ffffff;
+			border-radius: 50%;
+			box-shadow: 0 0 2px gray;
+			cursor: pointer;
+		}
+
+		.cancel>i {
+			padding-top: 3px;
+
+			font-size: 30px;
+			line-height: 36px;
+			color: gray;
+		}
+
+
+		.details_box td {
+			width: 50% !important;
+
+		}
+		.goodsImg{
+			width: 50px;
+			height: 50px;
+		}
+		#goodList tbody{
+			/* max-height: 300px; */
+			overflow-y: auto;
+		}
+		
+	</style>
+
+</head>
+
+<body>
+
+	<form class="layui-form   layui-row" style="float: left; " id="search">
+		<div class="layui-row">
+			<div class="layui-form-item layui-inline" style="width: 20%;">
+				<div class="layui-input-inline" style="width: 100%;">
+					<input type="text" name="money" id="money" placeholder="优惠券面值/元" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+		</div>
+		<div class="layui-row">
+			<div class="layui-form-item layui-inline" style="width: 20%;">
+				<div class="layui-input-inline" style="width: 100%;">
+					<input type="text" name="contentNum" id="contentNum" placeholder="满减面值/元" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+		</div>
+		<div class="layui-row">
+			<div class="layui-form-item   layui-inline" style="width: 20%;">			
+				<div class="layui-input-inline" style="width: 100%;">
+					<input type="text" name"count" id="count" placeholder="创建数量" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+		</div>
+		<div class="layui-row">
+			<div class="layui-form-item layui-inline" style="width: 20%;">
+				<div class="layui-input-inline" style="width: 100%;text-align: right;">
+					<button class="layui-btn createBtn" name="user" type="button">创建</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	<!-- 下面是一些第二行的东西 -->
+</body>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+
+<script type="text/javascript">
+	layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+		var element = layui.element
+		,laydate = layui.laydate
+		,laypage = layui.laypage
+		, layer = layui.layer
+		,form=layui.form;
+
+		var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句	
+	});
+	function formVerify(){
+		var reg=/^[1-9]\d*$/;
+		var bol=true;
+		var money=$("#money").val();
+		var count=$("#count").val();
+		var contentNum=$("#contentNum").val();
+		if(money==""){
+			layer.msg("请输入充值卡面值",{time:2000});
+			bol=false;
+			return bol;
+		}
+		if(!reg.test(money)){
+			layer.msg("请输入正确数字",{time:2000});
+			bol=false;
+			return bol;
+		}
+		if(count==""){
+			layer.msg("请输入充值卡数量",{time:2000});
+			bol=false;
+			return bol;
+		}
+		if(!reg.test(count)){
+			layer.msg("请输入正确数字",{time:2000});
+			bol=false;
+			return bol;
+		}
+		if(contentNum==""){
+			layer.msg("请输入满减面值",{time:2000});
+			bol=false;
+			return bol;
+		}
+		if(!reg.test(contentNum)){
+			layer.msg("请输入正确数字",{time:2000});
+			bol=false;
+			return bol;
+		}
+		return bol;
+		
+	}
+	$(".createBtn").click(function(){
+		var discountNum=$("#money").val();
+		var taskNum=$("#count").val();
+		var contentNum=$("#contentNum").val();
+		if(formVerify()){	
+			window.open("http://www.changwash.com:8088/makQrcode/make?taskNum="+taskNum+"&discountNum="+discountNum+"&contentNum="+contentNum);
+		}
+	})
+</script>
+
+</html>

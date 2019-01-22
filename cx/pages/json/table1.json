@@ -1,0 +1,14 @@
+{
+	"data":[{
+		"id":"001","customerName":"张俊","customerPhone":"15286953214","orderId":"2018456114","money":"100.0","createTime":"2018-05-13 09:20","status":"60"
+	},{
+		"id":"002","customerName":"张龙","customerPhone":"15286953213","orderId":"2018456113","money":"82.0","createTime":"2018-05-12 09:20","status":"50"
+	},{
+		"id":"003","customerName":"张角","customerPhone":"15286953212","orderId":"2018456112","money":"95.0","createTime":"2018-05-11 09:20","status":"30"
+	},{
+		"id":"004","customerName":"张宝","customerPhone":"15286953211","orderId":"2018456111","money":"58.0","createTime":"2018-05-10 09:20","status":"20"
+	}],
+	"msg":"数据获取成功",
+	"code":"0",
+	"count":"1000"
+}

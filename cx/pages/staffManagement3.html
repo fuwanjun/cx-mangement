@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset='utf-8'>
+    <meta name='renderer' content='webkit'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black'>
+    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <meta name='format-detection' content='telephone=no'>
+    <link rel="stylesheet" href="./css/demo.css" type="text/css">
+
+    <link rel="stylesheet" href="../resource/layui/css/layui.css">
+    <link rel="stylesheet" href="./css/pageIndex.css">
+    <link rel="stylesheet" href="./css/zTreeStyle.css" type="text/css">
+</head>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        width: 100vw;
+        height: 100vh;
+        min-height: 600px;
+        overflow-x: hidden;
+    }
+
+    .top {
+        padding: 19px 35px;
+        background-color: #f2f2f2;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .icon {
+        font-size: 14px;
+        line-height: 38px;
+    }
+
+    .icon > img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .top > span > button {
+        margin-left: 20px;
+    }
+
+    .itemsBox {
+        width: 100%;
+        padding: 20px;
+        border: 1px solid #f2f2f2;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .spaceAroundBtn {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: calc(100% - 20px);
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .item {
+        padding: 10px;
+        border: 1px solid #979797;
+        border-radius: 5px;
+        width: 200px;
+        height: 300px;
+        margin: 0 10px 30px 10px;
+        position: relative;
+    }
+
+    .right {
+        text-align: right;
+    }
+
+    .right > i {
+        color: #8a8a8a;
+    }
+
+    .staffImg {
+        display: block;
+        width: 80px;
+        height: 80px;
+        margin: 10px auto;
+        border-radius: 50%;
+    }
+
+    .staffNum {
+        color: #FF5722;
+    }
+
+    .viewRight {
+        color: #01AAED;
+        margin-bottom: 10px;
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    .itemTitle {
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .layui-form-label {
+        width: 120px;
+    }
+
+    .layui-input-block {
+        margin-left: 140px;
+    }
+
+    .btnRight {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+
+    .staffList {
+        width: 100%;
+    }
+
+    .spaceAround {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .tBody > tr > td,
+    .tHead > tr > th {
+        text-align: center
+    }
+
+    .unSelected {
+        color: #636363;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .selected {
+        color: #1E9FFF;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .layui-table {
+        margin-top: 0px;
+        position: relative;
+        top: 10px;
+    }
+
+    .spaceBetween {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .selectedPower {
+        font-size: 20px;
+        line-height: 50px;
+        background-color: #d8d6d6;
+    }
+
+    .powerItems {
+        height: 300px;
+        overflow-x: auto;
+    }
+
+    #demo1 {
+        width: 60px;
+        height: 60px;
+    }
+    .layui-upload-img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .layui-upload-list {
+        margin: 15px 18px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-end;
+        flex-direction: row;
+    }
+
+    .goodsFile {
+        display: inline-block;
+        height: 38px;
+        line-height: 38px;
+        padding: 0 18px;
+        background-color: #009688;
+        color: #fff;
+        white-space: nowrap;
+        text-align: center;
+        font-size: 14px;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        opacity: 0;
+        width: 92px;
+        position: absolute;
+        left: 15px;
+        top: 9px;
+    }
+
+    .shopRelative {
+        display: none;
+    }
+</style>
+
+<body>
+<div class="loading"></div>
+<div class="body">
+    <div class="container">
+        <div class="top">
+        <span class="icon">
+        <img src="../images/exclamationMark.png" alt=""> 根据员工的职能选择角色，然后新增账号，可以自定义角色，进行权限配置
+        </span>
+            <span> 查看历史员工账号
+                <button class="layui-btn allStaffList">员工列表</button>
+                <button class="layui-btn addPosition">新增角色</button>
+            </span>
+        </div>
+
+        <!-- 角色列表 -->
+        <div class="itemsBox">
+
+
+        </div>
+        <button id="addUser" class="layui-btn">生成权限菜单</button>
+    </div>
+
+
+    <!-- 弹出框 -->
+    <!-- 阴影 -->
+    <div class="bg">
+        <!-- 弹框容器 -->
+        <div class="Container">
+            <!-- 取消事件 -->
+            <div class="cancel">
+                <i class="layui-icon"> &#x1007;</i>
+            </div>
+            <!-- 添加员工 -->
+            <div class="bombBox staffInfo">
+                <div class="layui-form">
+                    <div class="layui-form-item">
+                        <h3 class="staffInfoClass center ">新增员工</h3>
+                    </div>
+                    <form id="userAdmin" class="layui-form" name="userAdmin">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">
+                                <button type="button" class="layui-btn" id="test1">上传图片</button>
+                                <input class="goodsFile" name="file" lay-verify="file" type="file" value=""
+                                       autocomplete="off">
+                            </label>
+                            <div class="layui-input-block">
+                                <img class="layui-upload-img" id="demo1">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" for="staffAccount">登陆账号</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="account" name="account" lay-verify="account"
+                                       placeholder="6-12位字符，允许数字及大、小写字母" autocomplete="off" class="layui-input">
+                                <input type="hidden" name="authorityType" id="authorityType" value=""
+                                       class="layui-input"/>
+                                <input type="hidden" name="userPicture" id="userPicture" value="" class="layui-input"/>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" for="userName">员工姓名</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="userName" name="userName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" for="phone">联系手机</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="phone" name="phone" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item shopRelative">
+                            <label class="layui-form-label">所属商店</label>
+                            <div class="layui-input-block">
+                                <select name="type" id="shopId">
+                                    <option value="鞋子">鞋子(普洗)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!--<div class="layui-form-item">
+                            <label class="layui-form-label">角色权限</label>
+                            <div class="layui-input-block">
+                                <input class="position" type="radio" name="staffSort" value="1" title="管理员">
+                                <input class="position" type="radio" name="staffSort" value="2" title="财务">
+                                <input class="position" type="radio" name="staffSort" value="3" title="普通员工">
+                            </div>
+                        </div>-->
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">角色性别</label>
+                            <div class="layui-input-block">
+                                <input class="gender" type="radio" name="sex" value="男" title="男" checked="">
+                                <input class="gender" type="radio" name="sex" value="女" title="女">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" for="password">登陆密码</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="password" name="password" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <!--<div class="layui-form-item">
+                            <label class="layui-form-label" for="passwordAgain">再次确认密码</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="passwordAgain" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>-->
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="button" class="layui-btn layui-btn-primary cancelSub">取消</button>
+                                <button type="button" class="layui-btn layui-btn-normal addStaffSub">确定</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 查看已有员工 -->
+            <div class="bombBox staffList">
+                <div class="layui-form-item">
+                    <h3 class="center">配送员账号管理列表</h3>
+                </div>
+                <table class="layui-table">
+
+                    <thead class="tHead">
+                    <tr>
+                        <th>选择</th>
+                        <th>员工姓名</th>
+                        <th>登陆账号</th>
+                        <th>角色权限</th>
+                        <th>新增时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody class="tBody">
+                    <!--<tr>-->
+                    <!--<td class="checkBox selectitem" isSelected="false">-->
+                    <!--<i class="layui-icon unSelected">&#xe63f;</i>-->
+                    <!--</td>-->
+                    <!--<td>张三</td>-->
+                    <!--<td>12345678901@ABC.com</td>-->
+                    <!--<td>停车场管理员</td>-->
+                    <!--<td>2016-11-29</td>-->
+                    <!--<td class="spaceAround">-->
+                    <!--<span class="pointer updataStaffBtn">编辑</span>-->
+                    <!--<span class="pointer">删除</span>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    </tbody>
+                    <tfoot class="tFoot">
+                    <tr>
+                        <td class="checkBox selectAll pointer" isSelected="true" style="border:none">
+                            全选
+                            <i class="layui-icon unSelected">&#xe63f;</i>
+                        </td>
+                        <td style="border:none">
+                            <button class="layui-btn layui-btn-primary deleteStaffsBtn">批量删除</button>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+                <div id="pickerPages"></div>
+            </div>
+
+            <!-- 修改现有员工信息 -->
+            <div class="bombBox updataStaffList">
+                <div class="layui-form">
+                    <div class="layui-form-item">
+                        <h3 class="staffInfoClass center">编辑员工账号</h3>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">登陆账号</label>
+                        <span class="updataStaffAccount layui-form-label"
+                              style="text-align: left;padding:9px 15px 9px 30px">测试账号</span>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" for="updataStaffName">员工姓名</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="updataStaffName" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" for="updataStaffPhone">联系手机</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="updataStaffPhone" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <!--<div class="layui-form-item">
+                        <label class="layui-form-label">角色权限</label>
+                        <div class="layui-input-block">
+                            <input class="position" type="radio" name="updataStaffSort" value="1" title="管理员">
+                            <input class="position" type="radio" name="updataStaffSort" value="2" title="财务">
+                            <input class="position" type="radio" name="updataStaffSort" value="3" title="普通员工">
+                        </div>
+                    </div>-->
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn layui-btn-primary isUpdataPsw">重置密码</button>
+                        </div>
+                    </div>
+
+
+                    <div class="restetPsw">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" for="updataPassword">登陆密码</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="updataPassword" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" for="updataPasswordAgain">再次确认密码</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="updataPasswordAgain" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="button" class="layui-btn layui-btn-primary cancelSub">取消</button>
+                            <button type="button" class="layui-btn layui-btn-normal updataStaffSub">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 权限管理 -->
+            <div class="bombBox powerSelect" style="width: auto;">
+                <div class="layui-form-item">
+                    <h3 class="staffInfoClass center">角色权限配置</h3>
+                </div>
+                <div class="layui-form spaceBetween">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" for="addStaffSort" style="text-align: left;width: auto;">角色姓名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="addStaffSort" autocomplete="off" class="layui-input"
+                                   placeholder="角色名称">
+                        </div>
+                    </div>
+                    <!--<div class="deletePosition pointer">-->
+                        <!--删除该角色-->
+                        <!--<i class="layui-icon" style="font-size: 20px;">&#xe640;</i>-->
+                    <!--</div>-->
+                </div>
+                <div class="spaceBetween" style="padding:0px 15px;">
+                    <div class="zTreeDemoBackground">
+                        <ul id="rightTree" class="ztree"></ul>
+                    </div>
+                </div>
+                <div class="spaceAround" style="width:60%;margin:0 auto;">
+                    <button class="layui-btn layui-btn-primary cancelSub">&#x3000;取&#x3000;消&#x3000;</button>
+                    <button class="layui-btn layui-btn-normal powerSelectSub">&#x3000;确&#x3000;定&#x3000;</button>
+                </div>
+
+            </div>
+
+
+            <!-- 修改现有员工信息 -->
+            <div class="bombBox deleteStaffItem">
+                <div class="layui-form">
+                    <div class="layui-form-item">
+                        <h3 class="staffInfoClass center">是否删除改角色</h3>
+                    </div>
+                    <div class="spaceAround" style="width:60%;margin:0 auto;">
+                        <button class="layui-btn layui-btn-primary cancelSub">取消删除</button>
+                        <button class="layui-btn layui-btn-normal deleteStaffSub">确定删除</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 修改现有员工信息 -->
+            <div class="bombBox powerBox">
+                <div class="layui-form">
+                    <div class="layui-form-item">
+                        <h3 class="center">查看角色权限</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="treeBox" style="display: none;padding: 10px;">
+    <ul id="tree" class="ztree"></ul>
+</div>
+</body>
+</html>
+<script src='../resource/js/jquery.min.js'></script>
+<script src="../resource/layui/layui.js"></script>
+
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script src="../resource/js/jquery.cookie.js"></script>
+<script src="../resource/js/jquery.form.js"></script>
+<script type="text/javascript" src="./js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="./js/jquery.ztree.excheck.js"></script>
+<script>
+    var setting = {
+        check: {
+            enable: true,
+            chkDisabledInherit: true
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        }
+    };
+    var userTypeId = JSON.parse($.cookie("data")).authorityType;
+
+    layui.use(['element', 'laypage', 'layer', 'form', 'upload'], function () {
+        var form = layui.form
+            , laypage = layui.laypage
+            , layer = layui.layer
+            , element = layui.element
+            , upload = layui.upload;
+        var $ = layui.jquery, layer = layui.layer;
+        $('.body').show();
+        $('.loading').hide();
+        var data = $.cookie("data");
+        var authorityType = JSON.parse(decodeURI(data)).authorityType;
+        $(function () {
+            getRoleAll();
+        });
+
+        function getShopId() {
+            $.ajax({
+                type: "get",
+                url: globalUrl + "shop/getShopListAll",
+                async: true,
+                crossDomain: true,
+                beforeSend: function (request) {
+                    request.setRequestHeader("token", $.cookie("token"));
+                },
+                success: function (res) {
+                    var str = "";
+                    if (res.data != "" && res.data.length > 0) {
+                        $.each(res.data, function (index, value) {
+                            str += '<option value="' + value.id + '">' + value.shopName + '</option>';
+                        });
+                    }
+                    $("#shopId").html(str);
+                    form.render();
+                },
+                error: function (err) {
+
+                }
+            });
+        }
+
+        //普通图片上传
+        $(".goodsFile").on("change", function () {
+            this_file = this;
+            var file_input = document.getElementsByClassName("goodsFile")[0].files[0];
+            console.log(file_input);
+            var formData = new FormData();
+            if (file_input.name != '') {
+                showImg(this_file)
+            }
+        })
+        //图片回显函数
+        var file;
+
+        function showImg(obj) {
+            file = obj.files[0];
+            var readerFile = new FileReader();
+            readerFile.onload = function (ev) {
+                var data = ev.target.result;
+                $("#demo1").attr("src", data)
+            };
+            readerFile.readAsDataURL(file);
+        }
+
+        //自定义验证规则
+        function formVerify() {
+            var regPhone = /^1[34578]\d{9}$/;
+            var bol = true;
+            var account = $("#account").val();
+            var userName = $("#userName").val();
+            var phone = $("#phone").val();
+            var password = $("#password").val();
+            var sex = $("input[name=sex]").val();
+            var fileImg = document.getElementsByClassName("goodsFile")[0].files[0];
+            if (account == "") {
+                layer.msg("请输入登录账号", {time: 2000});
+                bol = false;
+                return bol;
+            }
+            if (userName == "") {
+                layer.msg("请输入员工姓名", {time: 2000});
+                bol = false;
+                return bol;
+            }
+            if (phone == "") {
+                layer.msg("请输入联系手机", {time: 2000});
+                bol = false;
+                return bol;
+            } else if (!regPhone.test(phone)) {
+                layer.msg("手机号格式错误", {time: 2000});
+                bol = false;
+                return bol;
+            }
+            if (password == "") {
+                layer.msg("请设置登录密码", {time: 2000});
+                bol = false;
+                return bol;
+            }
+            if (fileImg == "" || fileImg == null) {
+                if (file_img == "") {
+                    layer.msg("请上传图片", {time: 2000});
+                    bol = false;
+                    return bol;
+                }
+            }
+            return bol;
+        };
+        //监听提交
+        $('.addStaffSub').live('click', function () {
+            var title = $(".staffInfo .staffInfoClass").text().split("新增")[1];
+            if (title == "管理员") {
+                api_url = "userAdmin/putUserAdmin";
+            } else {
+                api_url = "takeUser/putTaker";
+            }
+            var canForm = formVerify();
+            if (canForm) {
+                var formData = new FormData();
+                if (title != "管理员") {
+                    formData.append("shopId", $("#shopId").val());
+                    formData.append("takerName", $("#userName").val());
+                } else {
+                    formData.append("userName", $("#userName").val());
+                }
+                formData.append("account", $("#account").val());
+                formData.append("phone", $("#phone").val());
+                formData.append("sex", $("input[name=sex]").val());
+                formData.append("password", $("#password").val());
+                formData.append("authorityType", $("#authorityType").val());
+                formData.append("file", document.getElementsByClassName("goodsFile")[0].files[0]);
+
+                $.ajax({
+                    type: "post",
+                    url: globalUrl + api_url,
+                    async: true,
+                    contentType: false,
+                    processData: false,
+                    cache: false,
+                    data: formData,
+                    crossDomain: true,
+                    beforeSend: function (request) {
+                        request.setRequestHeader("token", $.cookie("token"));
+                    },
+                    success: function (res) {
+                        document.getElementById("userAdmin").reset();
+                        layer.close();
+                        parent.location.reload();
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                });
+            } else {
+                return false;
+            }
+        });
+
+        function getRoleAll() {
+            var str = '';
+            var token = $.cookie("token");
+            $.ajax({
+                type: "get",
+                data: {authorityType: authorityType},
+                url: globalUrl + "role/getRoleByLeve",
+                async: true,
+                crossDomain: true,
+                beforeSend: function (request) {
+                    request.setRequestHeader("token", token);
+                },
+                success: function (res) {
+                    if (res.code > -1) {
+                        $.each(res.data, function (index, val) {
+                            str += '<div class="item">';
+                            str += '<p class="right pointer updataPower">菜单权限'
+                            str += '<i class="layui-icon">&#xe614;</i>'
+                            str += '</p>';
+                            str += '<img class="staffImg" src="./img/boss_color.jpg" alt="">'
+                            str += '<p class="center itemTitle">' + val.roleName + '</p>'
+                            str += '<p class="staffDes">' + val.content + '</p>'
+                            str += '<p class="staffStatus">该角色目前已配置<span class="staffNum">0</span>个账号'
+                            str += '</p>';
+                            str += '<p class="viewRight pointer">查看权限</p>'
+                            str += '<div class="spaceAroundBtn">'
+                            str += '<button class="layui-btn layui-btn-sm addStaff" data-id="' + val.id + '" data-title="' + val.roleName + '">新增账号</button>'
+                            str += '<button class="layui-btn layui-btn-sm layui-btn-primary staffManage">管理账号</button>'
+                            str += '</div>';
+                            str += '</div>';
+                        });
+
+                        $(".itemsBox").html(str);
+
+                    }
+                }
+            });
+        }
+
+        function alertMsg(type, msg) {
+            var icon = '';
+            switch (true) {
+                case (type == ('success')):
+                    icon = '&#x1005;';
+                    break;
+                case (type == ('error')):
+                    icon = '&#x1007;';
+                    break;
+            }
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: false,
+                area: ['400px', '200px'],
+                shade: 0.5,
+                id: 'LAY_layuipro',
+                btnAlign: 'c',
+                moveType: 1,
+                content: '<div style="text-align: center"><i class="layui-icon" style="line-height: 150px;font-size: 100px; color: #000000;">' +
+                icon + '</i><p style="font-size: 22px">' + msg + '</p></div>',
+                time: 2000,
+            });
+        };
+
+        // 显示弹框阴影
+        function showBG(DOM) {
+            parent.ableBtn();
+            $('.bombBox').hide();
+            $(DOM).fadeIn();
+            $('.bg').fadeIn();
+            parent.disableBtn();
+        };
+
+        // 隐藏弹框阴影
+        function hideBG() {
+            $('.bg').fadeOut();
+            parent.ableBtn();
+            $('.bombBox').fadeOut();
+
+            // 把input标签清空。
+            $('input').val('');
+            $('.chk').removeClass('checkbox_true_full').addClass('checkbox_false_full');
+
+            isNeedList = false;
+            isNeedItem = false;
+        };
+
+        // 判断弹框消失后是否需要加载员工列表
+        var isNeedList = false;
+
+
+        // 取消弹框操作
+        // 两个dom节点，叉号按钮和取消按钮
+        $('.cancel').live('click', function () {
+            $("#demo1").attr("src", '');
+            hideBG();
+        });
+
+        $('.cancelSub').live('click', function () {
+            switch (true) {
+                case isNeedList:
+                    showBG('.staffList');
+                    break;
+                case isNeedItem:
+                    showBG('.powerSelect');
+                    break;
+                default:
+                    hideBG();
+                    break;
+            }
+        });
+
+
+        // 添加员工
+        $('.itemsBox .addStaff').live('click', function () {
+            var id = $(this).attr("data-id");
+            var roleName = $(this).attr("data-title");
+            if (roleName != "管理员") {
+                $(".shopRelative").show();
+            }
+            showBG('.staffInfo');
+            getShopId();
+            $(".staffInfo .staffInfoClass").text("新增" + roleName);
+            $(".staffInfo #authorityType").val(id);
+            form.render();
+        });
+
+
+        $('.staffManage').live('click', function () {
+            isNeedList = true;
+            showBG('.staffList');
+            pickersMsg();
+        });
+
+        // 更新员工信息
+        $('.updataStaffBtn').live('click', function () {
+            $('.restetPsw').hide();
+            $('.isUpdataPsw').parent().show();
+            showBG('.updataStaffList');
+        });
+
+        // 是否更改密码
+        var isUpdataPsw = false;
+        $('.isUpdataPsw').live('click', function () {
+            isUpdataPsw = true;
+            $(this).parent().hide();
+            $('.restetPsw').show();
+        });
+        // 提交员工信息
+        $('.updataStaffSub').live('click', function () {
+            var name = $('#updataStaffName').val();
+            var phone = $('#updataStaffPhone').val();
+            var position = $('.position[name="updataStaffSort"]:checked').val();
+            var password = $('#updataPassword').val();
+            var againPsw = $('#updataPasswordAgain').val();
+            $('input').val('');
+            showBG('.staffList');
+        });
+
+
+        // 全选
+        var isSelectAll = false;
+        // 单个选择 需要存一个单个优惠ID
+        var selectArry = [];
+        $('.selectitem').live('click', function () {
+            var isSelected = $(this).attr('isSelected');
+            isSelected = (isSelected == 'false') ? false : true;
+            if (isSelected) {
+                // 选中状态
+                $(this).html("<i class='layui-icon unSelected'>&#xe63f;</i>");
+                $(this).attr('isSelected', !isSelected);
+            } else {
+                // 非选中
+                $(this).html("<i class='layui-icon selected'>&#xe616;</i>");
+                $(this).attr('isSelected', !isSelected);
+            }
+            // 存入最新的状态
+            $(this).attr('isSelected', !isSelected);
+            updataStatus()
+        });
+
+        $('.selectAll').live('click', function () {
+            var isSelected = $(this).attr('isSelected');
+            // 先改变原有状态再赋值判断
+            isSelected = (isSelected == 'false') ? false : true;
+            isSelectAll = isSelected;
+            console.log('是否全选' + isSelected);
+            if (isSelectAll) {
+                // 选中状态
+                selectArry = [1, 2, 3];
+                $(this).html("全选&nbsp;<i class='layui-icon selected'>&#xe616;</i>");
+                $('.selectitem').html("<i class='layui-icon selected'>&#xe616;</i>");
+                $('.selectitem').attr('isSelected', !isSelected);
+            } else {
+                // 非选中
+                selectArry = [];
+                $(this).html("全选&nbsp;<i class='layui-icon unSelected'>&#xe63f;</i>");
+                $('.selectitem').html("<i class='layui-icon unSelected'>&#xe63f;</i>");
+                $('.selectitem').attr('isSelected', !isSelected);
+            }
+            // 存入最新的状态
+            $(this).attr('isSelected', !isSelected);
+            updataStatus()
+        });
+
+        updataStatus();
+        $('.deleteStaffsBtn').addClass('layui-btn-disabled');
+
+        function updataStatus() {
+            // console.group('是否禁用按钮');
+            // console.log(selectArry);
+            // console.log(selectArry.length != 0);
+            // console.groupEnd();
+            if (selectArry.length != 0) {
+                // console.log('启用');
+                $('.deleteStaffsBtn').removeClass('layui-btn-disabled').removeAttr("disabled");
+            } else {
+                // console.log('禁用');
+                $('.deleteStaffsBtn').addClass('layui-btn-disabled').attr('disabled', "true");
+            }
+        }
+
+        // 权限设置
+        var setting = {
+            check: {
+                enable: true
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                onCheck: getItemId,
+                beforeClick: beforeClick,
+            },
+        };
+
+        var itemId = ''
+
+        function getItemId(e, treeId, treeNode, clickFlag) {
+            var treeObj = $.fn.zTree.getZTreeObj("rightTree"),
+                nodes = treeObj.getCheckedNodes(true),
+                v = "";
+            for (var i = 0; i < nodes.length; i++) {
+                v += nodes[i].id + ",";
+            }
+            ;
+            itemId = v;
+            console.group('选中的参数');
+            console.log(v);
+            console.groupEnd();
+        };
+
+
+        function beforeClick(treeId, treeNode) {
+            var zTree = $.fn.zTree.getZTreeObj("rightTree");
+            zTree.checkNode(treeNode, !treeNode.checked, null, true);
+            return false;
+        };
+
+
+        // 添加角色框展示
+        $('.addPosition').live('click', function () {
+
+            var allMenu = [];
+            var treeMenu = $.fn.zTree;
+            getAllMenu(function(data){
+                for (var i = 0; i < data.data.length; i++) {
+                    var oneMenu = {id: data.data[i].id, pId: data.data[i].parentId, name: data.data[i].menuName};
+                    allMenu.push(oneMenu)
+                }
+            });
+            treeMenu.init($("#rightTree"), setting, allMenu);
+
+            showBG('.powerSelect');
+        });
+        // 确认添加角色
+        $('.powerSelectSub').live('click', function () {
+            var position = $('#addStaffSort').val();
+            if (position == '') {
+                layer.msg('角色名称不能为空');
+                return
+            }
+            ;
+            var power = itemId;
+            console.group('添加职位参数');
+            console.log(power);
+            console.log(position);
+            console.groupEnd();
+            hideBG();
+        });
+
+
+        // 删除职位操作
+        var isNeedItem = false;
+        $('.deletePosition').live('click', function () {
+            showBG('.deleteStaffItem');
+            isNeedItem = true;
+        });
+
+        // 确认删除职位
+        $('.deleteStaffSub').live('click', function () {
+            alertMsg('success', '删除操作成功');
+            hideBG();
+        });
+
+        // 显示所有员工列表
+        $('.allStaffList').live('click', function () {
+            showBG('.staffList');
+        });
+
+        // 更新角色权限
+        $('.updataPower').live('click', function () {
+            showBG('.powerSelect');
+        });
+
+        $('.viewRight').live('click', function () {
+            showBG('.powerBox');
+        });
+
+    });
+
+    //	获取配送员账号信息
+    function pickersMsg() {
+        $.ajax({
+            url: globalUrl + "takeUser/getAllTaker",
+            type: "get",
+            data: {
+                pageNum: 1,
+                pageSize: 8
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                var count = data.data.pages;
+                console.log(data);
+                for (var i = 0; i < data.data.list.length; i++) {
+                    var item = '<tr>' +
+                        '<td class="checkBox selectitem" isSelected="false">' +
+                        '<i class="layui-icon unSelected">&#xe63f;</i>' +
+                        '</td>' +
+                        '<td>' + data.data.list[i].takerName + '</td>' +
+                        '<td>' + data.data.list[i].account + '</td>' +
+                        '<td>停车场管理员</td>' +
+                        '<td>' + timestampToTime(data.data.list[i].createTime) + '</td>' +
+                        '<td class="spaceAround">' +
+                        '<span class="pointer updataStaffBtn" style="color:#1E9FFF;font-weight: bold;">编辑</span>' +
+                        '<span class="pointer" style="color:red;font-weight: bold;">删除</span>' +
+                        '</td>' +
+                        '</tr>';
+                    $(item).appendTo($(".staffList table .tBody"))
+                }
+                pickerPaging(count)
+            }
+        })
+    }
+
+    //	配送员列表分页
+    function pickerPaging(count) {
+        layui.use('laypage', function () {
+            var laypage = layui.laypage;
+            laypage.render({
+                elem: "pickerPages",
+                count: count,
+                jump: function (obj) {
+                    $.ajax({
+                        url: globalUrl + "takeUser/getAllTaker",
+                        type: "get",
+                        data: {
+                            pageNum: obj.curr,
+                            pageSize: 8
+                        },
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("token", $.cookie("token"));
+                        },
+                        crossDomain: true,
+                        success: function (data) {
+                            if ($(".staffList table .tBody").html() != "") {
+                                $(".staffList table .tBody").html(" ");
+                                var count = data.data.pages;
+                                console.log(data);
+                                for (var i = 0; i < data.data.list.length; i++) {
+                                    var item = '<tr>' +
+                                        '<td class="checkBox selectitem" isSelected="false">' +
+                                        '<i class="layui-icon unSelected">&#xe63f;</i>' +
+                                        '</td>' +
+                                        '<td>' + data.data.list[i].takerName + '</td>' +
+                                        '<td>' + data.data.list[i].account + '</td>' +
+                                        '<td>停车场管理员</td>' +
+                                        '<td>' + timestampToTime(data.data.list[i].createTime) + '</td>' +
+                                        '<td class="spaceAround">' +
+                                        '<span class="pointer updataStaffBtn" style="color:#1E9FFF;font-weight: bold;">编辑</span>' +
+                                        '<span class="pointer" style="color:red;font-weight: bold;">删除</span>' +
+                                        '</td>' +
+                                        '</tr>';
+                                    $(item).appendTo($(".staffList table .tBody"))
+                                }
+                            }
+
+                        }
+                    })
+                }
+            })
+        })
+    }
+
+    $("#addUser").live("click", function () {
+        var allMenu = [];
+        var treeMenu = $.fn.zTree;
+        $.ajax({
+            url: globalUrl + "menu/getMenuPage",
+            type: "get",
+            data: {page: 1},
+            async: false,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                for (var i = 0; i < data.data.length; i++) {
+                    var oneMenu = {id: data.data[i].id, pId: data.data[i].parentId, name: data.data[i].menuName};
+                    allMenu.push(oneMenu)
+                }
+//				console.log(allMenu);
+//                console.log($.fn.zTree);
+
+            }
+        });
+        checkMenu(userTypeId, function (data) {
+            console.log(data);
+            treeMenu.init($("#tree"), setting, allMenu);
+            var treeObj = treeMenu.getZTreeObj("tree");
+            for (var i = 0; i < data.data.length; i++) {
+                var node = treeObj.getNodesByParam("id", data.data[i].id, null);
+
+                treeObj.checkNode(node[0], true);
+            }
+
+        });
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.open({
+                title: "权限管理",
+                type: 1,
+                content: $("#treeBox"),
+                btn: ['确定', '取消']
+            })
+        })
+    });
+
+    function getAllMenu(success){
+        $.ajax({
+            url: globalUrl + "menu/getMenuPage",
+            type: "get",
+            data: {page: 1},
+            async: false,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:success
+        });
+    }
+
+    function checkMenu(id, success) {
+        $.ajax({
+            url: globalUrl + "menu/getMenuByRole",
+            type: "get",
+            async: false,
+            data: {roleId: id},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: success
+        })
+    }
+</script>

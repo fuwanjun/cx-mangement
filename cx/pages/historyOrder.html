@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+
+
+	<style>
+		.cancel {
+			position: absolute;
+			top: -10px;
+			right: -10px;
+			width: 30px;
+			height: 30px;
+			background-color: #ffffff;
+			border-radius: 50%;
+			box-shadow: 0 0 2px gray;
+			cursor: pointer;
+		}
+
+		.cancel>i {
+			padding-top: 3px;
+
+			font-size: 30px;
+			line-height: 36px;
+			color: gray;
+		}
+
+
+		.details_box td {
+			width: 50% !important;
+
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<form class="layui-form   layui-row" style="float: left; " id="search">
+
+
+		<div class="layui-row">
+			<div class="layui-form-item   layui-inline " style="width: 20%;">
+				<div class="layui-input-inline" style="margin:0; width: 60%;">
+					<input type="text" name="criticalWord" id="criticalWord" placeholder="输入车牌号/取车码/..." autocomplete="off" class="layui-input">
+				</div>
+
+				<button class="layui-btn" name="user" type="button">搜索</button>
+
+
+			</div>
+
+			<div class="layui-form-item   layui-inline ">
+
+				<button class="layui-btn" name="user" style="float: left;" type="button">车辆类型</button>
+				<div class="layui-input-inline">
+					<select name="quiz2">
+						<option value="">所有</option>
+						<option value="杭州">正常</option>
+
+						<option value="宁波">超长</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item   layui-inline ">
+				<button class="layui-btn" name="user" style="float: left;" type="button">计费方式</button>
+				<div class="layui-input-inline">
+					<select name="quiz2">
+						<option value="">所有</option>
+						<option value="杭州">普通计费</option>
+						<option value="宁波">会员计费</option>
+						<option value="宁波">免费</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item   layui-inline ">
+
+				<button class="layui-btn" style="float: left;" name="user" type="button">支付方式</button>
+				<div class="layui-input-inline">
+
+					<select name="quiz2">
+						<option value="所有">所有</option>
+						<option value="杭州">支付宝支付</option>
+
+						<option value="宁波">微信支付</option>
+						<option value="宁波">现金支付</option>
+					</select>
+				</div>
+			</div>
+
+		</div>
+		<!--这边是停车时间-->
+		<div class="layui-row">
+			<div class="layui-form-item   layui-inline " style="width: 20%;">
+
+				<div class="layui-input-inline" style="margin:0; width: 60%; ">
+					<input type="text" name="criticalWord" id="criticalWord" placeholder="机器人" autocomplete="off" class="layui-input">
+				</div>
+				<button class="layui-btn" name="user" type="button">搜索</button>
+
+			</div>
+
+
+			<div class="layui-form-item   layui-inline" style="width: 47%; ">
+
+				<div class="layui-inline" id="riqiBox" style="float:left;margin:0">
+
+					<button class="layui-btn" id="searchBtn" name="user" style="float: left; min-width:80px" type="button">按时间段</button>
+
+					<div class="" id="timeList_box" style="display:none">
+						<div>按时间段</div>
+						<div>按天</div>
+						<div>按周</div>
+						<div>按月</div>
+						<div>最近7天</div>
+						<div>最近15天</div>
+						<div>最近30天</div>
+					</div>
+
+				</div>
+
+
+				<div class="layui-input-inline  total  total0" style="width: 36%; display:block;">
+					<input type="text" class="layui-input" id="test5" placeholder="请选择开始时间">
+				</div>
+				<div class="layui-input-inline total total0" style="width: 1%;     line-height: 38px;display:block;">
+					~
+
+				</div>
+
+				<div class="layui-input-inline total total0" style="width: 36%;display:block;">
+					<input type="text" class="layui-input" id="test6" placeholder="请选择结束时间">
+				</div>
+
+				<div class="layui-input-inline  total total1" style="width: 36%;display:none;">
+					<input type="text" class="layui-input" id="test1" placeholder="请选择日期">
+				</div>
+
+				<div class="layui-input-inline  total total2" style="width: 36%;display:none;">
+					<input type="text" class="layui-input" id="test2" placeholder="请选择日期">
+				</div>
+
+				<div class="layui-input-inline  total total3" style="width: 36%;display:none;">
+					<input type="text" class="layui-input" id="test3" placeholder="请选择月份">
+				</div>
+
+			</div>
+
+		</div>
+
+	</form>
+
+	<!-- 下面是一些第二行的东西 -->
+
+	<div class="layui-row">
+
+		<div class="layui-inline  orderManage" style="margin-top:10px">
+			历史订单
+		</div>
+
+	</div>
+
+	<!-- 下面是第三行表格 -->
+
+
+	<table class="layui-table" lay-skin="line" align="center">
+		<!-- <colgroup>
+			  <col width="150">
+			  <col width="150">
+			  <col width="200">
+			  <col>
+			</colgroup> -->
+		<thead>
+			<tr align="center">
+				<th>编号</th>
+				<th>车牌号/取车码</th>
+				<th>车辆类型</th>
+				<th>拍照</th>
+				<th>计费方式</th>
+				<th>停车时间</th>
+				<th>取车时间</th>
+				<th>停车时长</th>
+				<th>费用</th>
+
+				<th>支付宝支付</th>
+				<th>详情</th>
+
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>0245</td>
+				<td>京F.524811</td>
+				<td>正常</td>
+				<td>查看图片</td>
+				<td>普通计费</td>
+				<td>2018.01.24
+					<br> 09:30AM
+				</td>
+				<td>2018.01.24
+					<br> 09:30AM
+				</td>
+				<td>3小时52分钟</td>
+				<td>30元</td>
+				<td>支付宝支付</td>
+				<td>详情</td>
+
+			</tr>
+		</tbody>
+	</table>
+
+
+
+	<!-- 这个下面是分页 -->
+
+	<div id="demo7"></div>
+
+
+	<!-- 这边是操作的弹框 -->
+	<div class="caozuoShadow" style="display:none">
+
+
+		<div class="xiangqing_shadow" style="display:block">
+
+			<div class="cancel" id="xiangqingCancer">
+				<i class="layui-icon"> &#x1007;</i>
+			</div>
+
+			<div class="tip" style="margin-top:15px">
+				详情
+			</div>
+
+			<div class="details_box">
+				<table class="layui-table" align="center">
+
+					<!-- <thead>
+										<tr align="center">
+											<th>编号</th>
+											<th>车牌号/取车码</th>
+										</tr>
+									</thead> -->
+					<tbody>
+
+
+
+						<tr>
+							<td>编号</td>
+							<td>5245</td>
+						</tr>
+
+						<tr>
+							<td>停车时间</td>
+							<td>2018.01.24 09:30AM</td>
+						</tr>
+
+
+						<tr>
+							<td>取车时间：</td>
+							<td>--</td>
+						</tr>
+
+
+						<tr>
+							<td>停车时间</td>
+							<td>2018.01.24 09:30AM</td>
+						</tr>
+
+
+						<tr>
+							<td>取车超时</td>
+							<td>--</td>
+						</tr>
+						<tr>
+							<td>停车超时费用</td>
+							<td>--</td>
+						</tr>
+
+						<tr>
+							<td>支付方式</td>
+							<td>--</td>
+						</tr>
+						<tr>
+							<td>车辆照片</td>
+							<td>查看图片</td>
+						</tr>
+						<tr>
+							<td>车辆类型</td>
+							<td>正常</td>
+						</tr>
+						<tr>
+							<td>停车入口</td>
+							<td>入口2</td>
+						</tr>
+						<tr>
+							<td>取车出口</td>
+							<td>--</td>
+						</tr>
+						<tr>
+							<td>计费方式</td>
+							<td>普通计费</td>
+						</tr>
+						<tr>
+							<td>计费方式</td>
+							<td>普通计费</td>
+						</tr>
+						<tr>
+							<td>取物次数</td>
+							<td>0</td>
+						</tr>
+						<tr>
+							<td>取物费用</td>
+							<td>0元</td>
+						</tr>
+						<tr>
+							<td>取物完成时间</td>
+							<td>无</td>
+						</tr>
+						<tr>
+							<td>车牌号修改</td>
+							<td>普通计费</td>
+						</tr>
+						<tr>
+							<td>使用机器人</td>
+							<td>GK251 GK251</td>
+						</tr>
+						<tr>
+							<td>历史停车点</td>
+							<td>（x1,y1）,(x1,y1),(x1,y1)</td>
+						</tr>
+						<tr>
+							<td>执行状态</td>
+							<td>
+								<br> 机器人1接受任务
+								<br> 机器人1接受任务
+								<br> 机器人1接受任务
+								<br> 机器人1接受任务
+								<br> 机器人1接受任务
+								<br> 机器人1接受任务
+								<br> 机器人1接受任务
+							</td>
+						</tr>
+
+						<tr>
+							<td>行进路线</td>
+							<td>
+								<br> 时间：0.936
+								<br> 停车路线：（x1,y2）（x1,y2）（x1,y2）（x1,y2） （x1,y2）（x1,y2）
+								<br> 时间：10:21 AM
+								<br> 转移路线1：（x1,y2）（x1,y2）（x1,y2）（x1,y2） （x1,y2）（x1,y2）
+								<br> 时间：10:21 AM
+								<br> 转移路线2：（x1,y2）（x1,y2）（x1,y2）（x1,y2） （x1,y2）（x1,y2）
+
+							</td>
+						</tr>
+
+					</tbody>
+
+				</table>
+
+
+			</div>
+
+
+
+		</div>
+
+
+	</div>
+
+
+
+
+
+
+</body>
+<script src='./js/jquery.min.js'></script>
+
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+
+<script type="text/javascript">
+	layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+		var element = layui.element;
+		var laydate = layui.laydate;
+		var laypage = layui.laypage
+			, layer = layui.layer;
+
+		var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+		//时间选择器
+		laydate.render({
+			elem: '#test5',
+			type: 'date'
+		})
+
+		laydate.render({
+			elem: '#test1'
+		});
+
+		laydate.render({
+			elem: '#test2'
+		});
+
+
+		laydate.render({
+			elem: '#test3', type: 'month'
+		});
+
+
+		//时间选择器
+		laydate.render({
+			elem: '#test6',
+			type: 'date'
+		})
+
+
+		//  这个是分页的设置 
+		laypage.render({
+			elem: 'demo7',
+			limits: [8, 12, 16]
+			, count: 100
+			, layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+			, jump: function (obj) {
+				console.log(obj)
+			}
+		});
+
+
+
+	});
+
+
+	$("#riqiBox").mouseover(function () {
+
+		$("#timeList_box").show()
+
+	})
+
+	$("#riqiBox").mouseout(function () {
+
+		$("#timeList_box").hide()
+	})
+
+
+	$("#timeList_box div").live("click", function () {
+		$("#timeList_box").hide()
+
+
+		var index = $(this).index()
+
+		$(".total").hide()
+
+		$(".total" + index).show()
+
+		var text = $(this).text()
+
+		$("#searchBtn").text(text)
+
+	})
+
+	// 这边是详情页面对应的取消按钮
+	$("td").click(function () {
+
+		if ($(this).text() == "详情") {
+			$(".caozuoShadow").show()
+			parent.disableBtn()
+
+
+		}
+
+
+	})
+
+
+	$("#xiangqingCancer").click(function () {
+
+		$(".caozuoShadow").hide()
+		parent.ableBtn()
+
+	})
+
+
+</script>
+
+</html>

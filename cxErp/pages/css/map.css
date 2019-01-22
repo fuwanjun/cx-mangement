@@ -1,0 +1,117 @@
+body{
+    position: relative;
+}
+
+.box{
+ 
+    position: relative;
+}
+
+.importMap{
+
+    background-color: #ffffff;
+    position: absolute;
+	top: 50vh;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	
+    border-radius: 50px;
+    font-size: 20px;
+    width: 200px;
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+    background-color: red;
+    cursor: pointer;
+    background-color: #f2f2f2;
+    
+    
+    /* font-weight: bold; */
+}
+
+.tip_left{
+    font-weight: bold;
+    font-size: 16px;
+    height: 38px;
+    line-height: 37px;
+    
+ 
+}
+
+
+.float_right{
+    float: right;
+
+}
+
+.next_mapbox{
+
+    display: flex;
+    margin-top: 15px;
+}
+.mapLeft{
+    flex: 5;
+    height: 500px;
+    background-color:white;
+}
+.mapRight{
+    flex: 1;
+    height: 500px;
+  background-color: #f1f1f1;
+}
+
+.mapRightItem{
+    margin: 20px;
+
+}
+
+
+.mapRightSure{
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+    margin:  20px auto;
+    text-align: center;
+    line-height: 70px;
+    background-color: #009688;
+    cursor: pointer;
+}
+
+
+.mapRightCancer{
+
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+    margin:  20px auto;
+    text-align: center;
+    line-height: 70px;
+    background-color:white;
+    border: 1px solid #dadada;
+    cursor: pointer;
+
+}
+
+.newNumberBox{
+    font-size: 16px;
+    font-weight: bold;
+
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

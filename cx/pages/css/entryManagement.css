@@ -1,0 +1,279 @@
+.tittle {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.box {
+    width: 100%;
+    display: flex;
+}
+
+.entryManage {
+    flex: 2.5;
+    /* background-color: #f1f1f1; */
+    /* height: 500px; */
+}
+
+.periodTimeSet {
+    flex: 1;
+}
+
+/* 这边是出入口管理的样式 */
+
+.list_box {
+    width: 100%;
+    padding-top: 20px;
+}
+
+.list_rongqi {
+    overflow: hidden;
+}
+
+.list_box div {
+    margin-top: 8px;
+}
+
+.listTop {
+    width: 20%;
+    height: 100px;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    background: #cac4c4;
+    float: left;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 5px;
+}
+
+.listBottom {
+    width: 20%;
+    height: 100px;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    background: #cac4c4;
+    float: left;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 5px;
+}
+
+.selectList {
+    border: 2px solid black;
+    /* background-color: #726b6b; */
+    background-color: #948c8c;
+}
+
+.name {
+    font-size: 24px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.lei {
+    font-size: 12px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.state {
+    font-size: 14px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.setBox {
+    /* overflow: hidden; */
+    display: flex;
+    /* width: 60%; */
+    /* padding-left: 40px; */
+}
+
+.listSet {
+    flex: 1;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    /* background-color: red; */
+}
+
+.set_set {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background-color: #999999;
+    margin: 0 auto;
+}
+
+.setText {
+    text-align: center;
+    font-weight: bold;
+}
+
+/* 这边是时间段设置的样式 */
+
+.periodTimeSetlittle {
+    margin: 10px;
+    margin-top: 0px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #f1f1f1;
+    height: 85px;
+    padding: 15px;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+
+
+.periodTimeSetnext {
+    margin: 10px;
+    /* height: 400px; */
+    background-color: #f1f1f1;
+}
+
+.biaoge_tip {
+    display: flex;
+}
+
+.cishu {
+    font-size: 38px;
+    line-height: 38px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.biaoge_tip .cishu {
+    flex: 1;
+    line-height: 1;
+    padding-left: 15px;
+    padding-top: 10px;
+}
+
+.biaoge_tip .layui-form {
+    flex: 2.5
+}
+
+/* 这边是表哥的样式 */
+
+.echarts_box {
+    margin-top: 5px;
+    height: 360px;
+    width: 100%;
+    min-width: 330px;
+    /* height: calc(100vh - 300px); */
+}
+
+
+/* 这边是出入口时间段阴影的设置 */
+.inwardAndOutward_shadow{
+
+  min-height:  500px;
+  /* width: 70vw; */
+  max-width: 900px;
+  width: 900px;
+}
+
+.inwardAndOutward_top{
+
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.duanduan{
+    
+font-size: 16px;
+font-weight: bold;
+margin-top: 10px;
+
+}
+
+.timeDuan{
+height: 37px;
+line-height: 37px;
+font-weight: bold;
+
+}
+
+.reduce{
+   width: 25px;
+ margin-left: 5px;
+ margin-top: 5px;
+}
+
+.reduceBox{
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #f1f1f1;
+    margin-left: 15px;
+}
+
+
+
+.churukou_box{
+
+    height: 320px;
+    overflow-y: auto;
+    border: 1px  solid #333333;
+    border-radius: 3px;
+    margin-top: 20px;
+     padding: 15px;
+
+}
+
+.listTime{
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.churukouList{
+overflow: hidden;
+
+}
+
+.item{
+    float: left;
+    height: 60px;
+    width: 420px;
+    background-color:#f1f1f1;
+    margin-bottom: 15px;
+    border-radius: 5px;
+
+    line-height: 50px;
+    
+}
+
+.churukouName{
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 60px;
+    margin-left: 30px;
+    margin-top: 5px;
+}
+
+.item:nth-child(2n-1){
+    float: left;
+   
+   }
+.item:nth-child(2n){
+ float: right;
+}
+
+
+
+.cancerOrsure{
+    display: flex;
+}
+
+.cancerOrsure div{
+    flex: 1;
+
+}
+
+

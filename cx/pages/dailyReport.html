@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" href="./css/pageIndex.css">
+
+
+</head>
+<style>
+	.searchContainer {
+		display: flex;
+		justify-content: space-between;
+		background-color: rgba(242, 242, 242, 1);
+		padding: 20px 20px;
+	}
+
+	.icon {
+		width: 16px;
+		height: 16px;
+	}
+
+	.layui-form-item {
+		margin-bottom: 0px;
+	}
+
+	.layui-inline>.layui-form-label {
+		width: auto;
+		padding: 9px 5px;
+	}
+
+	.table {
+		border: 1px solid #f2f2f2;
+		padding: 20px;
+	}
+
+	.spaceBetween {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+
+	.totalAccount {
+		font-size: 16px;
+		line-height: 38px;
+	}
+
+	.red {
+		color: #ff0000;
+	}
+
+	#pageBtn {
+		display: flex;
+		justify-content: center;
+	}
+
+	td {
+		text-align: center;
+	}
+
+	.layui-table th {
+		text-align: center;
+		border-collapse: collapse;
+		border: 1px solid #E6E6E6;
+	}
+
+	.badgeContainer {
+		display: inline-block;
+		width: 50px;
+		text-align: center;
+		position: absolute;
+		top: -50%;
+		left: -25px;
+	}
+
+	.badge {
+		display: inline-block;
+		background-color: #f73838;
+		height: 18px;
+		padding: 3px 6px;
+		border-radius: 9px;
+		font-size: 10px;
+		line-height: 15px;
+	}
+</style>
+
+<body>
+	<div class="loading"> </div>
+	<div class="body">
+		<!-- 客户分类详情 -->
+		<div>
+			<!-- 顶部客户按钮操作部分 -->
+			<div class="searchContainer">
+				<div>
+
+					<!-- <a href="./staffShift.html">
+					<button class="layui-btn">
+						<img class="icon" src="./img/shift.png" alt=""> 申请交班
+					</button>
+				</a> -->
+
+					<a href="./shiftAccount.html">
+						<button class="layui-btn" style="position:relative;overflow:visible;">
+							<div class="badgeContainer">
+								<span class="badge">9</span>
+							</div>
+							<img class="icon" src="./img/finance.png" alt=""> 财务交接
+						</button>
+					</a>
+					<a href="./shiftHistory.html">
+						<button class="layui-btn">
+							查看今日交班记录
+						</button>
+					</a>
+
+				</div>
+				<!-- 搜索 -->
+				<div class="layui-form-item layui-inline">
+					<div class="layui-inline" style="margin: 0;">
+						<label class="layui-form-label" for="date">
+							<i class="layui-icon" style="font-size: 30px;">&#xe637;</i>
+						</label>
+						<div class="layui-inline" style="width: 100px;">
+							<input name="date" id="date" lay-verify="date" autocomplete="off" class="layui-input" type="text">
+						</div>
+					</div>
+
+
+					<div class="layui-inline" style="margin: 0;">
+						<label class="layui-form-label" for="carNum">
+							车牌号
+						</label>
+						<div class="layui-inline" style="width: 130px;">
+							<input type="text" id="carNum" placeholder="例如：京A88888" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline layui-form" style="margin: 0;">
+						<label class="layui-form-label" for="payType">
+							收费方式
+						</label>
+						<div class="layui-inline" id="payType" style="width: 140px;">
+							<select name="payType" lay-verify="">
+								<option value="">请选择支付方式</option>
+								<option value="1">微信支付</option>
+								<option value="2">支付宝支付</option>
+								<option value="3">现金支付</option>
+							</select>
+						</div>
+					</div>
+
+					<button class="layui-btn" style="vertical-align: 0;">
+						<i class="layui-icon">&#xe615;</i> 搜索
+					</button>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="table">
+			<div class="tHead spaceBetween">
+				<span class="totalAccount">
+					当月总汇&#58;
+					<span class="red">&yen;
+						<span class="totalNum">88888888.8</span>
+					</span>
+					&#x3000; &#x3000; 微信&#58;
+					<span class="red">&yen;
+						<span class="weChatNum">
+							800000000.88
+						</span>
+					</span>
+					&#x3000; &#x3000; 支付宝&#58;
+					<span class="red">&yen;
+						<span class="alipayNum">
+							800000000.88
+						</span>
+					</span>
+					&#x3000; &#x3000; 现金&#58;
+					<span class="red">&yen;
+						<span class="cash">
+							800000000.88
+						</span>
+					</span>
+
+				</span>
+				<button class="layui-btn">
+					<img class="icon" src="./img/export.png" alt="">导出</button>
+			</div>
+			<table class="layui-table" lay-skin="line row">
+				<colgroup>
+					<!-- 车牌 -->
+					<col width="11%">
+					<!-- 收费数 -->
+					<col width="9%">
+					<!-- 优惠数 -->
+					<col width="10%">
+					<!-- 付费方式 -->
+					<col width="12%">
+					<!-- 分组 -->
+					<col width="10%">
+					<!-- 优惠活动 -->
+					<col width="13%">
+					<!-- 停车时间 -->
+					<col width="23%">
+					<!-- 停车时长 -->
+					<col width="12%">
+				</colgroup>
+				<thead>
+					<tr>
+						<th>车牌</th>
+						<th>收费金额</th>
+						<th>优惠金额</th>
+						<th>收费方式</th>
+						<th>所在分组</th>
+						<th>优惠活动</th>
+						<th>停车时间</th>
+						<th>停车时长</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>京A12345</td>
+						<td>&yen;120</td>
+						<td>&yen;120</td>
+						<td>支付宝支付</td>
+						<td>普通员工</td>
+						<td>前两小时免费</td>
+						<td>2018/10/10 19:17 - 2018/10/10 20:30</td>
+						<td>10小时13分</td>
+					</tr>
+					<tr>
+						<td>京A12345</td>
+						<td>&yen;120</td>
+						<td>&yen;120</td>
+						<td>支付宝支付</td>
+						<td>普通员工</td>
+						<td>前两小时免费</td>
+						<td>2018/10/10 19:17 - 2018/10/10 20:30</td>
+						<td>10小时13分</td>
+					</tr>
+					<tr>
+						<td>京A12345</td>
+						<td>&yen;120</td>
+						<td>&yen;120</td>
+						<td>支付宝支付</td>
+						<td>普通员工</td>
+						<td>前两小时免费</td>
+						<td>2018/10/10 19:17 - 2018/10/10 20:30</td>
+						<td>10小时13分</td>
+					</tr>
+					<tr>
+						<td>京A12345</td>
+						<td>&yen;120</td>
+						<td>&yen;120</td>
+						<td>支付宝支付</td>
+						<td>普通员工</td>
+						<td>前两小时免费</td>
+						<td>2018/10/10 19:17 - 2018/10/10 20:30</td>
+						<td>10小时13分</td>
+					</tr>
+					<tr>
+						<td>京A12345</td>
+						<td>&yen;120</td>
+						<td>&yen;120</td>
+						<td>支付宝支付</td>
+						<td>普通员工</td>
+						<td>前两小时免费</td>
+						<td>2018/10/10 19:17 - 2018/10/10 20:30</td>
+						<td>10小时13分</td>
+					</tr>
+					<tr>
+						<td>京A12345</td>
+						<td>&yen;120</td>
+						<td>&yen;120</td>
+						<td>支付宝支付</td>
+						<td>普通员工</td>
+						<td>前两小时免费</td>
+						<td>2018/10/10 19:17 - 2018/10/10 20:30</td>
+						<td>10小时13分</td>
+					</tr>
+					<tr>
+						<td>京A12345</td>
+						<td>&yen;120</td>
+						<td>&yen;120</td>
+						<td>支付宝支付</td>
+						<td>普通员工</td>
+						<td>前两小时免费</td>
+						<td>2018/10/10 19:17 - 2018/10/10 20:30</td>
+						<td>10小时13分</td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- 分页 -->
+			<div id="pageBtn">
+
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+<script src='./js/jquery.min.js'></script>
+<script src="../resource/layui/layui.js"></script>
+<script>
+
+	
+	$(function () {
+		$('.body').show();
+		$('.loading').hide();
+	});
+
+	layui.use(['laypage', 'layer', 'form', 'laydate'], function () {
+		var form = layui.form;
+		var laypage = layui.laypage;
+		var layer = layui.layer;
+		var laydate = layui.laydate;
+		//监听提交
+		laypage.render({
+			elem: 'pageBtn',
+			count: 100,
+			layout: ['prev', 'page', 'next', 'skip', 'count', 'limit'],
+			jump: function (obj) {
+				console.log(obj)
+			}
+		});
+
+		laydate.render({
+			elem: '#date',
+			value: new Date(),
+		});
+	})
+
+	function alertMsg(type, msg) {
+		var icon = '';
+		switch (true) {
+			case (type == ('success')):
+				icon = '&#x1005;';
+				break;
+			case (type == ('error')):
+				icon = '&#x1007;';
+				break;
+		}
+		layer.open({
+			type: 1,
+			title: false,
+			closeBtn: false,
+			area: ['400px', '200px'],
+			shade: 0.5,
+			id: 'LAY_layuipro',
+			btnAlign: 'c',
+			moveType: 1,
+			content: '<div style="text-align: center"><i class="layui-icon" style="line-height: 150px;font-size: 100px; color: #000000;">' +
+				icon + '</i> <p style="font-size: 22px">' + msg + '</p></div>',
+			time: 2000,
+		});
+	}
+
+
+
+
+	// 搜索
+	$('.searchSubBtn').live('click', function () {
+		var data = $('#date').val();
+		var carNum = $('#carNum').val();
+		var payType = $('#payType input').val();
+
+		console.group('搜索条件');
+		console.log(data);
+		console.log(carNum);
+		console.log(payType);
+		console.groupEnd();
+	});
+
+	var badge = JSON.parse(sessionStorage.getItem('badge'));
+	updataBadge(badge)
+
+	function updataBadge(num) {
+		if (num > 99) {
+			$('.badge').html('99+');
+			return;
+		}
+		if (num > 0) {
+			$('.badge').html(num);
+			return;
+		}
+	};
+</script>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>打印机管理</title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+	<style>
+		.cancelSub,.addStaffSub,.changeStaff{
+			float: right;
+			margin-left:20px;
+		}
+	</style>
+</head>
+<body>
+<form class="layui-form layui-row" action="" style="display: flex">
+	<div class="layui-form-item">
+		<label class="layui-form-label">用户名：</label>
+		<div class="layui-input-block">
+			<input type="text" id="criticalWord" name="title" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<button id="search" style="margin-left: 20px;" type="button" class="layui-btn">搜索</button>
+</form>
+	<div class="layui-row">
+		<div class="layui-inline  orderManage" style="margin-top:10px">打印机管理</div>
+		<div class="layui-inline" style="float:right;margin-top:10px">
+			<!--<button class="layui-btn layui-btn-normal" style="margin-right:30px;" id="zhuanyi">转移空托盘</button>-->
+			<button class="layui-btn" id="addDeilvery">新增打印机</button>
+		</div>
+	</div>
+	<table class="layui-table" id="table1">
+		<thead>
+			<tr>
+				<td>工厂</td>
+				<td>打印机名称</td>
+				<td>打印机Pkey</td>
+				<td>打印机Sn</td>
+				<td>打印机Ukey</td>
+				<td>飞鹅账号</td>
+				<td>创建时间</td>
+				<td>是否可用</td>
+				<td>操作</td>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+<div id="page"></div>
+</body>
+<div id="userMsg" style="padding: 10px 20px 0 0;display: none;">
+	<form id="userAdmin" class="layui-form" name="userAdmin">
+		<div class="layui-form-item">
+			<label class="layui-form-label">选择工厂</label>
+			<div class="layui-input-block">
+				<select name="type" id="factory"></select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" >打印机</label>
+			<div class="layui-input-block">
+				<input type="text" id="printName" name="account" lay-verify="account" placeholder="打印机名称" autocomplete="off" class="layui-input">
+				<!--<input type="hidden" name="authorityType" id="authorityType" value="" class="layui-input"/>-->
+				<input type="hidden" name="userPicture" id="userPicture" value="" class="layui-input"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" >Pkey</label>
+			<div class="layui-input-block">
+				<input type="text" id="pKey" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">Sn</label>
+			<div class="layui-input-block">
+				<input type="text" id="sn" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" >Ukey</label>
+			<div class="layui-input-block">
+				<input type="text" id="uKey" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">飞鹅账号</label>
+			<div class="layui-input-block">
+				<input type="text" id="printUser" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button type="button" class="layui-btn layui-btn-primary cancelSub">取消</button>
+				<button type="button" class="layui-btn layui-btn-normal addStaffSub">确定</button>
+				<button type="button" class="layui-btn layui-btn-normal changeStaff">修改</button>
+			</div>
+		</div>
+	</form>
+</div>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script>
+    getAllFactory();
+	var page=1;
+	var pageSize=10;
+    layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+        var element = layui.element
+            , laydate = layui.laydate
+            , laypage = layui.laypage
+            , form = layui.form
+            , layer = layui.layer;
+        var $ = layui.jquery; //独立版的layer无需执行这一句
+        getAllPrint(page,pageSize)
+    });
+
+    $("#addDeilvery").live("click",function(){
+        $(".addStaffSub").show();
+        $(".changeStaff").hide();
+        layui.use('layer',function(){
+            var layer=layui.layer;
+            layer.open({
+                type:1,
+                content:$("#userMsg"),
+                area:['35%']
+            })
+        })
+    });
+
+//	确定新增打印机
+	$(".addStaffSub").live("click",function(){
+	    var shopName=$("#factory").val();
+	    var shopId=$("#factory").find("option:selected").attr("factoryId");
+	    var printName=$("#printName").val();
+	    var pKey=$("#pKey").val();
+        var sn=$("#sn").val();
+        var uKey=$("#uKey").val();
+        var user=$("#printUser").val();
+        if(printName&&pKey&&sn&&uKey&&user){
+            addPrint(shopName,shopId,printName,pKey,sn,uKey,user);
+		}else{
+            layer.msg('填写完整的打印机信息');
+		}
+	});
+
+	$(".offBtn").live("click",function(){
+        var id=$(this).parent().parent().attr("printId");
+		offPrint(id);
+	});
+    $(".openBtn").live("click",function(){
+        var id=$(this).parent().parent().attr("printId");
+		openPrint(id);
+    });
+
+	$(".delBtn").live("click",function(){
+	   	var id=$(this).parent().parent().attr("printId");
+		layer.confirm('确定删除打印机？',{title:'删除打印机'},function(){
+		    delPrint(id);
+		})
+	});
+
+	$(".cancelSub").live("click",function(){
+		layer.closeAll();
+	});
+
+    /**
+	 *页面初始化
+     * @param page
+     * @param pageSize
+     * @param name
+     */
+    function getAllPrint(page,pageSize){
+        $.ajax({
+            url: globalUrl + "api/print/getPrintList",
+            type: "get",
+            data:{pageNum:page,pageSize:pageSize},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+			success:function(data){
+				if(data.code==0){
+                    $("#table1 tbody").html("");
+				    for(var i=0;i<data.data.list.length;i++){
+                        var state = '';
+                        if (data.data.list[i].state == 0) {
+                            state = '<button class="layui-btn layui-btn-sm layui-btn-danger offBtn">否</button>' +
+                                '<button class="layui-btn layui-btn-sm layui-btn-disabled openBtn" disabled>是</button>';
+                        } else {
+                            state = '<button class="layui-btn layui-btn-sm layui-btn-danger layui-btn-disabled offBtn" disabled>否</button>' +
+                                '<button class="layui-btn layui-btn-sm openBtn">是</button>';
+                        }
+				        var item='<tr printId="'+data.data.list[i].id+'">' +
+							'<td>'+data.data.list[i].shopName+'</td>' +
+							'<td>'+data.data.list[i].printName+'</td>' +
+							'<td>'+data.data.list[i].printPkey+'</td>' +
+							'<td>'+data.data.list[i].printSn+'</td>' +
+							'<td>'+data.data.list[i].printUkey+'</td>' +
+                            '<td>'+data.data.list[i].printUser+'</td>' +
+							'<td>'+timestampToTime(data.data.list[i].createTime)+'</td>' +
+							'<td>'+state+'</td>' +
+							'<td>' +
+//							'<button class="layui-btn layui-btn-xs layui-btn-normal changeBtn">编辑</button>' +
+                            '<button class="layui-btn layui-btn-sm layui-btn-danger delBtn">删除</button>' +
+							'</td>' +
+							'</tr>';
+				        $(item).appendTo($("#table1 tbody"));
+					}
+					layui.use('laypage',function(){
+					    var laypage=layui.laypage;
+						laypage.render({
+                            elem:'page',
+                            count:data.data.total,
+                            limit:pageSize,
+                            curr:page,
+                            jump:function(obj,first){
+                                page=obj.curr;
+                                if(!first){
+                                    getAllPrint(obj.curr,pageSize)
+                                }
+                            }
+						})
+					})
+				}
+			}
+		})
+	}
+
+	function addPrint(shopName,shopId,printName,printPkey,printSn,printUkey,printUser){
+		$.ajax({
+            url: globalUrl + "api/print/putPrint",
+            type: "post",
+            data: {shopName:shopName,shopId:shopId,printName:printName,printPkey:printPkey,printSn:printSn,printUkey:printUkey,printUser:printUser},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+			success:function(data){
+				if(data.code==0){
+                    getAllPrint(page,pageSize);
+                    layer.closeAll();
+                    layer.msg(data.message);
+				}else{
+                    layer.msg(data.message);
+				}
+			}
+		})
+	}
+
+	function delPrint(id){
+	    $.ajax({
+            url: globalUrl + "api/print/deletePrint",
+            type: "post",
+            data: {printId:id},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+			success:function(data){
+				if(data.code==0){
+                    getAllPrint(page,pageSize);
+				    layer.closeAll();
+				    layer.msg(data.message);
+				}else{
+                    layer.msg(data.message);
+				}
+			}
+		})
+	}
+    /**
+     * 停用
+     */
+    function offPrint(id) {
+        $.ajax({
+            url: globalUrl + "api/print/disablePrint",
+            type: "post",
+            data: {printId:id},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                if (data.code == 0) {
+                    getAllPrint(page,pageSize);
+                    layer.closeAll();
+                    layer.msg(data.message);
+                }else{
+                    layer.msg(data.message);
+                }
+            }
+        })
+    }
+
+    /**
+     * 停用
+     */
+    function openPrint(id) {
+        $.ajax({
+            url: globalUrl + "api/print/enablePrint",
+            type: "post",
+            data: {printId:id},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                if (data.code == 0) {
+                    getAllPrint(page,pageSize);
+                    layer.closeAll();
+                    layer.msg(data.message);
+                }else{
+                    layer.msg(data.message);
+                }
+            }
+        })
+    }
+
+    /**
+     * 获取选项中的所有工厂
+     */
+    function getAllFactory() {
+        $.ajax({
+            url: globalUrl + "shop/getShopList",
+            type: "get",
+            async: false,
+            data: {pageNum: 1, pageSize: 100},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                if (data.code == 0) {
+                    for (var i = 0; i < data.data.list.length; i++) {
+                        var item = '<option factoryId="' + data.data.list[i].id + '" value="' + data.data.list[i].shopName + '">' + data.data.list[i].shopName + '</option>';
+                        $(item).appendTo($("#factory"));
+                    }
+                }
+            }
+        })
+    }
+</script>
+</html>

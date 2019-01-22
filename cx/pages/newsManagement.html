@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title></title>
+    <meta charset='utf-8'>
+    <meta name='renderer' content='webkit'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black'>
+    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <meta name='format-detection' content='telephone=no'>
+    <link rel="stylesheet" href="../resource/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href='css/pageIndex.css'/>
+    <link rel="stylesheet" type="text/css" href='css/orderManagement.css'/>
+    <link rel="stylesheet" href="../resource/wangEditor-3.1.1/release/wangEditor.min.css">
+    <style>
+        .cancel {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 2px gray;
+            cursor: pointer;
+        }
+
+        .cancel > i {
+            padding-top: 3px;
+
+            font-size: 30px;
+            line-height: 36px;
+            color: gray;
+        }
+
+        .details_box td {
+            width: 50% !important;
+
+        }
+
+        .goodsImg {
+            width: 50px;
+            height: 50px;
+        }
+
+        .upBanner {
+            width: 300px;
+            height: 200px;
+            border: 1px solid #ccc;
+            float: left;
+            margin-left: 10px;
+            margin-bottom: 20px;
+        }
+
+        .goodsFile {
+            display: inline-block;
+            height: 38px;
+            line-height: 38px;
+            padding: 0 18px;
+            background-color: #009688;
+            color: #fff;
+            white-space: nowrap;
+            text-align: center;
+            font-size: 14px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            opacity: 0;
+            width: 92px;
+            position: absolute;
+            left: 0;
+            top: 9px;
+        }
+
+        .layui-upload-img {
+            max-width: 300px;
+            max-height: 200px;
+        }
+
+        .layui-table img {
+            max-width: 300px;
+            max-height: 200px;
+        }
+    </style>
+
+</head>
+
+<body>
+<!-- 下面是一些第二行的东西 -->
+<div class="layui-row">
+
+    <div class="layui-inline  orderManage" style="margin-top:10px">
+        公告栏管理
+    </div>
+
+    <div class="layui-inline" style="float:right;margin-top:10px">
+        <button class="layui-btn  layui-btn-normal" id="addNews">新增公告</button>
+        <!--<button class="layui-btn layui-btn-danger" id="zhuanyi">删除全部</button>-->
+    </div>
+</div>
+<!-- 下面是第三行表格 -->
+<table class="layui-table" id="goodList" lay-skin="line" align="center">
+    <thead>
+    <tr align="center">
+        <!--<th><input type="checkbox" name="allSelect" id="allSelect" value="" /></th>-->
+        <!--<th>编号</th>-->
+        <th width="15%">标题</th>
+        <th>封面</th>
+        <th width="30%">摘要</th>
+        <th width="10%">时间</th>
+        <th width="20%">操作</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<div id="page"></div>
+</body>
+<div id="newsBox" style="display: none; padding: 10px 30px;">
+    <form class="layui-form" action="">
+        <div class="layui-form-item" style="overflow: hidden">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-block">
+                <input id="titNews" type="text" name="title" required lay-verify="required" placeholder="请输入标题"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="display:flex;">
+            <label class="layui-form-label">
+                <button type="button" class="layui-btn" id="test1">上传图片</button>
+                <input class="goodsFile" name="file" lay-verify="file" type="file" value="" autocomplete="off">
+            </label>
+            <div class="layui-input-block" id="imgCon" style="margin-left: 14px;margin-bottom: 20px;">
+                <img class="layui-upload-img" id="demo1">
+            </div>
+            <!--<div class="upBanner"><img src="" alt=""></div>-->
+        </div>
+
+        <div style="display: flex; margin-bottom: 20px;">
+            <p style="width: 110px; padding: 10px 10px;">公告内容：</p>
+            <div id="content" style="width: calc(100% - 110px); float: right;"></div>
+        </div>
+        <div class="layui-form-item" style="overflow: hidden">
+            <label class="layui-form-label">摘要：</label>
+            <div class="layui-input-block">
+                <input id="someCon" type="text" name="title" required lay-verify="required" placeholder="请输入摘要内容"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序号：</label>
+            <div class="layui-input-block">
+                <input id="sortNews" type="number" class="layui-input" value="0">
+            </div>
+        </div>
+        <button style="float: right;" type="button" class="layui-btn" id="saveNews">保存</button>
+    </form>
+</div>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script src="../resource/wangEditor-3.1.1/release/wangEditor.min.js"></script>
+<script type="text/javascript">
+    var editorText = window.wangEditor;
+    var editor = new editorText('#content');
+    editor.customConfig.uploadImgShowBase64 = true
+    editor.create();
+    $(function () {
+        getAllNews(1,4);
+    });
+    layui.use(['laypage', 'layer', 'form', 'upload'], function () {
+        var form = layui.form
+            , laypage = layui.laypage
+            , layer = layui.layer
+            , upload = layui.upload;
+        var $ = layui.jquery, layer = layui.layer;
+
+        $(".goodsFile").on("change", function () {
+            this_file = this;
+            var file_input = document.getElementsByClassName("goodsFile")[0].files[0];
+            if (file_input.name != '') {
+                showImg(this_file)
+            }
+        });
+        //图片回显函数
+        var file;
+
+        function showImg(obj) {
+            file = obj.files[0];
+            var readerFile = new FileReader();
+            readerFile.onload = function (ev) {
+                var data = ev.target.result;
+                $("#demo1").attr("src", data)
+            };
+            readerFile.readAsDataURL(file);
+        }
+    });
+
+    //停用公告
+    $(".stopBtn").live("click", function () {
+        var id = $(this).parent().parent().attr("newsId");
+        $.ajax({
+            url: globalUrl + "notice/disableNotice",
+            data: {noticeId: id},
+            type: "post",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                console.log(data);
+                if (data.code == 0) {
+                    layui.use('layer',function(){
+                        var layer=layui.layer;
+                        layer.msg("停用成功！")
+                        getAllNews(1,4);
+                    })
+                }
+            }
+        })
+    });
+    //启用公告
+    $(".startBtn").live("click", function () {
+        var id = $(this).parent().parent().attr("newsId");
+        $.ajax({
+            url: globalUrl + "notice/enableNotice",
+            data: {noticeId: id},
+            type: "post",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                console.log(data);
+                if (data.code == 0) {
+                    layui.use('layer',function(){
+                        var layer=layui.layer;
+                        layer.msg("启用成功！")
+                        getAllNews(1,4);
+                    })
+                }
+            }
+        })
+    });
+
+    //删除公告
+    $(".delBtn").live("click", function () {
+        var id = $(this).parent().parent().attr("newsId");
+    layui.use("layer",function(){
+        var layer=layui.layer;
+        var delPop=layer.open({
+            content:"确定删除该条公告？",
+            btn:["确定","取消"],
+            yes:function(){
+                $.ajax({
+                    url: globalUrl + "notice/deleteNotice",
+                    data: {noticeId: id},
+                    type: "post",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("token", $.cookie("token"));
+                    },
+                    crossDomain: true,
+                    success: function (data) {
+                        console.log(data);
+                        if (data.code == 0) {
+                            layui.use('layer',function(){
+                                var layer=layui.layer;
+                                layer.msg("删除成功！")
+                                getAllNews(1,4);
+                            })
+                        }
+                    }
+                })
+            },btn2:function(){
+                layer.close(delPop);
+            }
+        })
+    })
+
+    });
+    var con = "";
+    //新增公告
+    $("#addNews").click(function () {
+        cleanPop();
+        btnVal = "putNotice";
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            con=layer.open({
+                type: 1,
+                title: '新增公告',
+                content: $("#newsBox"),
+                area: ['60%', '100%']
+            })
+        });
+    });
+
+    var changeId="";
+    //编辑
+    $(".changeBtn").live("click", function () {
+        changeId = $(this).parent().parent().attr("newsId");
+        getThisNews(changeId);
+        btnVal = "updateNotice";
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            con = layer.open({
+                type: 1,
+                title: '新增公告',
+                content: $("#newsBox"),
+                area: ['60%', '100%']
+            })
+        });
+    });
+
+//    公告置顶
+    $(".goTopBtn").live("click",function(){
+        var id = $(this).parent().parent().attr("newsId");
+        $.ajax({
+            url: globalUrl + "notice/toTopNotice",
+            data: {noticeId: id},
+            type: "post",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:function(data){
+                console.log(data);
+                if(data.code==0){
+                    getAllNews(1,4);
+                }
+            }
+        })
+    });
+
+    //保存
+    var btnVal = "";
+    $("#saveNews").click(function () {
+        var formData = new FormData();
+        var tit = $("#titNews").val();
+        var remark=$("#someCon").val();
+        var pic = "";
+        if (document.getElementsByClassName("goodsFile")[0].files[0]) {
+            pic = document.getElementsByClassName("goodsFile")[0].files[0];
+            formData.append("coverFile", pic);
+        }
+        var sort = $("#sortNews").val();
+        var content = editor.txt.html();
+        formData.append("noticeTitle", tit);
+        formData.append("sort", sort);
+        formData.append("remark", remark);
+        formData.append("content",content);
+        if(btnVal=='updateNotice'){
+            formData.append("id",changeId)
+            changeId="";
+        }
+        $.ajax({
+            url: globalUrl + "notice/" + btnVal,
+            data: formData,
+            contentType: false,
+            processData: false,
+            type: "post",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                layui.use('layer', function () {
+                    var layer = layui.layer;
+                    if (data.code == 0) {
+                        layer.open({
+                            content: "保存成功！"
+                        });
+                        layer.close(con);
+                        getAllNews(1,4);
+                        cleanPop();
+                    } else {
+                        layer.open({
+                            content: data.message
+                        })
+                    }
+                })
+
+            }
+        })
+    });
+
+    //查询
+    function getThisNews(id) {
+        $.ajax({
+            url: globalUrl + "notice/getNoticeById",
+            data: {noticeId: id},
+            type: "get",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                console.log(data);
+                layui.use('layer', function () {
+                    var layer = layui.layer;
+                    if (data.code == 0) {
+                        cleanPop();
+                        $("#titNews").val(data.data.noticeTitle);
+                        $("#demo1").attr("src", "http://" + data.data.cover);
+                        $("#someCon").val(data.data.remark);
+                        editor.txt.html(data.data.content);
+                        $("#sortNews").val(data.data.sort);
+                    } else {
+                        layer.open({
+                            content: data.message
+                        })
+                    }
+                });
+
+            }
+        })
+    }
+
+    //清空弹窗内容
+    function cleanPop() {
+        $("#titNews").val("");
+        $("#demo1").attr("src", "");
+        editor.txt.html("");
+        $("#sortNews").val(0);
+    }
+
+    //获取所有公告
+    function getAllNews(page,pageSize) {
+        $.ajax({
+            url: globalUrl + "notice/getNoticeAllList",
+            data: {pageNum: page,pageSize:pageSize},
+            type: "get",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+                console.log(data);
+                if (data.code == 0) {
+                    $("#goodList tbody").html("");
+                    for (var i = 0; i < data.data.list.length; i++) {
+                        var title = data.data.list[i].noticeTitle ? data.data.list[i].noticeTitle : "无标题";
+                        var banner = '';
+                        if (data.data.list[i].cover) {
+                            banner = '<img src="http://' + data.data.list[i].cover + '"/>';
+                        } else {
+                            banner = '无封面';
+                        }
+                        var someCon = data.data.list[i].remark ? data.data.list[i].remark : "无摘要";
+                        var stopBtn = "";
+                        if (data.data.list[i].state == 0) {
+                            stopBtn = '<button type="button" class="layui-btn layui-btn-sm layui-btn-primary stopBtn">停用</button>';
+                        } else {
+                            stopBtn = '<button type="button" class="layui-btn layui-btn-sm startBtn">启用</button>';
+                        }
+                        var item = '<tr newsId="' + data.data.list[i].id + '">' +
+                            '<td>' + title + '</td>' +
+                            '<td style="max-height: 250px;">' + banner + '</td>' +
+                            '<td>' + someCon + '</td>' +
+                            '<td>' + timestampToTime(data.data.list[i].createTime) + '</td>' +
+                            '<td>' +
+                            stopBtn +
+                            '<button type="button" class="layui-btn layui-btn-sm layui-btn-danger delBtn">删除</button>' +
+                            '<button type="button" class="layui-btn layui-btn-sm layui-btn-normal changeBtn">编辑</button>' +
+                            '<button type="button" class="layui-btn layui-btn-sm goTopBtn">置顶</button>' +
+                            '</td>' +
+                            '</tr>';
+                        $(item).appendTo($("#goodList tbody"));
+                    }
+                    layui.use('laypage',function(){
+                        var laypage=layui.laypage;
+                        laypage.render({
+                            elem:'page',
+                            count:data.data.total,
+                            limit:4,
+                            curr:page,
+                            jump:function(obj,first){
+                                if(!first){
+                                    getAllNews(obj.curr,pageSize)
+                                }
+                            }
+                        })
+                    })
+                }
+            }
+        })
+    }
+</script>
+</html>

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset='utf-8'>
+    <meta name='renderer' content='webkit'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black'>
+    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <meta name='format-detection' content='telephone=no'>
+    <link rel="stylesheet" href="../resource/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href='css/pageIndex.css'/>
+    <link rel="stylesheet" type="text/css" href='css/orderManagement.css'/>
+    <style>
+        .cancel {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 2px gray;
+            cursor: pointer;
+        }
+
+        .cancel > i {
+            padding-top: 3px;
+
+            font-size: 30px;
+            line-height: 36px;
+            color: gray;
+        }
+
+        .details_box td {
+            width: 50% !important;
+
+        }
+
+        .expressList {
+            position: absolute;
+            width: 80px;
+            left: 50%;
+            margin-left: -40px;
+            top: 38px;
+            background-color: #f1f1f1;
+            z-index: 9999;
+            border-radius: 3px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .expressList li {
+            padding: 10px 0;
+            text-align: center;
+
+        }
+
+        .expressList li:hover {
+            background-color: rgba(0, 125, 208, .7);
+            color: #fff;
+        }
+
+        .showExpress {
+            display: inline-block;
+            width: 72px;
+        }
+
+        .layui-input-block {
+            margin-left: 56px;
+        }
+
+        .layui-form-label {
+            padding: 0;
+            width: auto;
+            line-height: 36px;
+        }
+    </style>
+
+</head>
+
+<body>
+<form class="layui-form layui-row" action="" style="display: flex;flex-wrap: wrap;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">关键词：</label>
+        <div class="layui-input-block">
+            <input type="text" id="criticalWord" name="title" required lay-verify="required" placeholder="用户名、手机号、订单号"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="margin-left: 20px;">交易状态：</label>
+        <div class="layui-input-block" style="margin-left: 90px;">
+            <select name="city" lay-verify="required" id="status">
+                <option value="">全部</option>
+                <option value="10">未付款</option>
+                <option value="20">已付款</option>
+                <option value="30">已取件</option>
+                <option value="35">清洗中</option>
+                <option value="40">待送</option>
+                <option value="45">在送</option>
+                <option value="50">送件完成</option>
+                <option value="60">交易成功</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="margin-left: 20px;">差价：</label>
+        <div class="layui-input-block" style="margin-left: 90px;">
+            <select name="city" lay-verify="required" id="diff">
+                <option value="">全部</option>
+                <option value="true">已补</option>
+                <option value="false">未补</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item" style="display: flex;">
+        <label class="layui-form-label" style="margin-left: 20px;">时间：</label>
+        <div class="layui-input-block" style="margin-left: 0px;">
+            <input id="test5" type="text" name="title" required lay-verify="required" placeholder="开始时间"
+                   autocomplete="off" class="layui-input">
+        </div>
+        <p style="line-height: 38px;font-size: 16px;margin: 0 10px;">~</p>
+        <div class="layui-input-block" style="margin-left: 0px;">
+            <input id="test6" type="text" name="title" required lay-verify="required" placeholder="结束时间"
+                   autocomplete="off" class="layui-input">
+        </div>
+        <button id="search" style="margin-left: 20px;" type="button" class="layui-btn">搜索</button>
+    </div>
+
+</form>
+<!-- 下面是一些第二行的东西 -->
+
+<div class="layui-row">
+
+    <div class="layui-inline  orderManage" style="margin-top:10px">
+        订单管理
+    </div>
+
+    <div class="layui-inline" style="float:right;margin-right:30px;margin-top:10px">
+        <!--<button class="layui-btn layui-btn-normal" style="margin-right:30px;" id="zhuanyi">转移空托盘</button>
+
+        <button class="layui-btn  layui-btn-normal" id="xinzhengrenwu">新增任务</button>-->
+
+    </div>
+
+</div>
+
+<!-- 下面是第三行表格 -->
+
+
+<table class="layui-table" id="orderList" lay-skin="line" align="center">
+    <!-- <colgroup>
+          <col width="150">
+          <col width="150">
+          <col width="200">
+          <col>
+        </colgroup> -->
+    <thead>
+    <tr align="center">
+        <th>订单编号</th>
+        <th>用户姓名</th>
+        <th>用户手机</th>
+        <th>快递方式</th>
+        <th>订单金额</th>
+        <th>当前状态</th>
+        <th>下单时间</th>
+        <th>预约时间</th>
+        <th>预约时间修改</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<!-- 这个下面是分页 -->
+<div id="demo7"></div>
+<button id="excel" class="layui-btn layui-btn-primary" type="button">导出EXCEL表格</button>
+<div class="bg">
+    <!-- 弹框容器 -->
+    <div class="Container">
+        <!-- 取消事件 -->
+        <div class="cancel">
+            <i class="layui-icon"> &#x1007;</i>
+        </div>
+        <div class="bombBox updataStaffList">
+            <div class="layui-form">
+                <div class="layui-form-item">
+                    <h3 class="staffInfoClass center">改派信息</h3>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="fristUserName">原配送员姓名</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="fristUserName" data-id="" readonly="readonly" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="redistUserName">现配送员姓名</label>
+                    <div class="layui-input-block">
+                        <input type="hidden" name="orderNo" id="orderNo" value=""/>
+                        <input type="text" id="redistUserName" data-id="" placeholder="请选择改派配送员" readonly="readonly"
+                               onclick="getTaker()" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="remark">改派原因</label>
+                    <div class="layui-input-block">
+                        <textarea type="text" id="remark" autocomplete="off" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn layui-btn-primary cancelSub">取消</button>
+                        <button type="button" class="layui-btn layui-btn-normal updataStaffSub">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<div id="timeBox" style="padding: 10px 20px;"><input style="padding: 5px;" id="changeTime" type="text" placeholder="选择预约时间"></div>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+
+<script type="text/javascript">
+    var para = {};
+    para.page = 1;
+    para.pageSize = 10;
+    $(function () {
+        initData(para);
+    });
+
+    function initData(para) {
+        $.ajax({
+            url: globalUrl + "order/adminOrderList",
+            data: para,
+//			    page:page,
+//                status:status,
+//                orderNoEnd:keyWord,
+//                dateStart:startTime,
+//                dataEnd:endTime
+            type: "post",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (res) {
+                var str = "";
+                $.each(res.data.list, function (index, value) {
+                    var expressStatus="";
+                    if(value.expressStatus==1){
+                        expressStatus='顺丰';
+                    }else if(value.expressStatus==2){
+                        expressStatus='自配';
+                    }else if(value.expressStatus==3){
+                        expressStatus='德邦';
+                    }
+                    var createTime = formatDate(value.createTime);
+                    var yuyueTime = value.subTime;
+                    yuyueTime.lastIndexOf("-");
+                    str += '<tr orderNo="'+value.orderNo+'">';
+                    str += '<td>' + value.orderNo + '</td>';
+                    if (value.address != null) {
+                        str += '<td>' + value.address.userName + '</td>'
+                        str += '<td>' + value.address.phone + '</td>'
+                    } else {
+                        str += '<td></td>';
+                        str += '<td></td>'
+                    }
+                    str += '<td data-id="' + value.orderNo + '"><span class="showExpress">'+expressStatus+'</span><button class="layui-btn layui-btn-xs changeExpress">改派</button>';
+                    str += '<ul class="expressList">';
+//                    str += '<li>厂家自配</li>';
+//                    str += '<li>顺丰</li>';
+                    str += '</ul></td>';
+                    str += '<td>' + value.payment + '</td>';
+                    //10-未付款，20-已付款，30-已取件，35 取件完成 40-待送，45-在送，50-送件完成，60-交易成功
+                    if (value.status == "10") {
+                        str += '<td>未付款</td>'
+                    } else if (value.status == "20") {
+                        str += '<td>已付款</td>'
+                    } else if (value.status == "30") {
+                        str += '<td>已取件</td>'
+                    } else if (value.status == "35") {
+                        str += '<td>清洗中</td>'
+                    } else if (value.status == "40") {
+                        str += '<td>待送</td>'
+                    } else if (value.status == "45") {
+                        str += '<td>在送</td>'
+                    } else if (value.status == "50") {
+                        str += '<td>送件完成</td>'
+                    } else if (value.status == "60") {
+                        str += '<td>交易完成</td>'
+                    }
+                    str += '<td>' + createTime + '</td>';
+                    str += '<td>' + yuyueTime + '</td>';
+                    str += '<td><button class="layui-btn layui-btn-sm changeTime">修改时间</button></td>';
+                    str += '<td data-id="' + value.orderNo + '"><button class="layui-btn layui-btn-normal operation">查看</button></td>'
+                    str += '</tr>'
+                });
+
+                $("#orderList tbody").html(str);
+                layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+                    var element = layui.element;
+                    var laydate = layui.laydate;
+                    var laypage = layui.laypage
+                        , layer = layui.layer;
+                    var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+                    //时间选择器
+                    laydate.render({
+                        elem: '#test5',
+                        type: 'date'
+                    });
+
+                    //时间选择器
+                    laydate.render({
+                        elem: '#test6',
+                        type: 'date'
+                    });
+                    laydate.render({
+                        elem: '#changeTime',
+                        type: 'datetime'
+                    });
+                    laypage.render({
+                        elem: 'demo7',
+                        count: res.data.total,
+                        limit: res.data.pageSize,
+                        curr: para.page,
+                        jump: function (obj, first) {
+                            if (!first) {
+                                para.page = obj.curr;
+                                initData(para);
+                            }
+                        }
+                    })
+                })
+            }
+        })
+    }
+
+    //条件查询
+    $("#search").click(function () {
+        var para = {};
+        var condi = $("#criticalWord").val();
+        var status = $("#status").val() ? $("#status").val() : 0;
+        var diff = $("#diff").val();
+        var dateStart = $("#test5").val();
+        var dateEnd = $("#test6").val();
+        para.page = 1;
+        if (status || status == 0) {
+            para.status = status;
+        }
+        if (condi) {
+            para.orderNoEnd = condi;
+        }
+        if (dateStart) {
+            para.dateStart = dateStart + " 00:00:00";
+        }
+        if (dateEnd) {
+            para.dateEnd = dateEnd + " 23:59:59";
+        }
+        if (diff) {
+            para.isFill = diff
+        }
+
+        initData(para);
+    });
+    //点击查看详情
+    layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+        var element = layui.element;
+        var laydate = layui.laydate;
+        var laypage = layui.laypage
+            , layer = layui.layer;
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+        $("#orderList button.operation").live("click", function () {
+            var id = $(this).parent().attr("data-id");
+            console.log(id);
+            seeOrder(id);
+        })
+    });
+
+    //	修改预约时间
+    $(".changeTime").live("click", function () {
+        $('#changeTime').val("");
+        var orderNo=$(this).parent().parent().attr("orderNo");
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.open({
+                type: 1,
+                content: $("#timeBox"),
+                btn:['修改','取消'],
+                yes:function(){
+                    var time=$('#changeTime').val();
+                    $.ajax({
+                        url: globalUrl + "/order/updateSubTime",
+                        type: "post",
+                        data: {orderNo:orderNo,subTime:time},
+                        crossDomain: true,
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("token", $.cookie("token"));
+                        },
+                        success:function(data){
+                            if(data.code==0){
+                                initData(para);
+                                layer.closeAll();
+                                layer.msg(data.message);
+                            }else{
+                                layer.msg(data.message);
+                            }
+                        }
+                    })
+                }
+            })
+        })
+    });
+
+    //	查看订单详情
+    function seeOrder(orderId) {
+        $.ajax({
+            url: globalUrl + "/order/orderView",
+            type: "post",
+            data: {orderNo: orderId},
+            crossDomain: true,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            success: function (data) {
+                console.log(data);
+                layer.open({
+                    type: 2,
+                    title: "订单详情",
+                    content: "orderDetail.html?id=" + orderId,
+                    area: ["100%", "100%"]
+                });
+            }
+        })
+    }
+
+    function getTaker() {
+        layer.open({
+            type: 2,
+            title: "改派配送员",
+            content: "takerManagement.html",
+            area: ["600px", "450px"]
+        });
+    }
+
+    $("#orderList .changeExpress").live("click", function () {
+        //$(this).next().toggle();
+        showBG('.updataStaffList');
+        var orderId = $(this).parent().attr("data-id");
+        getTakerByOrderNo(orderId);
+
+    });
+
+    function getTakerByOrderNo(orderId) {
+        $.ajax({
+            type: "get",
+            url: globalUrl + "taker/getOrderTaker",
+            data: {orderNo: orderId},
+            async: true,
+            crossDomain: true,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            success: function (res) {
+                if (res.code == 0) {
+                    $("#fristUserName").val(res.data.takerName);
+                    $("#orderNo").val(orderId);
+                    $("#fristUserName").attr("data-id", res.data.id);
+                }
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        });
+    }
+
+    layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+        var element = layui.element;
+        var laydate = layui.laydate;
+        var laypage = layui.laypage
+            , layer = layui.layer;
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+        $("#orderList #redistUserName").live("click", function () {
+            layer.open({
+                type: 2,
+                title: "改派配送员",
+                content: "takerManagement.html",
+                area: ["600px", "450px"]
+            });
+        })
+    });
+
+
+    $(".expressList").on("click", "li", function () {
+        var text = $(this).text();
+        //此时还要进行改派的接口请求 并刷新列表
+        $(this).parent().siblings("span").text(text);
+        $(this).parent().toggle();
+    });
+
+    // 显示弹框阴影
+    function showBG(DOM) {
+        parent.ableBtn();
+        $('.bombBox').hide();
+        $(DOM).fadeIn();
+        $('.bg').fadeIn();
+        parent.disableBtn();
+    };
+
+    // 隐藏弹框阴影
+    function hideBG() {
+        $('.bg').fadeOut();
+        parent.ableBtn();
+        $('.bombBox').fadeOut();
+
+        // 把input标签清空。
+        $('input').val('');
+        $('.chk').removeClass('checkbox_true_full').addClass('checkbox_false_full');
+
+        isNeedList = false;
+        isNeedItem = false;
+    };
+    //隐藏
+    $('.cancel').live('click', function () {
+        $("#demo1").attr("src", '');
+        hideBG();
+    });
+    $('.cancelSub').live('click', function () {
+        hideBG();
+    });
+
+    $('.updataStaffSub').live('click', function () {
+        var fristUserName = $("#fristUserName").val();
+        var fristUserId = $("#fristUserName").attr("data-id");
+        var redistUserName = $("#redistUserName").val();
+        var redistUserId = $("#redistUserName").attr("data-id");
+        var remark = $("#remark").val();
+        var orderNo = $("#orderNo").val();
+
+        if (redistUserName == "") {
+            lay.msg("请选择改派的配送员", {time: 1000});
+            return false;
+        }
+        var distDetail = {
+            fristUserName: fristUserName,
+            fristUserId: fristUserId,
+            redistUserName: redistUserName,
+            redistUserId: redistUserId,
+            remark: remark,
+            orderNo: orderNo
+        };
+        $.ajax({
+            type: "post",
+            url: globalUrl + "dist/redistOrder",
+            async: true,
+            data: distDetail,
+            crossDomain: true,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            success: function (res) {
+                console.log(res);
+                hideBG();
+                layer.msg(res.message, {time: 1000})
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    });
+    $("#excel").click(function () {
+        getExcel();
+    });
+
+    //	导出EXCEL表格
+    function getExcel() {
+        var para = {};
+        var url = globalUrl + "order/exportOrderList";
+        var status = $("#status").val() ? $("#status").val() : 0;
+        var dateStart = $("#test5").val();
+        var dateEnd = $("#test6").val();
+        var orderNoEnd = $("#criticalWord").val();
+        var diff = $("#diff").val();
+        if (status || status == 0) {
+            url += "?status=" + status;
+        }
+        if (diff) {
+            url += "&isFill=" + diff;
+        }
+        if (dateStart) {
+            url += "&dateStart=" + dateStart + " 00:00:00";
+        }
+        if (dateEnd) {
+            url += "&dateEnd=" + dateEnd + " 23:59:59";
+        }
+        if (orderNoEnd) {
+            url += "&orderNoEnd=" + orderNoEnd;
+        }
+        window.open(url);
+    }
+
+</script>
+
+</html>

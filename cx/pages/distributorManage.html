@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title></title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" href="./css/pageIndex.css">
+
+</head>
+<style>
+	.searchContainer {
+		display: flex;
+		justify-content: space-between;
+		background-color: rgba(242, 242, 242, 1);
+		padding: 20px 20px;
+	}
+
+	.icon {
+		width: 16px;
+		height: 16px;
+	}
+
+	.layui-form-item {
+		margin-bottom: 0px;
+	}
+
+	.layui-inline>.layui-form-label {
+		width: auto;
+		padding: 9px 5px;
+	}
+
+	.table {
+		border: 1px solid #f2f2f2;
+		padding: 20px;
+	}
+
+	.spaceBetween {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+
+	.totalAccount {
+		font-size: 16px;
+		line-height: 38px;
+	}
+
+	.red {
+		color: #ff0000;
+	}
+
+	#pageBtn {
+		display: flex;
+		justify-content: center;
+	}
+
+	td {
+		text-align: center;
+	}
+
+	.layui-table th {
+		text-align: center;
+		border-collapse: collapse;
+		border: 1px solid #E6E6E6;
+	}
+
+	.title {
+		font-size: 20px;
+		line-height: 38px
+	}
+	.dropdown_menu{
+		position: absolute;
+		background-color: #fff;
+		border: 1px solid #ddd;
+		border-radius: 2px;
+		left: 50%;
+		top: 48px;
+		width: 87px;
+		margin-left: -43px;
+		z-index: 999999;
+		display: none;
+	}
+	.dropdown_menu li{
+		padding: 10px 0;
+	}
+	.active_li{
+		background-color: #1E9FFF;
+		color: #fff;
+	}
+</style>
+
+<body>
+	<div class="loading"> </div>
+	<div class="body">
+
+		<div class="loading">
+
+		</div>
+		<div class="body">
+			<!-- 客户分类详情 -->
+			<div>
+				<!-- 顶部客户按钮操作部分 -->
+				<div class="searchContainer">
+					<span class="title">
+						分销商管理
+					</span>
+					<!-- 搜索 -->
+					<div class="layui-form-item layui-inline">
+						<!--<div class="layui-inline" style="margin: 0;">
+							<label class="layui-form-label" for="date">
+								<i class="layui-icon" style="font-size: 30px;">&#xe637;</i>
+							</label>
+							<div class="layui-inline" style="width: 100px;">
+								<input name="date" id="date" lay-verify="date" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>-->
+
+
+						<!--<div class="layui-inline" style="margin: 0;">
+							<label class="layui-form-label" for="carNum">
+								车牌号
+							</label>
+							<div class="layui-inline" style="width: 130px;">
+								<input type="text" id="carNum" placeholder="例如：京A88888" autocomplete="off" class="layui-input">
+							</div>
+						</div>-->
+						<!--<div class="layui-inline layui-form" style="margin: 0;">
+							<label class="layui-form-label" for="payType">
+								收费方式
+							</label>
+							<div class="layui-inline" id="payType" style="width: 140px;">
+								<select name="payType" lay-verify="">
+									<option value="">请选择支付方式</option>
+									<option value="1">微信支付</option>
+									<option value="2">支付宝支付</option>
+									<option value="3">现金支付</option>
+								</select>
+							</div>
+						</div>-->
+
+						<!--<button class="layui-btn" style="vertical-align: 0;">
+							<i class="layui-icon searchSubBtn">&#xe615;</i> 搜索
+						</button>-->
+						<button class="layui-btn newAdd" style="vertical-align: 0;">
+							<i class="layui-icon">&#xe654;</i> 新增
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="table">
+				<!--<div class="tHead spaceBetween">
+					<span class="totalAccount">
+						当月总汇&#58;
+						<span class="red">&yen;
+							<span class="totalNum">88888888.8</span>
+						</span>
+						&#x3000; &#x3000; 微信&#58;
+						<span class="red">&yen;
+							<span class="weChatNum">
+								800000000.88
+							</span>
+						</span>
+						&#x3000; &#x3000; 支付宝&#58;
+						<span class="red">&yen;
+							<span class="alipayNum">
+								800000000.88
+							</span>
+						</span>
+						&#x3000; &#x3000; 现金&#58;
+						<span class="red">&yen;
+							<span class="cash">
+								800000000.88
+							</span>
+						</span>
+
+					</span>
+					<button class="layui-btn">
+						<img class="icon" src="./img/export.png" alt="">导出</button>
+				</div>-->
+				<table class="layui-table" lay-skin="line row">
+					<colgroup>
+						<!-- 车牌 -->
+						<col width="10%">
+						<col width="15%">
+						<col width="10%">
+						<col width="12%">
+						<col width="13%">
+						<col width="15%">
+						<col width="15%">
+						<!-- 停车时长 -->
+						<col width="10%">
+					</colgroup>
+					<thead>
+						<tr>
+							<th>推广人</th>
+							<th>号码</th>
+							<th>等级</th>
+							<th>累计佣金、打款佣金</th>
+							<th>下级分销商数</th>
+							<th>注册时间</th>
+							<!--<th>审核时间</th>-->
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>老薛</td>
+							<td>15526358974</td>
+							<td>会员</td>
+							<td>
+								<div>1200</div>
+								<div>800</div>
+							</td>
+							<td>10</td>
+							<td>2018-08-18</td>
+							<!--<td>2018-08-19</td>-->
+							<td class="operation">
+								<!--<button class="layui-btn layui-btn-primary">
+									<a href="javascript:;">操作<i class="layui-icon">&#xe625;</i></a>
+								</button>
+								<ul class="dropdown_menu">
+									<li>会员信息</li>
+									<li>删除分销商</li>
+									<li>删除会员</li>
+								</ul>-->
+								<button class="layui-btn layui-btn-xs editBtn">编辑</button>
+								<button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
+							</td>
+						</tr>
+						<tr>
+							<td>伏~~</td>
+							<td>15526358974</td>
+							<td>会员</td>
+							<td>
+								<div>1200</div>
+								<div>800</div>
+							</td>
+							<td>10</td>
+							<td>2018-08-18</td>
+							<!--<td>2018-08-19</td>-->
+							<td class="operation">
+								<button class="layui-btn layui-btn-xs editBtn">编辑</button>
+								<button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
+							</td>
+						</tr>
+						<tr>
+							<td>刘浩</td>
+							<td>15526358974</td>
+							<td>会员</td>
+							<td>
+								<div>1200</div>
+								<div>800</div>
+							</td>
+							<td>10</td>
+							<td>2018-08-18</td>
+							<!--<td>2018-08-19</td>-->
+							<td class="operation">
+								<button class="layui-btn layui-btn-xs editBtn">编辑</button>
+								<button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
+							</td>
+						</tr>
+						<tr>
+							<td>张俊</td>
+							<td>15526358974</td>
+							<td>会员</td>
+							<td>
+								<div>1200</div>
+								<div>800</div>
+							</td>
+							<td>10</td>
+							<td>2018-08-18</td>
+							<!--<td>2018-08-19</td>-->
+							<td class="operation">
+								<button class="layui-btn layui-btn-xs editBtn">编辑</button>
+								<button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
+								
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<!-- 分页 -->
+				<div id="pageBtn">
+
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+</body>
+
+</html>
+<script src='./js/jquery.min.js'></script>
+<script src="../resource/layui/layui.js"></script>
+<script>
+	$(function () {
+		$('.body').show();
+		$('.loading').hide();
+	});
+
+	layui.use(['laypage', 'layer', 'form', 'laydate'], function () {
+		var form = layui.form;
+		var laypage = layui.laypage;
+		var layer = layui.layer;
+		var laydate = layui.laydate;
+		//监听提交
+		laypage.render({
+			elem: 'pageBtn',
+			count: 100,
+			layout: ['prev', 'page', 'next', 'skip', 'count', 'limit'],
+			jump: function (obj) {
+				console.log(obj)
+			}
+		});
+
+		laydate.render({
+			elem: '#date',
+			value: new Date(),
+		});
+		
+		$(".dropdown_menu li").live("click",function(){
+			$(this).parent().hide();
+			var index=$(this).index();
+			var id= $(this).parent().attr("data-id");
+			switch (index){
+				case 0:
+					layer.open({
+						type:2,
+						title:"会员信息展示",
+						content:"memberMsg.html?id="+id,
+						area:["600px","350px"]
+					})
+					break;
+				case 1:
+					layer.open({
+						type:2,
+						content:"memberList.html?id="+id,
+						area:["100%","100%"]
+					})
+					break;
+				case 2:
+					layer.confirm("要删除该会员吗？",{
+						btn : [ '确定', '取消' ]
+					},function(index){
+						layer.close(index);
+						//进行后台的删除请求接口
+					})
+					break;
+				default:
+					break;
+			}
+			
+		})
+		
+		
+		
+	
+	$('.searchSubBtn').live('click', function () {
+		var data = $('#date').val();
+		var carNum = $('#carNum').val();
+		var payType = $('#payType input').val();
+	});
+	$(".operation button").on("click",function(e){
+		$(this).parent().parent().siblings().children().children(".dropdown_menu").hide();
+		$(this).siblings(".dropdown_menu").toggle();
+	})
+	$(".dropdown_menu li").hover(function(){
+		$(this).addClass("active_li")
+	},function(){
+		$(this).removeClass("active_li")
+	})
+	
+	$(".deleteBtn").click(function(){
+		layer.confirm("确认删除吗？",{
+			btn : [ '确定', '取消' ]
+		},function(index){
+			layer.close(index);
+			//进行后台的删除请求接口
+		})
+	})
+	$(".newAdd").live("click",function(){
+		layer.open({
+			type:2,
+			title:"分销商信息",
+			content:"addDistributor.html",
+			area:["600px","350px"],
+			btn: ['确认新增', '取消'], //只是为了演示
+	        yes: function(){
+	          //进行提交 并关闭 弹窗 
+	          console.log("关闭之前进行提交")
+	        },
+	        btn2: function(){
+	          layer.closeAll();
+	        },
+	        zIndex: layer.zIndex, //重点1
+	        success: function(layero){
+	          layer.setTop(layero); //重点2
+	          //这句话表示弹框成功打开
+	        }
+		})
+	})
+	
+	
+	})
+</script>

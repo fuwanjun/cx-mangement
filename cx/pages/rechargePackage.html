@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>充值套餐</title>
+	<meta charset='utf-8'>
+	<meta name='renderer' content='webkit'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='format-detection' content='telephone=no'>
+	<link rel="stylesheet" href="../resource/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
+	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
+	<style>
+		.cancel {
+			position: absolute;
+			top: -10px;
+			right: -10px;
+			width: 30px;
+			height: 30px;
+			background-color: #ffffff;
+			border-radius: 50%;
+			box-shadow: 0 0 2px gray;
+			cursor: pointer;
+		}
+
+		.cancel>i {
+			padding-top: 3px;
+
+			font-size: 30px;
+			line-height: 36px;
+			color: gray;
+		}
+
+
+		.details_box td {
+			width: 50% !important;
+
+		}
+		input[type=number] {
+			-moz-appearance:textfield;
+		}
+		input[type=number]::-webkit-inner-spin-button,
+		input[type=number]::-webkit-outer-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+		.layui-form-label{
+			width: 120px;
+		}
+		.layui-input-block{
+			margin-left: 120px;
+		}
+	</style>
+
+</head>
+
+<body>
+	<!-- 下面是一些第二行的东西 -->
+	<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+		<ul class="layui-tab-title">
+			<li class="layui-this">会员充值</li>
+			<li>折扣卡套餐</li>
+		</ul>
+		<div class="layui-tab-content"></div>
+	</div>
+	<div class="layui-tab-item layui-show">
+		<div class="layui-row">
+			<div class="layui-inline  orderManage" style="margin-top:10px">
+				会员充值
+			</div>
+			<button style="float: right;" type="button" class="layui-btn" id="addPackage">新增套餐</button>
+		</div>
+
+		<table class="layui-table" id="orderList" lay-skin="line" align="center">
+			<thead>
+			<tr align="center">
+				<th>套餐</th>
+				<th>充值金额</th>
+				<th>赠送金额</th>
+				<th>操作</th>
+			</tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>
+
+		<!-- 这个下面是分页 -->
+		<div id="page"></div>
+		<!--<button id="excel" class="layui-btn layui-btn-primary" type="button">导出EXCEL表格</button>-->
+		<div class="bg">
+
+		</div>
+	</div>
+
+	<div class="layui-tab-item">
+		<div class="layui-row">
+			<div class="layui-inline  orderManage" style="margin-top:10px">
+				折扣卡套餐
+			</div>
+			<button style="float: right;" type="button" class="layui-btn" id="addPackage2">新增套餐</button>
+		</div>
+
+		<table class="layui-table" id="orderList2" lay-skin="line" align="center">
+			<thead>
+			<tr align="center">
+				<th>套餐</th>
+				<th>充值金额</th>
+				<th>折扣</th>
+				<th>操作</th>
+			</tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>
+
+		<!-- 这个下面是分页 -->
+		<div id="page2"></div>
+		<!--<button id="excel" class="layui-btn layui-btn-primary" type="button">导出EXCEL表格</button>-->
+		<div class="bg">
+
+		</div>
+	</div>
+
+
+	
+</body>
+<div id="addCon" style="display: none; padding: 20px 20px 0 0;">
+	<form class="layui-form" action="">
+		<div class="layui-form-item">
+			<label class="layui-form-label">套餐名：</label>
+			<div class="layui-input-block">
+				<input id="addName" type="text" name="title" required  lay-verify="required" placeholder="请输入套餐名" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">充值金额：</label>
+			<div class="layui-input-block">
+				<input id="addInMoney" type="number" name="title" required  lay-verify="required" placeholder="请输入充值金额" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">赠送金额：</label>
+			<div class="layui-input-block">
+				<input id="addGiftMoney" type="number" name="title" required  lay-verify="required" placeholder="请输入赠送金额" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">排序：</label>
+			<div class="layui-input-block">
+				<input id="addSort" type="number" autocomplete="off" class="layui-input" value="0">
+			</div>
+		</div>
+	</form>
+	<button style="float: right;" type="button" class="layui-btn" id="addCheck">保存套餐</button>
+</div>
+<div id="addCon2" style="display: none; padding: 20px 20px 0 0;">
+	<form class="layui-form" action="">
+		<div class="layui-form-item">
+			<label class="layui-form-label">套餐名：</label>
+			<div class="layui-input-block">
+				<input id="addName2" type="text" name="title" required  lay-verify="required" placeholder="请输入套餐名" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">充值金额：</label>
+			<div class="layui-input-block">
+				<input id="addInMoney2" type="number" name="title" required  lay-verify="required" placeholder="请输入充值金额" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">折扣：</label>
+			<div class="layui-input-block">
+				<input id="addGiftMoney2" type="number" name="title" required  lay-verify="required" placeholder="请输入储值卡折扣" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">排序：</label>
+			<div class="layui-input-block">
+				<input id="addSort2" type="number" autocomplete="off" class="layui-input" value="0">
+			</div>
+		</div>
+	</form>
+	<button style="float: right;" type="button" class="layui-btn" id="addCheck2">保存套餐</button>
+</div>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript" src="../resource/js/common.js"></script>
+<script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../resource/layui/layui.js"></script>
+<script>
+$(function(){
+    getAllPackage();
+    savingCard();
+});
+$(".layui-tab-title li").click(function(){
+   	var i=$(this).index();
+   	$(".layui-tab-item").removeClass("layui-show");
+    $(".layui-tab-item").eq(i).addClass("layui-show");
+});
+//获取所有套餐类型
+function getAllPackage(){
+    $.ajax({
+        url: globalUrl + "/rechargeCard/getRechargeList",
+        type: "get",
+		data:{type:'balance'},
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("token", $.cookie("token"));
+        },
+        crossDomain: true,
+		success:function(data){
+            console.log(data);
+            layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
+                var element = layui.element;
+                var laydate = layui.laydate;
+                var laypage = layui.laypage
+                    , layer = layui.layer;
+                var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+				if(data.code==0){
+                    $("#orderList tbody").html("");
+					for(var i=0;i<data.data.length;i++){
+					    var packageName=data.data[i].remark?data.data[i].remark:"";
+                        var inNum=data.data[i].price?data.data[i].price:"";
+                        var giftNum=data.data[i].giftPrice?data.data[i].giftPrice:"";
+                        var switchBtn="";
+                        if(data.data[i].state=='USABLE'){
+                            switchBtn='<button type="button" class="layui-btn layui-btn-primary layui-btn-sm stopBtn">停用</button>';
+						}else{
+                            switchBtn='<button type="button" class="layui-btn layui-btn-sm startBtn">启用</button>';
+						}
+						var item='<tr id="'+data.data[i].id+'">' +
+								 	'<td>'+packageName+'</td>' +
+									'<td>'+inNum+'</td>' +
+									'<td>'+giftNum+'</td>' +
+									'<td>' +
+										switchBtn +
+                            			'<button type="button" class="layui-btn layui-btn-danger layui-btn-sm delBtn">删除</button>'+
+									'</td>'+
+								 '</tr>';
+						$(item).appendTo($("#orderList tbody"));
+					}
+				}else{
+				    layer.open({
+						content:data.message
+					})
+				}
+            })
+		}
+	})
+}
+
+//停用套餐
+$(".stopBtn").live("click",function(){
+    var packageId=$(this).parent().parent().attr("id");
+    $.ajax({
+        url: globalUrl + "/rechargeCard/disableDetail",
+        type: "post",
+		data:{id:packageId},
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("token", $.cookie("token"));
+        },
+        crossDomain: true,
+		success:function(data){
+            if(data.code==0){
+                getAllPackage();
+			}else{
+                alert(data.message);
+			}
+		}
+	})
+});
+
+//启用套餐
+$(".startBtn").live("click",function(){
+    var packageId=$(this).parent().parent().attr("id");
+    $.ajax({
+        url: globalUrl + "/rechargeCard/enableDetail",
+        type: "post",
+        data:{id:packageId},
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("token", $.cookie("token"));
+        },
+        crossDomain: true,
+        success:function(data){
+			if(data.code==0){
+                getAllPackage();
+			}else{
+                alert(data.message);
+			}
+        }
+    })
+});
+var add="";
+//	新增套餐
+$("#addPackage").click(function(){
+	layui.use('layer',function(){
+	    var layer=layui.layer;
+	    add=layer.open({
+			type:1,
+			content:$("#addCon"),
+			area:['480px','360px']
+		})
+	})
+});
+
+//	保存新增套餐
+$("#addCheck").click(function(){
+    var name=$("#addName").val();
+    var price=$("#addInMoney").val();
+    var giftPrice=$("#addGiftMoney").val();
+    var sort=$("#addSort").val();
+    layui.use('layer',function(){
+        var layer=layui.layer;
+        if(name!="" && price!="" && giftPrice!="" &&sort!=""){
+            $.ajax({
+                url: globalUrl + "/rechargeCard/putDetail",
+                type: "post",
+                data:{
+                    remark:name,
+                    price:price,
+                    giftPrice:giftPrice,
+                    sort:sort
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("token", $.cookie("token"));
+                },
+                crossDomain: true,
+                success:function(data){
+                    console.log(data);
+					if(data.code==0){
+						layer.close(add);
+                        getAllPackage();
+						layer.open({
+							content:data.message
+						})
+
+					}else{
+                        layer.open({
+                            content:data.message
+                    })
+					}
+                }
+            })
+        }else{
+			layer.open({
+				content:"请填写完整的套餐信息"
+			})
+        }
+	})
+});
+
+//删除套餐
+$(".delBtn").live("click",function(){
+    var packageId=$(this).parent().parent().attr("id");
+    layui.use('layer',function(){
+        var delPop=layer.open({
+			content:"确认删除该套餐？",
+			btn:['取消','确定'],
+			yes:function(){
+			    layer.close(delPop);
+			},
+			btn2:function(){
+				$.ajax({
+                    url: globalUrl + "/rechargeCard/deleteDetail",
+                    type: "post",
+                    data:{id:packageId},
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("token", $.cookie("token"));
+                    },
+                    crossDomain: true,
+					success:function(data){
+                        console.log(data);
+						if(data.code==0){
+                            layer.open({
+                                content:data.message
+                            });
+                            getAllPackage();
+						}else{
+						    layer.open({
+								content:data.message
+							})
+						}
+					}
+				})
+			}
+		})
+	})
+});
+
+//	新增套餐
+$("#addPackage2").click(function(){
+    layui.use('layer',function(){
+        var layer=layui.layer;
+        add=layer.open({
+            type:1,
+            content:$("#addCon2"),
+            area:['480px','360px']
+        })
+    })
+});
+
+//保存储值卡套餐
+$("#addCheck2").click(function(){
+    var name=$("#addName2").val();
+    var price=$("#addInMoney2").val();
+    var discount=$("#addGiftMoney2").val();
+    var sort=$("#addSort2").val();
+    layui.use('layer',function(){
+        var layer=layui.layer;
+        if(name!="" && price!="" && discount!="" &&sort!=""){
+            $.ajax({
+                url: globalUrl + "/rechargeCard/putDetail",
+                type: "post",
+                data:{
+                    remark:name,
+                    price:price,
+                    discount:discount,
+                    sort:sort
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("token", $.cookie("token"));
+                },
+                crossDomain: true,
+                success:function(data){
+                    console.log(data);
+                    if(data.code==0){
+                        layer.close(add);
+                        savingCard();
+                        layer.open({
+                            content:data.message
+                        })
+
+                    }else{
+                        layer.open({
+                            content:data.message
+                        })
+                    }
+                }
+            })
+        }else{
+            layer.open({
+                content:"请填写完整的套餐信息"
+            })
+        }
+    })
+});
+
+//停用储值卡套餐
+$(".stop2").live("click",function(){
+    var packageId=$(this).parent().parent().attr("packageId");
+    $.ajax({
+        url: globalUrl + "/rechargeCard/disableDetail",
+        type: "post",
+        data:{id:packageId},
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("token", $.cookie("token"));
+        },
+        crossDomain: true,
+        success:function(data){
+            if(data.code==0){
+                savingCard();
+            }else{
+                alert(data.message);
+            }
+        }
+    })
+});
+//启用套餐
+$(".stop3").live("click",function(){
+    var packageId=$(this).parent().parent().attr("packageId");
+    $.ajax({
+        url: globalUrl + "/rechargeCard/enableDetail",
+        type: "post",
+        data:{id:packageId},
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("token", $.cookie("token"));
+        },
+        crossDomain: true,
+        success:function(data){
+            if(data.code==0){
+                savingCard();
+            }else{
+                alert(data.message);
+            }
+        }
+    })
+});
+
+//删除储值卡套餐
+$(".del2").live("click",function(){
+    var packageId=$(this).parent().parent().attr("packageId");
+    alert(packageId);
+    layui.use('layer',function(){
+        var delPop=layer.open({
+            content:"确认删除该套餐？",
+            btn:['取消','确定'],
+            yes:function(){
+                layer.close(delPop);
+            },
+            btn2:function(){
+                $.ajax({
+                    url: globalUrl + "/rechargeCard/deleteDetail",
+                    type: "post",
+                    data:{id:packageId},
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("token", $.cookie("token"));
+                    },
+                    crossDomain: true,
+                    success:function(data){
+                        console.log(data);
+                        if(data.code==0){
+                            layer.open({
+                                content:data.message
+                            });
+                            savingCard();
+                        }else{
+                            layer.open({
+                                content:data.message
+                            })
+                        }
+                    }
+                })
+            }
+        })
+    })
+});
+
+
+//	获取所有储值卡套餐
+function savingCard(){
+    $.ajax({
+        url: globalUrl + "/rechargeCard/getRechargeList",
+        type: "get",
+        data:{type:'discount'},
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("token", $.cookie("token"));
+        },
+        crossDomain: true,
+		success:function(data){
+            console.log(data);
+            if(data.code==0){
+                $("#orderList2 tbody").html("");
+                if(data.data.length==0){
+                    noPackage='<tr><td>暂无储值卡套餐</td></tr>';
+                    $(noPackage).appendTo($("#orderList2 tbody"));
+				}else{
+					for(var i=0;i<data.data.length;i++){
+					    var btn='';
+					    if(data.data[i].state=='USABLE'){
+					        btn='<button type="button" class="layui-btn layui-btn-sm layui-btn-primary stop2">停用</button>';
+						}else{
+                            btn='<button type="button" class="layui-btn layui-btn-sm stop3">启用</button>';
+						}
+					    var item='<tr packageId="'+data.data[i].id+'">' +
+									'<td>'+data.data[i].remark+'</td>' +
+									'<td>'+data.data[i].price+'</td>' +
+									'<td>'+data.data[i].discount+'</td>' +
+									'<td>' +
+										btn +
+                            			'<button type="button" class="layui-btn layui-btn-sm layui-btn-danger del2">删除</button>' +
+									'</td>' +
+								 '</tr>';
+						$(item).appendTo($("#orderList2 tbody"));
+					}
+				}
+			}
+		}
+	})
+}
+</script>
+</html>

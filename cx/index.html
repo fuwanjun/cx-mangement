@@ -1,0 +1,341 @@
+<!-- 添加申请 -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>常洗后台管理</title>
+	<link rel="shortcut icon" type="image/x-icon" href="./images/logo.png" media="screen" />
+	<link rel="stylesheet" href="./resource/layui/css/layui.css">
+	<link rel="stylesheet" href="./css/index.css">
+</head>
+<style>
+	body {
+		user-select: none;
+	}
+
+	.layui-layout-admin .layui-body {
+		bottom: 1px !important;
+	}
+
+	.bg {
+		width: 140px;
+		height: calc(100vh - 60px);
+		position: absolute;
+		top: 60px;
+		left: 0px;
+		background-color: rgba(0, 0, 0, 0.5);
+		z-index: 100000;
+	}
+
+	.spread {
+		width: 50px;
+		height: 50px;
+		background-color: red;
+		border-radius: 50%;
+		position: absolute;
+		bottom: 40px;
+		left: 0px;
+		z-index: 10000;
+
+	}
+</style>
+
+<body class="layui-layout-body">
+
+	<div class="layui-layout layui-layout-admin">
+		<div class="layui-header">
+			<div class="layui-logo pointer">
+
+				<span class="title" style="font-weight: bold;">
+					常洗后台管理中心
+				</span>
+
+			</div>
+			<ul class="layui-nav layui-layout-right">
+				<!--<li class="layui-nav-item">-->
+					<!--<a class="pointer">-->
+						<!--<img src="http://t.cn/RCzsdCq" class="layui-nav-img"><span class="username">贤心</span>-->
+					<!--</a>-->
+					<!--<dl class="layui-nav-child">-->
+						<!--<dd>-->
+							<!--<a href="">基本资料</a>-->
+						<!--</dd>-->
+						<!--<dd>-->
+							<!--<a href="">安全设置</a>-->
+						<!--</dd>-->
+					<!--</dl>-->
+				<!--</li>-->
+				<li class="layui-nav-item">
+					<a id="goOut"><i class="layui-icon" style="font-size: 14px; color: #ffffff;">&#x1002;</i>退出登录</a>
+				</li>
+
+			</ul>
+		</div>
+		<div class="layui-side layui-bg-black   indexLeft">
+			<div class="layui-side-scroll  pointer">
+				<ul class="layui-nav layui-nav-tree" lay-filter="test">
+				</ul>
+			</div>
+		</div>
+		<div class="layui-body">
+			<iframe class="pageContainer">
+			</iframe>
+		</div>
+	</div>
+	<div class="bg">
+	</div>
+	<div class="spread" id="spread" style="display:none">
+	</div>
+</body>
+<script src="./resource/layui/layui.js"></script>
+<script src="./resource/js/jquery.min.js"></script>
+<script src="./resource/js/jquery.cookie.js"></script>
+<script src="./resource/js/common.js"></script>
+<script>
+	//JavaScript代码区域
+	var nowUrl="";
+	layui.use(['element','layer'], function () {
+		var element = layui.element
+		,layer=layui.layer;
+		var token=$.cookie("token");
+		$(function(){
+			if(!token){
+				window.location.href="login.html";
+				return false;
+			}
+			var account=JSON.parse($.cookie("data")).account;
+			var userName=JSON.parse($.cookie("data")).userName;
+			var userPicture=JSON.parse($.cookie("data")).userPicture;
+			getMenu(account);
+		});
+		function getCurrentStatus(lastStatus,currentStatus){
+			//获取刷新之前的状态
+			try {
+				lastStatus = JSON.parse(sessionStorage.getItem('currenStatus'));
+			} catch (error) {
+		
+			}
+			if (lastStatus) {
+				if (lastStatus.src) {
+					$('.pageContainer').attr('src', lastStatus.src);
+				} else {
+					$('.pageContainer').attr('src', nowUrl);
+					$('dd.item').eq(0).addClass('layui-this');
+				}
+				if (lastStatus.item) {
+					$('ul.layui-nav-tree').find('dd.item').eq(lastStatus.item).addClass('layui-this');
+				} else {
+					$('ul.layui-nav-tree .item').eq(0).addClass('layui-this');
+				}
+				$('.layui-this').parent().parent().addClass('layui-nav-itemed');
+			} else {
+				$('.pageContainer').attr('src', nowUrl);
+				$('.item').eq(0).addClass('layui-this');
+				$('.layui-this').parent().parent().addClass('layui-nav-itemed');
+			}
+		}
+
+		function getMenu(account){
+			$.ajax({
+				type:"get",
+				url:globalUrl+"menu/getMenuByAccount",
+				async:true,
+				dataType:"json",
+				data:{account:account},
+				crossDomain:true,
+				beforeSend:function(request){
+					request.setRequestHeader("token",token);
+				},
+				success:function(res){
+					if(res.code==0){
+						console.log(res)
+						var str='';
+						$.each(res.data, function(index,val) {
+							str+='<li class="layui-nav-item items">';
+							var menuUrl=!val.menuUrl?"javascript:;":val.menuUrl;
+							if(!val.menuUrl&&val.childMenus){
+							    if(!nowUrl){
+                                    nowUrl=val.childMenus[0].menuUrl;
+								}
+								str+='<a src="'+menuUrl+'">'+val.menuName+'<span class="layui-nav-more"><span></a>';
+							}else{
+
+								str+='<a src="'+menuUrl+'">'+val.menuName+'</a>';
+							}
+							if(val.childMenus){
+								str+='<dl class="layui-nav-child">';
+								$.each(val.childMenus, function(ind,v) {
+									str+='<dd class="item">';
+									str+='<a src="'+v.menuUrl+'">'+v.menuName+'</a>';
+									str+='</dd>';
+								});
+								str+='</dl>';
+							}
+							str+='</li>';
+						});
+						$("ul.layui-nav-tree").html(str);
+						getCurrentStatus();
+					}else if(res.code==-1){
+						layer.msg("登录失败！");
+						window.location.href="login.html";
+					}
+				}
+			});
+		}
+		
+	});
+
+	$('#goOut').click(function(){
+		layui.use('layer',function(){
+		    var layer=layui.layer;
+		    var outPop=layer.open({
+				title:'退出登录',
+				content:'确定退出当前账号？',
+				btn:['确定','取消'],
+				yes:function(){
+                    clearAllCookie();
+                    window.location.href="login.html";
+				},
+				btn2:function(){
+				    layer.close(outPop);
+				}
+			})
+		})
+	});
+
+
+	/**
+	 * 刷新后恢复到上次打开的状态 先保存当前状态
+	 */
+	var currenStatus = {};
+	var lastStatus = null;
+	var pcOryidong = false;
+	
+	
+	// 向iframe内添加内容并更新最新的链接
+	$('a').live('click', function (e) {
+		e.preventDefault();
+		var src = $(this).attr('src');
+		if (src=="javascript:;") {
+			$(this).parent("li").toggleClass("layui-nav-itemed");
+		}else{
+			currenStatus.src = src;
+			$('.pageContainer').attr('src', src);
+			updataStatus();
+			if (pcOryidong) {
+				$(".indexLeft").hide();
+				$('.spread').show()
+			}
+		}
+	});
+	
+	$("ul.layui-nav-tree .layui-nav-child a").live("click",function(e){
+		$("ul.layui-nav-tree .layui-nav-child .item").removeClass("layui-this");
+		$("ul.layui-nav-tree .layui-nav-child .item a").removeClass("layui-this");
+		$(this).addClass("layui-this");
+		var src = $(this).attr('src');
+	});
+	
+//	$("ul.layui-nav-tree .layui-nav-item.items").live("click",function(e){
+//		if($(this).children().hasClass("layui-nav-child")){
+//			$("ul.layui-nav-tree .layui-nav-child .item").removeClass("layui-this");
+//			$("ul.layui-nav-tree .layui-nav-child .item a").removeClass("layui-this");
+//			$(this).children(".layui-nav-child").find(".item").addClass("layui-this");
+//			var src = $(this).children("layui-nav-child").find("a").attr('src');
+//		}else{
+//			$("ul.layui-nav-tree .layui-nav-child .item").removeClass("layui-this");
+//			$("ul.layui-nav-tree .layui-nav-child .item a").removeClass("layui-this");
+//			$(this).addClass("layui-this");
+//			var src = $(this).children("a").attr('src');
+//		}
+//	})
+
+
+	$('dd').live('click', function () {
+		currenStatus.item = $('.item').index(this);
+		updataStatus();
+	});
+
+	// 弹框点出时阻止掉导航栏点击
+	$('.bg').hide();
+
+	function disableBtn() {
+		$('.bg').fadeIn();
+	}
+	
+	function ableBtn() {
+		$('.bg').fadeOut();
+	}
+
+
+	function updataStatus() {
+		var data = JSON.stringify(currenStatus)
+		console.log(data);
+		sessionStorage.setItem('currenStatus', data);
+	}
+
+
+	function yidong() {
+
+		$('.bg').remove()
+
+		pcOryidong = true;
+
+		$(".indexLeft").hide()
+		$('.spread').show()
+
+		$(".layui-body").css({
+			'left': "0"
+		})
+
+
+	}
+
+	$(".spread").live("click", function () {
+
+		$(".indexLeft").show()
+
+		$('.spread').hide()
+
+	});
+
+
+
+	function pc() {
+
+
+	}
+
+
+	function browserRedirect() {
+		var sUserAgent = navigator.userAgent.toLowerCase();
+		var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+		var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+		var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+		var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+		var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+		var bIsAndroid = sUserAgent.match(/android/i) == "android";
+		var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+		var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+
+		if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+			yidong()
+		} else {
+			pc()
+		}
+	}
+
+	browserRedirect();
+
+
+
+
+
+
+
+</script>
+
+
+
+</html>

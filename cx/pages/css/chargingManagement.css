@@ -1,0 +1,267 @@
+.layui-row {
+    display: flex;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.layui-row>div {
+    flex: 1;
+    height: calc(100vh - 60px);
+    /* background-color: #f1f1f1; */
+    overflow-y: auto;
+    margin-left: 20px;
+}
+
+.tip {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.next_tip {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-left: 10px;
+}
+
+/* 这个是充电的管理样式的设置 */
+.content1 {
+    margin-top: 15px;
+    padding-bottom: 10px;
+}
+
+.time_list {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    background-color: white;
+    padding-bottom: 15px;
+    position: relative;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+   
+    /* border: 1px solid #999999; */
+   
+   
+}
+
+.charging_rumber {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.shijianduan {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.time {
+    font-weight: bold;
+}
+
+.time_box {
+    height: 98px;
+    padding-top: 15px;
+    margin-left: 20px;
+}
+
+.edit2 {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.delete{
+
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+
+.increaseTime {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: white;
+
+    background-color: #f1f1f1;
+    border-radius: 5px;
+}
+
+/*下面是电量区间的样式设置*/
+
+.content2 {
+    margin-top: 15px;
+  
+}
+
+.show1 {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+    background-color: white;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+}
+
+.set {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.bottom_tip {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.show2 {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+    background-color: white;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    position: relative;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+}
+
+.dao {
+    font-weight: bold;
+    font-size: 16px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.warn {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.edit {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/*下面是弹框内容的东西编辑编辑修改电量*/
+
+.tip_top {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.powerSettings {
+    display: flex;
+}
+
+.powerSettings>div {
+    text-align: center;
+    flex: 5;
+}
+
+.powerSettings>.middle {
+    text-align: center;
+    line-height: 37px;
+    flex: 1;
+    font-weight: bold;
+}
+
+.middle_tip {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.form_box {
+    margin-top: 15px;
+}
+
+.anniuBox {
+    display: flex;
+}
+
+.anniuBox div {
+    flex: 1;
+}
+
+.cancerOrsure {
+    display: flex
+}
+
+.cancerOrsure div {
+    flex: 4;
+}
+
+.cancerOrsure div layui-btn {
+    flex: 1;
+    height: 60px;
+}
+
+/* 这边是充电管理电量样式阴影样式的设置 */
+
+.duanyi {
+    display: flex;
+}
+
+.biaozhi1{
+    flex: 1;
+    font-size: 18px;
+    font-weight: bold;
+
+}
+
+.timeInterval{
+    flex: 5;
+    /* background-color: black; */
+}
+
+
+.recharge_robote_num{
+    font-size: 18px;
+     font-weight: bold;
+   text-align: center;
+   
+   margin-top: 40px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

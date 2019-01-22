@@ -1,0 +1,176 @@
+<!-- 添加申请 -->
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>常洗</title>
+	<link rel="shortcut icon" type="image/x-icon" href="./images/p.png" media="screen" />
+	<link rel="stylesheet" href="./resource/layui/css/layui.css">
+	<link rel="stylesheet" href="css/public.css">
+</head>
+<style>
+	* {
+		box-sizing: border-box;
+	}
+
+	.container {
+		padding-top: 70px;
+	}
+
+	.logo {
+		width: 159px;
+		height: 134px;
+		display: block;
+		margin: 10px auto;
+	}
+
+	.mamnageTitle {
+		line-height: 67px;
+		color: rgba(16, 16, 16, 1);
+		font-size: 46px;
+		text-align: center;
+		font-family: 'Roboto';
+	}
+
+	.form {
+		width: 500px;
+		margin: 30px auto;
+		padding: 50px 50px;
+		box-shadow: 0 0 5px #bbbbbb;
+		border-radius: 4px;
+	}
+
+	.formItem {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		border: 1px solid #bbbbbb;
+		width: 400px;
+		padding: 9px;
+		margin: 10px 0;
+		border-radius: 4px;
+	}
+
+	.label {
+		width: 28px;
+		height: 28px;
+	}
+
+	.label>img {
+		width: 100%;
+		height: 100%;
+	}
+
+	.input {
+		width: 352px;
+		height: 28px;
+		border: none;
+		padding: 0 0 0 20px;
+	}
+
+	.layui-btn {
+		width: 100%;
+		margin: 20px 0 0 0;
+	}
+
+	.customerService {
+		color: rgba(153, 153, 153, 1);
+		font-size: 16px;
+		text-align: center;
+		font-family: 'Roboto';
+		margin-bottom: 20px;
+	}
+</style>
+
+<body>
+	<div class="container">
+
+		<img class="logo" src="./images/logo.png" alt="常洗洗衣">
+		<p class="mamnageTitle">
+			常洗洗衣后台管理中心
+		</p>
+
+		<!-- 输入框 -->
+		<form class="form layui-form">
+			<div class="layui-form-item input-item">
+				<label for="userName">用户名</label>
+				<input type="text" placeholder="请输入用户名" autocomplete="off" id="userName" class="layui-input" lay-verify="required">
+			</div>
+			<div class="layui-form-item input-item">
+				<label for="password">密码</label>
+				<input type="password" placeholder="请输入密码" autocomplete="off" id="password" class="layui-input" lay-verify="required">
+			</div>
+			<div class="layui-form-item">
+				<button class="layui-btn layui-block" lay-filter="login" lay-submit>登录</button>
+			</div>
+		</form>
+
+		<p class="customerService">常洗客服：400-88208820</p>
+	</div>
+</body>
+
+<script src="./resource/layui/layui.js"></script>
+<script src="./resource/js/jquery.min.js"></script>
+<script src="./resource/js/jquery.cookie.js"></script>
+<script src="./resource/js/common.js"></script>
+<script>
+	
+	layui.use(['form', 'layedit', 'laydate','layer'], function(){
+	  var form = layui.form
+	  ,layer = layui.layer
+	  ,layedit = layui.layedit
+	  ,laydate = layui.laydate;
+	  //登录按钮
+	      form.on("submit(login)",function(data){
+			  var username=$("#userName").val();
+			  var password=$("#password").val();
+			  
+	          var _this=this;
+			  $.ajax({
+				  data:{account:username,password:password},
+				  type:"post",
+				  url:globalUrl+"userAdmin/login",
+				  beforeSend:function(){
+					$(_this).text("登录中...").attr("disabled","disabled").addClass("layui-disabled");  
+				  },
+				  success:function(res){
+					  console.log(res);
+					  if(res.code==1){
+					  	$.cookie("data",encodeURI(JSON.stringify(res.data)));
+					  	$.cookie("token",res.token);
+						layer.msg(res.msg);
+						window.location.href="index.html";
+					  }else{
+						 layer.msg(res.msg);
+						 $(_this).text("登录").removeAttr("disabled").removeClass("layui-disabled");
+					  }
+					  
+				  }
+			  })
+	      });
+	  
+	      //表单输入效果
+	      $(".loginBody .input-item").click(function(e){
+	          e.stopPropagation();
+	          $(this).addClass("layui-input-focus").find(".layui-input").focus();
+	      });
+	      $(".loginBody .layui-form-item .layui-input").focus(function(){
+	          $(this).parent().addClass("layui-input-focus");
+	      });
+	      $(".loginBody .layui-form-item .layui-input").blur(function(){
+	          $(this).parent().removeClass("layui-input-focus");
+	          if($(this).val() != ''){
+	              $(this).parent().addClass("layui-input-active");
+	          }else{
+	              $(this).parent().removeClass("layui-input-active");
+	          }
+	      })
+	  
+	  });
+  
+	
+</script>
+
+</html>

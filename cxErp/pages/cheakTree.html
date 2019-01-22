@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<HTML>
+
+<HEAD>
+	<TITLE> ZTREE DEMO - checkbox</TITLE>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<!-- <link rel="stylesheet" href="./css/demo.css" type="text/css"> -->
+	<link rel="stylesheet" href="./css/zTreeStyle.css" type="text/css">
+	<script type="text/javascript" src="./js/jquery.min.js"></script>
+	<script type="text/javascript" src="./js/jquery.ztree.core.js"></script>
+	<script type="text/javascript" src="./js/jquery.ztree.excheck.js"></script>
+	<SCRIPT type="text/javascript">
+		var setting = {
+			check: {
+				enable: true
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			callback: {
+				onCheck: getItemId,
+				beforeClick: beforeClick,
+			},
+		};
+
+		var zNodes = [
+			// 首页
+			{
+				id: '1',
+				name: "首页",
+				children: [{
+					id: '1-1',
+					name: "运行监控",
+				},
+				{
+					id: '1-2',
+					name: "日常监控",
+				},
+				]
+			},
+			// 订单管理
+			{
+				id: '2',
+				name: "订单管理",
+				children: [{
+					id: '2-1',
+					name: "订单管理",
+					children: [{
+						id: '2-1-1',
+						name: "转移空托盘",
+					},
+					{
+						id: '2-1-2',
+						name: "增加任务",
+					},
+					{
+						id: '2-1-3',
+						name: "现金取车",
+					},
+					{
+						id: '2-1-4',
+						name: "增加免费取物次数",
+					},
+					{
+						id: '2-1-5',
+						name: "修改车牌号",
+					},
+					{
+						id: '2-1-6',
+						name: "暂停任务",
+					},
+					{
+						id: '2-1-7',
+						name: "取物超时",
+					},
+					{
+						id: '2-1-8',
+						name: "取车超时",
+					}
+					],
+				},
+				{
+					id: '2-2',
+					name: "历史订单",
+				},
+				],
+			},
+			// 机器人管理
+			{
+				id: '3',
+				name: "机器人管理",
+				children: [{
+					id: '3-1',
+					name: "机器人列表",
+					children: [{
+						id: '3-1-1',
+						name: "增加机器人",
+					},
+					{
+						id: '3-1-2',
+						name: "删除机器人",
+					},
+					{
+						id: '3-1-3',
+						name: "去充电",
+					},
+					{
+						id: '3-1-4',
+						name: "修改ip地址",
+					},
+					{
+						id: '3-1-5',
+						name: "刷新坐标位置",
+					},
+					{
+						id: '3-1-6',
+						name: "暂停使用",
+					},
+					],
+				},
+				{
+					id: '2-2',
+					name: "历史订单",
+					children: [{
+						id: '3-2-1',
+						name: "电量管理",
+					},
+					{
+						id: '3-2-2',
+						name: "电量区间设置",
+					},
+					],
+				},
+				],
+			},
+			// 车厂信息管理
+			{
+				id: '4',
+				name: "停车厂信息先管理",
+				children: [{
+					id: '4-1',
+					name: "地图",
+					children: [{
+						id: '4-1-1',
+						name: "导入地图",
+					},
+					{
+						id: '4-1-2',
+						name: "暂停所有机器人运行",
+					},
+					{
+						id: '4-1-3',
+						name: "地图管理",
+					},
+					],
+				},
+				{
+					id: '4-2',
+					name: "出口管理",
+					children: [{
+						id: '4-2-1',
+						name: "出入口设置",
+					},
+					{
+						id: '4-2-2',
+						name: "时间段设置",
+					},
+					{
+						id: '4-2-3',
+						name: "出入口次数统计",
+					},
+					],
+				},
+				{
+					id: '4-3',
+					name: "费用管理",
+					children: [{
+						id: '4-3-1',
+						name: "费用设置",
+					},
+					{
+						id: '4-3-2',
+						name: "时间段优惠",
+					},
+					{
+						id: '4-3-2',
+						name: "停车时长优惠",
+					},
+					],
+				},
+				],
+			},
+			// 历史记录
+			{
+				id: '5',
+				name: "历史记录",
+				children: [{
+					id: '5-1',
+					name: "操作记录",
+				},
+				{
+					id: '5-2',
+					name: "维修记录",
+					children: [{
+						id: '5-3-1',
+						name: "新增维修记录",
+					},
+					{
+						id: '5-3-2',
+						name: "操作",
+					},
+					],
+				},
+				]
+			},
+			// 客户管理
+			{
+				id: '6',
+				name: "客户管理",
+				children: [{
+					id: '6-1',
+					name: "客户分组",
+					children: [{
+						id: '6-1-1',
+						name: "添加分组",
+					},
+					{
+						id: '6-1-2',
+						name: "组(编辑,删除)",
+					},
+					{
+						id: '6-1-3',
+						name: "添加客户",
+					},
+					{
+						id: '6-1-4',
+						name: "客户操作(编辑,删除,转移)",
+					},
+					],
+				},
+				{
+					id: '6-2',
+					name: "优惠方式",
+					children: [{
+						id: '6-2-1',
+						name: "添加优惠方式",
+					},
+					{
+						id: '6-2-2',
+						name: "操作(编辑,删除)",
+					},
+					],
+				},
+				]
+			},
+			// 财务模块
+			{
+				id: '7',
+				name: "财务模块",
+				children: [{
+					id: '7-1',
+					name: "日报表",
+					children: [{
+						id: '7-1-1',
+						name: "财务交接",
+					},
+					{
+						id: '7-1-2',
+						name: "申请交班",
+					},
+					{
+						id: '7-1-3',
+						name: "查看交班记录",
+					},
+					{
+						id: '7-1-4',
+						name: "导出",
+					},
+					],
+				},
+				{
+					id: '7-2',
+					name: "月报表",
+					children: [{
+						id: '7-2-1',
+						name: "导出",
+					},],
+				},
+				{
+					id: '7-3',
+					name: "年报表",
+					children: [{
+						id: '7-3-1',
+						name: "导出",
+					},],
+				},
+				]
+			},
+			// 系统配置
+			{
+				id: '8',
+				name: "系统配置",
+				children: [{
+					id: '8-1',
+					name: "系统配置",
+					children: [
+						{
+							id: '8-1-1',
+							name: "转移空托盘",
+						},
+						{
+							id: '8-1-2',
+							name: "员工列表",
+						},
+						{
+							id: '8-1-3',
+							name: "新增账号",
+						},
+						{
+							id: '8-1-4',
+							name: "管理账号",
+						}
+					],
+				}
+				],
+			},
+		];
+
+
+		function setCheck() {
+			var zTree = $.fn.zTree.getZTreeObj("rightTree");
+			var type = {
+				"Y": 'ps',
+				"N": 'ps'
+			};
+			zTree.setting.check.chkboxType = type;
+		}
+
+		$(document).ready(function () {
+			$.fn.zTree.init($("#rightTree"), setting, zNodes);
+			var treeObj = $.fn.zTree.getZTreeObj("rightTree");
+			treeObj.expandAll(true);
+			setCheck();
+		});
+
+		function getItemId(e, treeId, treeNode, clickFlag) {
+			var treeObj = $.fn.zTree.getZTreeObj("rightTree"),
+				nodes = treeObj.getCheckedNodes(true),
+				v = "";
+			for (var i = 0; i < nodes.length; i++) {
+				v += nodes[i].id + ",";
+			}
+			console.group('选中的参数');
+			console.log(v);
+			console.groupEnd();
+		};
+
+
+		function beforeClick(treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj("rightTree");
+			zTree.checkNode(treeNode, !treeNode.checked, null, true);
+			return false;
+		}
+	</SCRIPT>
+</HEAD>
+
+<body>
+	<div class="content_wrap">
+		<div class="zTreeDemoBackground left">
+			<ul id="rightTree" class="ztree"></ul>
+		</div>
+	</div>
+</body>
+
+</HTML>
