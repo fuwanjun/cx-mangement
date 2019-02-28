@@ -323,11 +323,11 @@
                             '<p style="text-align: center;font-size: 16px; margin-top: 10px;">条码号：<span>' + barCode + '</span></p>' +
                             '<p style="text-align: center;font-size: 16px; margin-top: 10px; margin-bottom: 10px;">' + data.data.workName + '人：<span>' + data.data.backUser.username + ' </span> ' + data.data.backUser.usercode + '</p>',
                             area: ['360px'],
-                            btn: ['取消', '确定'],
-                            yes: layer.closeAll(),
-                            btn2: function () {
+                            btn: ['确定','取消'],
+                            yes: function () {
                                 backCheck(itemId, 40);
-                            }
+                            },
+                            btn2: layer.closeAll()
                         })
                     })
                 } else {
@@ -348,11 +348,11 @@
             var leak = layer.open({
                 type: 1,
                 content: '<p style="margin: 10px;">确定把该商品加入分类错误返单？</p>',
-                btn: ['取消', '确定'],
-                yes: layer.closeAll(),
-                btn2: function () {
+                btn: ['确定','取消'],
+                yes:  function () {
                     typeError(itemId, 40);
-                }
+                },
+                btn2:layer.closeAll()
             })
         })
     });

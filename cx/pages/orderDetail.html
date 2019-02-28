@@ -70,31 +70,31 @@
 				<div class="layui-form-item layui-inline">
 					<label class="layui-form-label">订单编号</label>
 					<div class="layui-input-block">
-						<input class="layui-input orderNumber" type="text" value="520" autocomplete="off">
+						<input class="layui-input orderNumber" type="text" value="" autocomplete="off">
 					</div>
 				</div>
 				<div class="layui-form-item layui-inline">
 					<label class="layui-form-label">用户姓名</label>
 					<div class="layui-input-block">
-						<input class="layui-input userName" type="text" readonly="readonly" value="小妞" placeholder="请输入用户姓名" autocomplete="off">
+						<input class="layui-input userName" type="text" readonly="readonly" value="" placeholder="请输入用户姓名" autocomplete="off">
 					</div>
 				</div>
 				<div class="layui-form-item layui-inline">
 					<label class="layui-form-label">用户手机</label>
 					<div class="layui-input-block">
-						<input class="layui-input userPhone" type="text" readonly="readonly" value="13143700505" placeholder="请输入用户手机号" autocomplete="off">
+						<input class="layui-input userPhone" type="text" readonly="readonly" value="" placeholder="请输入用户手机号" autocomplete="off">
 					</div>
 				</div>
 				<div class="layui-form-item layui-inline">
 					<label class="layui-form-label">快递方式</label>
 					<div class="layui-input-block">
-						<input class="layui-input expressWay" type="text" readonly="readonly" value="顺丰" autocomplete="off">
+						<input class="layui-input expressWay" type="text" readonly="readonly" value="" autocomplete="off">
 					</div>
 				</div>
 				<div class="layui-form-item layui-inline">
 					<label class="layui-form-label">订单金额</label>
 					<div class="layui-input-block">
-						<input class="layui-input orderPrice" type="text" readonly="readonly" value="无价" autocomplete="off">
+						<input class="layui-input orderPrice" type="text" readonly="readonly" value="" autocomplete="off">
 					</div>
 				</div>
 				<!--<div class="layui-form-item layui-inline">
@@ -106,15 +106,15 @@
 				<div class="layui-form-item layui-inline">
 				    <label class="layui-form-label">订单状态</label>
 				    <div class="layui-input-block">
-				      <input class="layui-input status" type="text" readonly="readonly" value="未支付" autocomplete="off">
+				      <input class="layui-input status" type="text" readonly="readonly" value="" autocomplete="off">
 				    </div>
 				</div>
-				<div class="layui-form-item layui-inline">
-					<label class="layui-form-label">需补差价</label>
-					<div class="layui-input-block">
-						<input class="layui-input addMoney" type="text" readonly="readonly" value="" autocomplete="off">
-					</div>
-				</div>
+				<!--<div class="layui-form-item layui-inline">-->
+					<!--<label class="layui-form-label">需补差价</label>-->
+					<!--<div class="layui-input-block">-->
+						<!--<input class="layui-input addMoney" type="text" readonly="readonly" value="" autocomplete="off">-->
+					<!--</div>-->
+				<!--</div>-->
 				<div class="layui-form-item">
 					<label class="layui-form-label">订单备注</label>
 					<div class="layui-input-block">
@@ -174,8 +174,8 @@
 				beforeSend:function(request){
 					request.setRequestHeader("token",$.cookie("token"));
 				},
-				success:function(res){
-					var res=res.data;
+				success:function(data){
+					var res=data.data;
 					var str="";
 					
 					//10-未付款，20-已付款，30-已取件，35 取件完成 40-待送，45-在送，50-送件完成，60-交易成功
@@ -218,11 +218,19 @@
 					}else{
 						str+='<tr><td>暂无商品数据</td></tr>'
 					}
+					var expressStatus;
+					if(res.expressStatus==1){
+                        expressStatus='顺丰';
+					} else if(res.expressStatus==2){
+                        expressStatus='自配';
+					}else if(res.expressStatus==3){
+                        expressStatus='德邦';
+					}
 					$(".addMoney").val(addPrice);
 					$(".orderNumber").val(res.orderNo);
 					$(".userName").val(res.address.userName);
 					$(".userPhone").val(res.address.phone);
-					$(".expressWay").val("顺丰");
+					$(".expressWay").val(expressStatus);
 					$(".orderPrice").val(res.payment);
 					form.render(null,"orderForm");
 					form.render();

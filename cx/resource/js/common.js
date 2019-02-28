@@ -1,8 +1,8 @@
-var globalUrl = "http://192.168.3.217:8080/";
-//var globalUrl="http://192.168.3.211:8081/";
+// var globalUrl = "http://192.168.3.217:8080/";
+// var globalUrl="http://192.168.3.29:8081/";
 // var globalUrl="http://47.96.78.174:8088/";
 
-// var globalUrl="http://www.changwash.com:8088/";
+var globalUrl="http://www.changwash.com:8088/";
 function formatDate(now) {
     var now = new Date(now);
     var year = now.getFullYear();

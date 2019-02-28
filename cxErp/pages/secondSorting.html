@@ -40,7 +40,7 @@
 			width:250px;
 		}
 		.tableResponse{
-			height: 120px;
+			/*height: 120px;*/
 			overflow-y: auto;
 		}
 		.attachment{
@@ -83,19 +83,16 @@
 		.brandLi-active{
 			background-color: #aaa;
 		}
-		.nameOperation{
-			display: none;
-		}
-		.brandOperation{
-			display: none;
-		}
-		.colorOperation{
-			display: none;
-		}
-		.spotOperation{
-			display: none;
-		}
-		.effectOperation{
+		.nameOperation,
+		.nameOperation2,
+		.brandOperation,
+		.brandOperation2,
+		.colorOperation,
+		.colorOperation2,
+		.spotOperation,
+		.spotOperation2,
+		.effectOperation,
+		.effectOperation2{
 			display: none;
 		}
 		input::-webkit-outer-spin-button,
@@ -155,9 +152,19 @@
 			height:100%;
 			font-size:20px;
 		}
-		.code2{
-			margin-top:40px;
+		.pList-l,.pList-r{
+			width:50%;
 		}
+		.pImg,.pCode{
+			width:100%;
+		}
+		.pCode{
+			text-align: center;
+		}
+		.pImg img{
+			width:100%;
+		}
+
 	</style>
 </head>
 <body>
@@ -182,7 +189,7 @@
 				      <label class="layui-form-label">加盟店</label>
 				      <div class="layui-input-inline">
 						  <select name="" id="shopName" lay-filter="shop">
-							  <option value="">1</option>
+							  <option value=""></option>
 						  </select>
 				        <!--<input id="joinName" type="text" class="layui-input">-->
 				      </div>
@@ -196,7 +203,7 @@
 				    <div class="layui-inline">
 				      <label class="layui-form-label">联系电话</label>
 				      <div class="layui-input-inline">
-				        <input id="joinPhone"  type="number" readonly class="layui-input">
+				        <input id="joinPhone"  type="text" readonly class="layui-input">
 				      </div>
 				    </div>
 					<div class="layui-inline">
@@ -378,7 +385,7 @@
 			</div>
 			<!-- 下面是第三行表格 -->
 			<div class="tableResponse">
-				<table class="layui-table" id="table" lay-skin="line" align="center">
+				<table class="layui-table" id="backTable" align="center">
 					<thead>
 						<tr align="center">
 							<th>条码号</th>
@@ -393,17 +400,6 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>TM20180907m11211</td>
-							<td>加厚衬衣</td>
-							<td>16</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>是</td>
-						</tr>
 
 					</tbody>
 				</table>
@@ -411,8 +407,96 @@
 			
 			<!-- 这个下面是分页 -->
 			<div id="demo8"></div>
-			
-			
+			<div class="brandOperation2">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>品牌
+						</div>
+						<div class="layui-inline layui-input-inline" style="margin-left:10px;margin-top:10px">
+							<input type="text" class="" name="searchBrand" id="searchBrand2" placeholder="输入品牌名称"
+								   value=""/>
+							<button class="layui-btn layui-btn-normal layui-btn-xs" id="searchBrandBtn2" type="button">
+								搜索关键词
+							</button>
+						</div>
+					</div>
+				</form>
+				<div id="brand2" class="brandContent"
+					 style="margin:8px 5px;background-color: #f1f1f1;height: 200px;overflow: scroll"></div>
+				<div class="layui-row" style="padding: 8px 5px;">
+					<input type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addBrand"
+						   id="addBrand2" value="" placeholder="输入品牌"/>
+					<button class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;" id="brandSearch2">确定
+					</button>
+				</div>
+			</div>
+			<div class="colorOperation2">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>颜色
+						</div>
+					</div>
+				</form>
+				<div class="brandContent" id="colorPicker2" style="margin:8px 5px;height: 220px;">
+
+				</div>
+			</div>
+			<div class="spotOperation2">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>瑕疵
+						</div>
+						<div class="layui-inline layui-input-inline" style="margin-left:10px;margin-top:10px">
+							<input type="text" class="" name="searchSpot" id="searchSpot2" placeholder="输入瑕疵关键词"
+								   value=""/>
+							<button id="searchBtn2" type="button" class="layui-btn layui-btn-normal layui-btn-xs">
+								搜索关键词
+							</button>
+						</div>
+						<button id="subSpots2" type="button" class="layui-btn layui-btn-normal layui-btn-xs"
+								style="font-size: 16px;height: 40px;">确认提交瑕疵类型
+						</button>
+					</div>
+				</form>
+				<div id="clothesBug2" class="brandContent"
+					 style="margin:8px 5px;background-color: #f1f1f1;height: 220px;"></div>
+				<div class="layui-row" style="padding: 8px 5px;">
+					<input id="inSpot2" type="text" class="layui-input" style="display: inline-block;width: 200px;"
+						   name="addBrand" value="" placeholder="输入瑕疵"/>
+					<button id="spotBtn2" class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;">添加
+					</button>
+				</div>
+			</div>
+			<div class="effectOperation2">
+				<form class="layui-form layui-row">
+					<div class="layui-row">
+						<div class="layui-inline  orderManage" style="margin-top:10px">
+							<span class="headlabel"></span>洗后效果
+						</div>
+						<div class="layui-inline layui-input-inline" style="margin-left:10px;margin-top:10px">
+							<input type="text" class="" name="searchEffect" id="searchEffect2" placeholder="输入关键词"
+								   value=""/>
+							<button type="button" id="searchEffectBtn2" class="layui-btn layui-btn-normal layui-btn-xs">
+								搜索关键词
+							</button>
+						</div>
+						<button id="subEffect2" type="button" class="layui-btn layui-btn-normal layui-btn-xs"
+								style="font-size: 16px;height: 40px;">确认提交洗衣效果
+						</button>
+					</div>
+				</form>
+				<div id="effectCon2" class="brandContent"
+					 style="margin:8px 5px;background-color: #f1f1f1;height: 220px;"></div>
+				<div class="layui-row" style="padding: 8px 5px;">
+					<input type="text" class="layui-input" style="display: inline-block;width: 200px;" name="addEffect"
+						   id="addEffect2" value="" placeholder="输入洗衣效果"/>
+					<button id="effectBtn2" class="layui-btn layui-btn-normal layui-btn-xs" style="height:38px;">确定
+					</button>
+				</div>
+			</div>
 	    </div>
 	  </div>
 	</div> 

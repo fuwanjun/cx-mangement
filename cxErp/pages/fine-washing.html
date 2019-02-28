@@ -273,10 +273,10 @@
 
     $(".stop").live("click",function(){
         var id=$(this).parent().parent().attr('itemId');
-        if(!clickCheck(id)){
-            layer.msg('操作流程违规');
-            return;
-        }
+//        if(!clickCheck(id)){
+//            layer.msg('操作流程违规');
+//            return;
+//        }
         layer.confirm('确定污渍终止？',{title:'污渍终止'},function(){
             stopStain(id);
         })
@@ -350,6 +350,7 @@
                             btn: ['确定', '取消'],
                             yes: function () {
                                 backCheck(itemId, status);
+                                layer.closeAll();
                             },
                             btn2: layer.closeAll()
                         })
@@ -555,6 +556,47 @@
         })
     });
 
+    //    事故处理-退件
+    $(".backPiece3").live("click",function(){
+        var id=$(this).parent().parent().attr("itemId");
+        layui.use('layer',function(){
+            var layer=layui.layer;
+            layer.open({
+                title:'返洗退件',
+                type:1,
+                content:'<p style="padding: 20px;">确定将该商品退件？</p>',
+                btn:['确定','取消'],
+                yes:function(){
+                    $.ajax({
+                        url: globalUrl + "api/wash/back2BackPiece;jsessionid=" + $.cookie("token"),
+                        type: 'post',
+                        data: {
+                            itemId:id,
+                            status: status,
+                            style:5
+                        },
+                        crossDomain: true,
+                        beforeSend: function (request) {
+                            request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                        },
+                        success:function(data){
+                            if(data.status==200){
+                                table3Show(tablePage3,pageSize,status);
+                                layer.closeAll();
+                                layer.msg('已完成');
+                            }else{
+                                layer.msg(data.msg);
+                            }
+                        }
+                    })
+                },
+                btn2:function(){
+                    layer.closeAll();
+                }
+            })
+        })
+    });
+
 //    返洗完成
     $(".okBtn1").live("click",function(){
         var id=$(this).parent().parent().attr("itemId");
@@ -571,7 +613,7 @@
                         type: 'post',
                         data: {
                             itemId: id,
-                            status:20,
+                            status:status,
                             style: 3
                         },
                         crossDomain: true,
@@ -899,7 +941,7 @@
                     $("#table1 tbody").html("");
                     var tHead = '<th>漏检返单</th>' +
                         '<th>分类错误返单</th>' +
-                        '<th>污渍终止</th>' +
+                        '<th>状态</th>' +
                         '<th>无法洗涤</th>';
                     $(tHead).appendTo($("#table1 thead tr"));
                     var colour = data.data.colour ? data.data.colour : '';
@@ -916,7 +958,10 @@
                         '</td>' +
                         '<td><button class="layui-btn layui-btn-danger layui-btn-sm leak">是</button></td>' +
                         '<td><button class="layui-btn layui-btn-danger layui-btn-sm wrong">是</button></td>' +
-                        '<td><button class="layui-btn layui-btn-danger layui-btn-sm stop">是</button></td>' +
+                        '<td>' +
+                            '<button class="layui-btn layui-btn-danger layui-btn-sm stop">污渍终止</button>' +
+                            '<button class="layui-btn layui-btn-normal layui-btn-sm">正常</button>' +
+                        '</td>' +
                         '<td>' +
                         '<button class="layui-btn layui-btn-sm outsource1">外包</button>' +
                         '<button class="layui-btn layui-btn-sm backPiece1">退件</button>' +
@@ -968,7 +1013,7 @@
                     var flaw = data.data.flaw ? data.data.flaw : '';
                     var item = '<tr itemId="' + data.data.id + '">' +
                         '<td>' + data.data.barCode + '</td>' +
-                        '<td>' + data.data.afterName + '</td>' +
+                        '<td>' + data.data.beforeName + '</td>' +
                         '<td>' + colour + '</td>' +
                         '<td>' + flaw + '</td>' +
                         //                        '<td>'+data.data.effect+'</td>' +
@@ -1096,9 +1141,10 @@
             success: function (data) {
                 if (data.status == 200) {
                     table1Show(tablePage1,pageSize,status);
-                    layer.msg(data.msg);
+                    layer.closeAll();
+                    layer.msg('操做成功');
                 } else {
-                    layer.msg(data.msg);
+                    layer.msg('操做失败');
                 }
             }
         })
@@ -1120,7 +1166,7 @@
                 if(data.status==200){
                     table1Show(tablePage1,pageSize,status);
                     layer.closeAll();
-                    layer.msg('污渍终止成功');
+                    layer.msg('操作成功');
                 }else{
                     layer.closeAll();
                     layer.msg(data.msg);

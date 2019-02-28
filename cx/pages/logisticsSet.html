@@ -1,184 +1,200 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>物流管理</title>
-	<meta charset='utf-8'>
-	<meta name='renderer' content='webkit'>
-	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
-	<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
-	<meta name='apple-mobile-web-app-status-bar-style' content='black'>
-	<meta name='apple-mobile-web-app-capable' content='yes'>
-	<meta name='format-detection' content='telephone=no'>
-	<link rel="stylesheet" href="../resource/layui/css/layui.css">
-	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
-	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
-	<style>
-		.cancel {
-			position: absolute;
-			top: -10px;
-			right: -10px;
-			width: 30px;
-			height: 30px;
-			background-color: #ffffff;
-			border-radius: 50%;
-			box-shadow: 0 0 2px gray;
-			cursor: pointer;
-		}
+    <title>物流管理</title>
+    <meta charset='utf-8'>
+    <meta name='renderer' content='webkit'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black'>
+    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <meta name='format-detection' content='telephone=no'>
+    <link rel="stylesheet" href="../resource/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href='css/pageIndex.css'/>
+    <link rel="stylesheet" type="text/css" href='css/orderManagement.css'/>
+    <style>
+        .cancel {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 2px gray;
+            cursor: pointer;
+        }
 
-		.cancel>i {
-			padding-top: 3px;
+        .cancel > i {
+            padding-top: 3px;
 
-			font-size: 30px;
-			line-height: 36px;
-			color: gray;
-		}
+            font-size: 30px;
+            line-height: 36px;
+            color: gray;
+        }
 
+        .details_box td {
+            width: 50% !important;
 
-		.details_box td {
-			width: 50% !important;
+        }
 
-		}
-		.expressList{
-			position: absolute;
-			width: 80px;
-			left: 50%;
-			margin-left: -40px;
-			top: 38px;
-			background-color: #f1f1f1;
-			z-index: 9999;
-			border-radius: 3px;
-			overflow: hidden;
-			display: none;
-		}
-		.expressList li{
-			padding: 10px 0;
-			text-align: center;
+        .expressList {
+            position: absolute;
+            width: 80px;
+            left: 50%;
+            margin-left: -40px;
+            top: 38px;
+            background-color: #f1f1f1;
+            z-index: 9999;
+            border-radius: 3px;
+            overflow: hidden;
+            display: none;
+        }
 
-		}
-		.expressList li:hover{
-			background-color:rgba(0,125,208,.7);
-			color: #fff;
-		}
+        .expressList li {
+            padding: 10px 0;
+            text-align: center;
 
-		.showExpress{
-			display: inline-block;
-			width: 72px;
-		}
-		.vip-score,.vip-balance,.order-num,.order-price{
-			display: flex;
-			justify-content: center;
-		}
-		tbody tr td{
-			text-align: center;
-		}
-		.head-pic{
-			width:50px;
-			height:50px;
-			-webkit-border-radius: 50%;
-			-moz-border-radius: 50%;
-			border-radius: 50%;
-			overflow: hidden;
-		}
-		.head-pic img{
-			width:100%;
-			height:100%;
-		}
-		.layui-form-select dl{
-			padding:0;
-		}
-		.layui-input-block{
-			margin-left:56px;
-		}
-		.layui-form-label{
-			padding:0;
-			width:auto;
-			line-height: 36px;
-		}
-		.head-pic{
-			width:50px;
-			height:50px;
-			margin-right:10px;
-		}
-		.head-name{
-			line-height: 50px;
-		}
-		.layui-table, .layui-table-view{
-			margin-bottom:0;
-		}
-		#total{
-			display: flex;
-			justify-content:space-around;
-			background: #c2c2c2;
-			padding:10px 0;
-			font-weight: bold;
-			font-size:16px;
-			color: #333;
-		}
-	</style>
+        }
+
+        .expressList li:hover {
+            background-color: rgba(0, 125, 208, .7);
+            color: #fff;
+        }
+
+        .showExpress {
+            display: inline-block;
+            width: 72px;
+        }
+
+        .vip-score, .vip-balance, .order-num, .order-price {
+            display: flex;
+            justify-content: center;
+        }
+
+        tbody tr td {
+            text-align: center;
+        }
+
+        .head-pic {
+            width: 50px;
+            height: 50px;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .head-pic img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .layui-form-select dl {
+            padding: 0;
+        }
+
+        .layui-input-block {
+            margin-left: 56px;
+        }
+
+        .layui-form-label {
+            padding: 0;
+            width: auto;
+            line-height: 36px;
+        }
+
+        .head-pic {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .head-name {
+            line-height: 50px;
+        }
+
+        .layui-table, .layui-table-view {
+            margin-bottom: 0;
+        }
+
+        #total {
+            display: flex;
+            justify-content: space-around;
+            background: #c2c2c2;
+            padding: 10px 0;
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
 
 </head>
 
 <body>
 
-	<!-- 下面是一些第二行的东西 -->
-	<div class="layui-row">
-		<div class="layui-inline  orderManage" style="margin-top:10px">
-			物流管理
-		</div>
-		<button class="layui-btn" id="addWl" style="float: right;">增加物流</button>
-	</div>
+<!-- 下面是一些第二行的东西 -->
+<div class="layui-row">
+    <div class="layui-inline  orderManage" style="margin-top:10px">
+        物流管理
+    </div>
+    <button class="layui-btn" id="addWl" style="float: right;">增加物流</button>
+</div>
 
-	<!-- 下面是第三行表格 -->
+<!-- 下面是第三行表格 -->
 
 
-	<table class="layui-table" id="orderList" lay-skin="line" align="center">
-		<thead>
-			<tr align="center">
-				<th>物流</th>
-				<!--<th>条件</th>-->
-				<th>运费</th>
-				<th>操作</th>
-			</tr>
-		</thead>
-		<tbody></tbody>
-	</table>
+<table class="layui-table" id="orderList" lay-skin="line" align="center">
+    <thead>
+    <tr align="center">
+        <th>物流</th>
+        <!--<th>条件</th>-->
+        <th>运费</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
 
-	<!-- 这个下面是分页 -->
-	<div id="page"></div>
-	<!--<button id="excel" class="layui-btn layui-btn-primary" type="button">导出EXCEL表格</button>-->
-	<!--<button id="excel" class="layui-btn layui-btn-primary" type="button">导出EXCEL表格</button>-->
-	<div class="bg">
+<!-- 这个下面是分页 -->
+<div id="page"></div>
+<!--<button id="excel" class="layui-btn layui-btn-primary" type="button">导出EXCEL表格</button>-->
+<!--<button id="excel" class="layui-btn layui-btn-primary" type="button">导出EXCEL表格</button>-->
+<div class="bg">
 
-	</div>
+</div>
 </body>
 <div id="add-box" style="display: none;padding: 10px 20px;">
-	<form class="layui-form" action="">
-		<div class="layui-form-item">
-			<label class="layui-form-label">名称</label>
-			<div class="layui-input-block">
-				<input type="text" id="wlName" name="title" required  lay-verify="required" placeholder="请输入物流名称" autocomplete="off" class="layui-input">
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label">物流费</label>
-			<div class="layui-input-block">
-				<input type="number" id="wlPrice" name="title" required  lay-verify="required" placeholder="请输入物流价格" autocomplete="off" class="layui-input">
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label">排序号</label>
-			<div class="layui-input-block">
-				<input type="number" id="sort" name="title" required  lay-verify="required" placeholder="请输入排序号" autocomplete="off" class="layui-input">
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label">状态</label>
-			<div class="layui-input-block" id="state">
-				<input type="radio" name="switch" value="1" title="启用">
-				<input type="radio" name="switch" value="0" title="禁用">
-			</div>
-		</div>
-	</form>
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="wlName" name="title" required lay-verify="required" placeholder="请输入物流名称"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">物流费</label>
+            <div class="layui-input-block">
+                <input type="number" id="wlPrice" name="title" required lay-verify="required" placeholder="请输入物流价格"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序号</label>
+            <div class="layui-input-block">
+                <input type="number" id="sort" name="title" required lay-verify="required" placeholder="请输入排序号"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block" id="state">
+                <input type="radio" name="switch" value="1" title="启用">
+                <input type="radio" name="switch" value="0" title="禁用">
+            </div>
+        </div>
+    </form>
 </div>
 <script src='./js/jquery.min.js'></script>
 <script type="text/javascript" src="../resource/js/common.js"></script>
@@ -194,166 +210,176 @@
 
         getLogistics();
 
-	});
+    });
 
-	$("#addWl").click(function(){
-	   	layui.use('layer',function(){
-	   	    var layer=layui.layer;
-	   	    layer.open({
-				title:'新增物流',
-				type:1,
-				content:$("#add-box"),
-				area:['600px'],
-				btn:['保存','取消'],
-				yes:function(){
-					var wlName=$("#wlName").val();
-					var wlPrice=$("#wlPrice").val();
-					var sort=$("#sort").val();
-					var state=$('#state input[name="switch"]:checked').val();
-                    addWl(wlName,wlPrice,sort,state);
-				},
-				btn2:function(){
+    $("#addWl").click(function () {
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.open({
+                title: '新增物流',
+                type: 1,
+                content: $("#add-box"),
+                area: ['600px'],
+                btn: ['保存', '取消'],
+                yes: function () {
+                    var wlName = $("#wlName").val();
+                    var wlPrice = $("#wlPrice").val();
+                    var sort = $("#sort").val();
+                    var state = $('#state input[name="switch"]:checked').val();
+                    addWl(wlName, wlPrice, sort, state);
+                },
+                btn2: function () {
 
-				}
-			})
-		})
-	});
+                }
+            })
+        })
+    });
 
-//	编辑
-	$(".changeBtn").live("click",function(){
-        var id=$(this).parent().parent().attr('wlId');
-	   	$.ajax({
+    //	编辑
+    $(".changeBtn").live("click", function () {
+        var id = $(this).parent().parent().attr('wlId');
+        $.ajax({
             url: globalUrl + "expressConfig/getExpressById",
             type: "get",
-            data:{id:id},
+            data: {id: id},
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("token", $.cookie("token"));
             },
             crossDomain: true,
-			success:function(data){
-                if(data.code==0){
-                    $("#wlName").val(data.data.expressName);
-                    $("#wlPrice").val(data.data.freight);
-                    $("#sort").val(data.data.sort);
-                    $('#state input[name="switch"]:checked').val(data.data.state);
-                    layui.use('layer',function(){
-                        var layer=layui.layer;
+            success: function (data) {
+                if (data.code == 0) {
+                    layui.use('form',function(){
+                        var form=layui.form;
+                        $("#wlName").val(data.data.expressName);
+                        $("#wlPrice").val(data.data.freight);
+                        $("#sort").val(data.data.sort);
+                        if(data.data.state==1){
+                            $('#state input[name="switch"]').eq(0).prop("checked",true);
+                        }else if(data.data.state==0){
+                            $('#state input[name="switch"]').eq(1).prop("checked",true);
+                        }
+
+                        form.render();
+                    })
+
+                    layui.use('layer', function () {
+                        var layer = layui.layer;
                         layer.open({
-                            title:'编辑物流',
-                            type:1,
-                            content:$("#add-box"),
-                            area:['600px'],
-                            btn:['保存','取消'],
-                            yes:function(){
-                                var wlName=$("#wlName").val();
-                                var wlPrice=$("#wlPrice").val();
-                                var sort=$("#sort").val();
-                                var state=$('#state input[name="switch"]:checked').val();
-                                changeWl(id,wlName,wlPrice,sort,state)
+                            title: '编辑物流',
+                            type: 1,
+                            content: $("#add-box"),
+                            area: ['600px'],
+                            btn: ['保存', '取消'],
+                            yes: function () {
+                                var wlName = $("#wlName").val();
+                                var wlPrice = $("#wlPrice").val();
+                                var sort = $("#sort").val();
+                                var state = $('#state input[name="switch"]:checked').val();
+                                changeWl(id, wlName, wlPrice, sort, state);
                             },
-                            btn2:function(){
-								layer.closeAll();
+                            btn2: function () {
+                                layer.closeAll();
                             }
                         })
                     })
-				}
-			}
-		})
-	});
+                }
+            }
+        })
+    });
 
-//	删除
-	$(".delBtn").live("click",function(){
-	   	var id=$(this).parent().parent().attr('wlId');
-	   	layui.use('layer',function(){
-	   	   	var layer=layui.layer;
-	   	   	layer.open({
-				type:1,
-				content:'<p style="padding: 10px 20px; text-align: center;">确定删除该物流方式吗？</p>',
-				btn:['确定','取消'],
-				yes:function(){
-				    delWl(id);
-				},
-				btn2:function(){
-				    layer.closeAll();
-				}
-			})
-		});
-	});
+    //	删除
+    $(".delBtn").live("click", function () {
+        var id = $(this).parent().parent().attr('wlId');
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.open({
+                type: 1,
+                content: '<p style="padding: 10px 20px; text-align: center;">确定删除该物流方式吗？</p>',
+                btn: ['确定', '取消'],
+                yes: function () {
+                    delWl(id);
+                },
+                btn2: function () {
+                    layer.closeAll();
+                }
+            })
+        });
+    });
 
-//	启用
-	$(".startBtn").live("click",function(){
-		var id=$(this).parent().parent().attr("wlId");
+    //	启用
+    $(".startBtn").live("click", function () {
+        var id = $(this).parent().parent().attr("wlId");
         startWl(id);
-	});
+    });
 
-//	禁用
-    $(".stopBtn").live("click",function(){
-        var id=$(this).parent().parent().attr("wlId");
+    //	禁用
+    $(".stopBtn").live("click", function () {
+        var id = $(this).parent().parent().attr("wlId");
         stopWl(id);
     });
 
-//	获取所有物流
-	function getLogistics(name,state){
-	    $.ajax({
+    //	获取所有物流
+    function getLogistics(name, state) {
+        $.ajax({
             url: globalUrl + "expressConfig/getExpressConfigListByParam",
             type: "get",
-            data:{
-                name:name,
-				state:state
+            data: {
+                name: name,
+                state: state
             },
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("token", $.cookie("token"));
             },
             crossDomain: true,
-			success:function(data){
-                if(data.code==0){
+            success: function (data) {
+                if (data.code == 0) {
                     $(".layui-table tbody").html("");
-                    for(var i=0;i<data.data.list.length;i++){
-                        var btn="";
-                        if(data.data.list[i].state==1){
-                            btn='<button class="layui-btn layui-btn-sm layui-btn-danger stopBtn">禁用</button>'+
-                                '<button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-disabled startBtn" disabled>启用</button>';
-						}else if(data.data.list[i].state==0){
-                            btn='<button class="layui-btn layui-btn-sm layui-btn-danger layui-btn-disabled stopBtn" disabled>禁用</button>'+
-                                '<button class="layui-btn layui-btn-sm layui-btn-normal startBtn">启用</button>';
-						}else if(data.data.list[i].state==2){
-                            btn='<button class="layui-btn layui-btn-sm layui-btn-danger layui-btn-disabled stopBtn" disabled>禁用</button>'+
-                                '<button class="layui-btn layui-btn-sm layui-btn-normal startBtn">启用</button>';
-						}
-                        var item='<tr wlId="'+data.data.list[i].id+'">' +
-									'<td>'+data.data.list[i].expressName+'</td>' +
-                            		'<td>'+data.data.list[i].freight+'</td>' +
-									'<td>'+
-										'<button class="layui-btn layui-btn-sm changeBtn" >编辑</button>'+
-										btn +
-                            			'<button class="layui-btn layui-btn-sm layui-btn-primary delBtn" >删除</button>'
-									'</td>';
-								'</tr>';
+                    for (var i = 0; i < data.data.list.length; i++) {
+                        var btn = "";
+                        if (data.data.list[i].state == 1) {
+                            btn = '<button class="layui-btn layui-btn-sm layui-btn-danger layui-btn-disabled" disabled>禁用</button>' +
+                                '<button class="layui-btn layui-btn-sm layui-btn-normal">启用</button>';
+                        } else if (data.data.list[i].state == 0) {
+                            btn = '<button class="layui-btn layui-btn-sm layui-btn-danger">禁用</button>' +
+                                '<button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-disabled" disabled>启用</button>';
+                        } else if (data.data.list[i].state == 2) {
+                            btn = '<button class="layui-btn layui-btn-sm layui-btn-danger">禁用</button>' +
+                                '<button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-disabled" disabled>启用</button>';
+                        }
+                        var item = '<tr wlId="' + data.data.list[i].id + '">' +
+                            '<td>' + data.data.list[i].expressName + '</td>' +
+                            '<td>' + data.data.list[i].freight + '</td>' +
+                            '<td>' +
+                            '<button class="layui-btn layui-btn-sm changeBtn" >编辑</button>' +
+                            btn +
+                            '<button class="layui-btn layui-btn-sm layui-btn-primary delBtn" >删除</button>'
+                        '</td>';
+                        '</tr>';
                         $(item).appendTo($(".layui-table tbody"))
-					}
-				}
-			}
-		})
-	}
+                    }
+                }
+            }
+        })
+    }
 
-//	编辑保存物流
-	function changeWl(id,name,freight,sort,state){
+    //	编辑保存物流
+    function changeWl(id, name, freight, sort, state) {
         $.ajax({
             url: globalUrl + "expressConfig/updateExpressConfig",
             type: "post",
-            data:{
-                id:id,
-                expressName:name,
-                freight:freight,
-                sort:sort,
-                state:state
+            data: {
+                id: id,
+                expressName: name,
+                freight: freight,
+                sort: sort,
+                state: state
             },
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("token", $.cookie("token"));
             },
             crossDomain: true,
-            success:function(data){
-                if(data.code==0){
+            success: function (data) {
+                if (data.code == 0) {
                     getLogistics();
                     layer.closeAll();
                     layer.msg(data.message);
@@ -361,88 +387,88 @@
                 }
             }
         })
-	}
+    }
 
-//	新增物流
-	function addWl(name,freight,sort,state){
-	    $.ajax({
+    //	新增物流
+    function addWl(name, freight, sort, state) {
+        $.ajax({
             url: globalUrl + "expressConfig/putExpressConfig",
             type: "post",
-            data:{
-                expressName:name,
-                freight:freight,
-				sort:sort,
-				state:state
+            data: {
+                expressName: name,
+                freight: freight,
+                sort: sort,
+                state: state
             },
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("token", $.cookie("token"));
             },
             crossDomain: true,
-			success:function(data){
-				if(data.code==0){
-				    getLogistics();
-				    layer.closeAll();
-				    layer.msg(data.message);
+            success: function (data) {
+                if (data.code == 0) {
+                    getLogistics();
+                    layer.closeAll();
+                    layer.msg(data.message);
                     cleanWrite();
-				}
-			}
-		})
-	}
+                }
+            }
+        })
+    }
 
-//	删除物流
-	function delWl(id){
-		$.ajax({
+    //	删除物流
+    function delWl(id) {
+        $.ajax({
             url: globalUrl + "expressConfig/deleteExpressConfig",
             type: "post",
-            data:{id:id},
+            data: {id: id},
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("token", $.cookie("token"));
             },
             crossDomain: true,
-			success:function(data){
-                if(data.code==0){
+            success: function (data) {
+                if (data.code == 0) {
                     getLogistics();
                     layer.closeAll();
                     layer.msg(data.message);
 
-				}else{
+                } else {
                     layer.msg(data.message);
-				}
-			}
-		})
-	}
+                }
+            }
+        })
+    }
 
-//	启用物流
-    function startWl(id){
+    //	启用物流
+    function startWl(id) {
         $.ajax({
             url: globalUrl + "expressConfig/enable",
             type: "post",
-            data:{id:id},
+            data: {id: id},
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("token", $.cookie("token"));
             },
             crossDomain: true,
-			success:function(data){
-                if(data.code==0){
+            success: function (data) {
+                if (data.code == 0) {
                     getLogistics();
-				}
+                }
                 layer.msg(data.message);
-			}
+            }
         })
     }
 
     //	禁用物流
-    function stopWl(id){
+    function stopWl(id) {
         $.ajax({
             url: globalUrl + "expressConfig/disable",
             type: "post",
-            data:{id:id},
+            data: {id: id},
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("token", $.cookie("token"));
             },
             crossDomain: true,
-            success:function(data){
-                if(data.code==0){
+            success: function (data) {
+                if (data.code == 0) {
                     getLogistics();
                 }
                 layer.msg(data.message);
@@ -450,12 +476,12 @@
         })
     }
 
-//    清空编辑窗口
-	function cleanWrite(){
+    //    清空编辑窗口
+    function cleanWrite() {
         $("#wlName").val("");
         $("#wlPrice").val("");
         $("#sort").val("");
         $('#state input[name="switch"]:checked').val(0);
-	}
+    }
 </script>
 </html>

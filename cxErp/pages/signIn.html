@@ -78,6 +78,10 @@
         .layui-form-select dl {
             padding: 0;
         }
+        #checkBox{
+            display: none;
+            padding:0 20px;
+        }
     </style>
 
 </head>
@@ -92,9 +96,13 @@
     </div>
 
     <!-- 下面是一些第二行的东西 -->
-
+    <div style="display: flex;margin-bottom: 10px;right: 16px;">
+        <p style="line-height: 38px;margin-right: 20px;font-size: 18px;">衣袋库存：<span id="packNumbers"></span></p>
+        <button type="button" class="layui-btn layui-btn-normal" id="addpackage">添加</button>
+        <button type="button" class="layui-btn layui-btn-normal" id="checkPackBtn">衣袋审核</button>
+    </div>
     <div class="layui-row" style="display: flex">
-        <div class="layui-form-item" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
+        <div class="layui-form-item" style="margin-bottom: 0;margin-top: 10px;">
             <div class="layui-input-inline" style="margin:0; width: 70%;">
                 <input type="text" name="date" id="date" lay-verify="date" placeholder="选择日期" autocomplete="off"
                        class="layui-input">
@@ -103,7 +111,7 @@
         </div>
 
         <div class="layui-form-item" id="expressType"
-             style="width: 20%;margin-bottom: 0;margin-top: 10px; display: flex;">
+             style="margin-bottom: 0;margin-top: 10px; display: flex;">
             <div class="text">快递类型</div>
             <div class="layui-form-item">
                 <select name="" id="" lay-filter="wlType">
@@ -113,15 +121,13 @@
                 </select>
             </div>
         </div>
-        <div class="layui-form-item" style="width: 20%;margin-bottom: 0;margin-top: 10px; display: flex;">
-            <div class="text" style="line-height: 38px;height:38px;padding: 0 10px;background: #1E9FFF;color: #fff;">
-                装衣袋数量
-            </div>
+        <div class="layui-form-item" style="margin-bottom: 0;margin-top: 10px; display: flex;">
+            <div class="text" style="line-height: 38px;height:38px;padding: 0 10px;background: #1E9FFF;color: #fff;margin-left: 20px;">装衣袋数量</div>
             <div class="layui-input-inline">
                 <input id="packNum" class="layui-input" type="number" value="1">
             </div>
         </div>
-        <div class="layui-form-item" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
+        <div class="layui-form-item" style="    margin-bottom: 0;margin-top: 10px;">
             <div class="layui-input-inline" style="margin:0; width: 70%;" id="ydNum">
                 <input type="text" lay-filer="orderNum" lay-verify="date" id="orderNum" placeholder="请输入运单号"
                        autocomplete="off" class="layui-input">
@@ -129,6 +135,7 @@
             <button class="layui-btn layui-btn-normal" type="button" id="qs">签收</button>
         </div>
     </div>
+
 </form>
 <!-- 下面是第三行表格 -->
 <table class="layui-table" id="table" lay-skin="line" align="center">
@@ -148,12 +155,27 @@
 <!-- 这个下面是分页 -->
 <div id="page"></div>
 </body>
+<div id="checkBox">
+    <table class="layui-table">
+        <thead>
+            <tr align="center">
+                <th>取件员</th>
+                <th>申请时间</th>
+                <th>数量</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div id="page2"></div>
+</div>
 <script src='./js/jquery.min.js'></script>
 <script type="text/javascript" src="../resource/layui/layui.js"></script>
 <script type="text/javascript" src="../resource/js/common.js"></script>
 <script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
 <script type="text/javascript">
     var today = getNowFormatDate();
+    var packId="";
     layui.use(['element', 'form', 'layer', 'table', 'laydate', 'laypage'], function () {
         var element = layui.element;
         var form = layui.form;
@@ -174,6 +196,8 @@
             elem: '#test6',
             type: 'datetime'
         });
+//        getPackages();
+        getAllStock();
 
         form.on('select(wlType)', function (data) {
             $("#orderNum").val("").focus();
@@ -184,6 +208,18 @@
         form.on("select", function (data) {
             expressType = data.value;
         });
+
+        $("#checkPackBtn").click(function(){
+            checkPackages();
+            layer.open({
+                title:'装衣袋申请',
+                type:1,
+                content:$("#checkBox"),
+                area:['800px','600px'],
+                btn:['关闭']
+            })
+        });
+
         $("#qs").click(function () {
             var orderNum = $("#orderNum").val();
             var packNum = $("#packNum").val();
@@ -244,7 +280,37 @@
         });
     });
 
+    $("#addpackage").click(function(){
+        layer.confirm('<input type="number" id="packages" style="width: 100%;padding: 5px 10px;"value="" placeholder="请输入添加的装衣袋数量"/>',{title:'添加'},function(){
+            if($("#packages").val()<=0){
+                layer.msg('请填写正确格式的装衣袋数量');
+            }else{
+                var num=$("#packages").val();
+                addPackage(packId,num,0);
+            }
+        })
+    });
 
+    $(".yesBtn").live("click",function(){
+        var id=$(this).parent().parent().attr("data-id");
+        layer.confirm('确认同意申请',{title:'装衣袋申请'},function(){
+            $.ajax({
+                type:"get",
+                url:globalUrl2+"pocket/confirm",
+                data:{id:id},
+                success:function(data){
+                    if(data.status==200){
+                        checkPackages();
+                        getAllStock();
+                        layer.close(layer.index);
+                        layer.msg('申请已通过');
+                    }else{
+                        layer.msg(data.msg);
+                    }
+                }
+            })
+        });
+    });
 
     function qs(num, num2) {
         $.ajax({
@@ -263,6 +329,7 @@
                 if (data.msg) {
                     layer.msg(data.msg);
                 }
+                $("#packNum").val(1);
                 $("#orderNum").val("").focus();
             }
         })
@@ -365,61 +432,6 @@
             }
         });
 
-        //	分页
-//    function toPage(count, time) {
-//        layui.use('laypage', function () {
-//            var laypage = layui.laypage;
-//            laypage.render({
-//                elem: "page",
-//                count: count,
-//                limit: 5,
-//                jump: function (obj) {
-//                    $.ajax({
-//                        url: globalUrl + "api/work/signInByTime;jsessionid=" + $.cookie("token"),
-//                        type: "get",
-//                        data: {
-//                            time: time,
-//                            page: obj.curr,
-//                            pageSize: 5
-//                        },
-//                        crossDomain: true,
-//                        beforeSend: function (request) {
-//                            request.setRequestHeader("JSESSIONID", $.cookie("token"));
-//                        },
-//                        success: function (data) {
-//                            if (data.status == "200") {
-//                                $("#table tbody").html(" ");
-//                                for (var i = 0; i < data.data.list.length; i++) {
-//                                    var signSuccess = "";
-//                                    if (data.data.list[i].signSuccess) {
-//                                        signSuccess = "已入库";
-//                                    } else {
-//                                        signSuccess = "未入库";
-//                                    }
-//                                    var payStatus = "";
-//                                    if (data.data.list[i].payStatus) {
-//                                        payStatus = "已付款";
-//                                    } else {
-//                                        payStatus = "未付款";
-//                                    }
-//                                    var item = '<tr>' +
-//                                        '<td>' + data.data.list[i].orderNo + '</td>' +
-//                                        '<td>' + data.data.list[i].signCode + '</td>' +
-//                                        '<td>' + data.data.list[i].orderLevel + '</td>' +
-//                                        '<td>' + signSuccess + '</td>' +
-//                                        '<td>' + payStatus + '</td>' +
-//                                        '</tr>';
-//                                    $(item).appendTo($("#table tbody"));
-//                                }
-//                            } else {
-//                                alert(data.msg);
-//                            }
-//                        }
-//                    })
-//                }
-//            })
-//        })
-//    }
 
         function alertMsg(type, msg) {
             var icon = '';
@@ -456,7 +468,7 @@
             $(".zhuanyi_shadow").hide()
 
             parent.ableBtn()
-        })
+        });
 
 
         $("#zhuanyiSure").click(function () {
@@ -468,14 +480,14 @@
 
             alertMsg("success", "转移成功")
 
-        })
+        });
 
 
         //  下面是新增任务的弹框
         $("#createRenwuCancer").click(function () {
             $(".createRenwushadow").hide();
             parent.ableBtn()
-        })
+        });
 
         $("#createRenwuSure").click(function () {
 
@@ -498,7 +510,7 @@
                 area: ["800px", "560px"]
             })
 
-        })
+        });
 
         // 这边是操作取消
 
@@ -508,7 +520,7 @@
 
             parent.ableBtn()
 
-        })
+        });
 
         $("td").click(function () {
 
@@ -518,7 +530,7 @@
                 parent.disableBtn()
 
             }
-        })
+        });
 
         // 这边是第一层的点击
         $(".caozuoBtnBox   button").click(function () {
@@ -563,7 +575,7 @@
                 $(".xiangqing_shadow").show();
             }
 
-        })
+        });
 
 
         // 点击时现金取车的逻辑
@@ -573,7 +585,7 @@
             $(".xianjing_shadow").hide()
             $(".caozuoShadow_sonBox").show()
 
-        })
+        });
 
 
         $("#yiPay").click(function () {
@@ -584,7 +596,7 @@
             // 车主已付款出现
             $(".chezhuPay_shadow").show()
 
-        })
+        });
 
 
         $("#DdainSure").click(function () {
@@ -595,7 +607,7 @@
             $(".xianjing_shadow").hide()
             $(".caozuoShadow_sonBox").show()
 
-        })
+        });
 
 
         // 这边是增加免费取物次数的逻辑
@@ -605,7 +617,7 @@
             $(".cishu_shadow").hide()
             $(".caozuoShadow_sonBox").show()
 
-        })
+        });
 
         $("#cishuSure").click(function () {
 
@@ -618,7 +630,7 @@
             var obj = $(".cishu_shadow")
             successShadow(obj, tip1, tip2)
 
-        })
+        });
 
 
         // $("#commomSure").click(function () {
@@ -653,7 +665,7 @@
             $(".caozuoShadow_sonBox").show()
 
 
-        })
+        });
 
         $("#catNumberSure").click(function () {
             $(".CarNumber_shadow").hide()
@@ -667,8 +679,7 @@
             }, 2000)
 
 
-        })
-
+        });
 
         //  暂停任务的逻辑
 
@@ -678,7 +689,7 @@
             $(".caozuoShadow_sonBox").show()
 
 
-        })
+        });
 
         $("#zhantingSure").click(function () {
 
@@ -691,7 +702,7 @@
             var obj = $(".zhanting_shadow")
             successShadow(obj, tip1, tip2)
 
-        })
+        });
 
 
         // 这边是取物超时的逻辑
@@ -702,7 +713,7 @@
             $(".caozuoShadow_sonBox").show()
 
 
-        })
+        });
 
         $("#quwuSure").click(function () {
             $(".quwu_shadow").hide()
@@ -715,7 +726,7 @@
             }, 2000)
 
 
-        })
+        });
 
 
         // 这边是取车对应的逻辑
@@ -726,7 +737,7 @@
 
             $(".caozuoShadow_sonBox").show()
 
-        })
+        });
 
         $("#qucheSure").click(function () {
 
@@ -740,13 +751,13 @@
                 $(".caozuoShadow_sonBox").fadeIn()
             }, 2000)
 
-        })
+        });
 
         // 这边是详情页面对应的取消按钮
         $("#xiangqingCancer").click(function () {
             $(".xiangqing_shadow").hide()
             $(".caozuoShadow_sonBox").show()
-        })
+        });
 
         $(".onSale").click(function () {
             layer.confirm("要上架该商品吗？", {
@@ -755,7 +766,7 @@
                 layer.close(index);
                 //进行后台的上架请求接口
             })
-        })
+        });
         $(".outSale").click(function () {
             layer.confirm("要下架该商品吗？", {
                 btn: ['确定', '取消']
@@ -763,7 +774,7 @@
                 layer.close(index);
                 //进行后台的下架请求接口
             })
-        })
+        });
         $(".deleteBtn").click(function () {
             layer.confirm("要删除该商品吗？", {
                 btn: ['确定', '取消']
@@ -771,7 +782,7 @@
                 layer.close(index);
                 //进行后台的下架请求接口
             })
-        })
+        });
         $(".changeBtn").click(function () {
             layer.open({
                 type: 2,
@@ -781,6 +792,64 @@
         })
     }
 
+//    获取装衣袋数量
+    function getAllStock(){
+        $.ajax({
+            type:"get",
+            url:globalUrl2+"pocket/getPocketStock",
+            async:true,
+            success:function(data){
+                if(data.status==200){
+                    packId=data.data.id;
+                    $("#packNumbers").html(data.data.surplusStock);
+                }
+            }
+        })
+    }
+
+//    添加装衣袋库存
+    function addPackage(id,num,type){
+        $.ajax({
+            type:"post",
+            url:globalUrl2+"pocket/update",
+            data:{id:id,num:num,type:type},
+            success:function(data){
+                if(data.status==200){
+                    getAllStock();
+                    layer.closeAll();
+                    layer.msg("操作成功");
+                }else{
+                    layer.msg(data.msg);
+                }
+            }
+        })
+    }
+
+//    查看装衣袋申请
+    function checkPackages(){
+        $.ajax({
+            type:"get",
+            url:globalUrl2+"pocket/getList",
+            async:true,
+            success:function(data){
+                if(data.status==200){
+                    $("#checkBox table tbody").html("");
+                    for(var i=0;i<data.data.length;i++){
+                        var item='<tr data-id="'+data.data[i].id+'">' +
+                            '<td>'+data.data[i].takerName+'</td>' +
+                            '<td>'+timestampToTime(data.data[i].createTime)+'</td>' +
+                            '<td>'+data.data[i].applyNum+'</td>' +
+                            '<td>' +
+                            //							'<button class="layui-btn layui-btn-sm layui-btn-danger noBtn">拒绝</button>' +
+                            '<button class="layui-btn layui-btn-sm layui-btn-normal yesBtn">同意</button>' +
+                            '</td>' +
+                            '</tr>';
+                        $(item).appendTo($("#checkBox table tbody"));
+                    }
+                }
+            }
+        })
+    }
 </script>
 
 </html>

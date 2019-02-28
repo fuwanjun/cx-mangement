@@ -142,11 +142,11 @@
 <div class="layui-row">
 
     <div class="layui-inline  orderManage" style="margin-top:10px">
-        工厂管理列表
+        工厂或门店管理列表
     </div>
 
     <div class="layui-inline" style="float:right;margin-top:10px">
-        <button class="layui-btn  layui-btn-normal" id="xinzhengrenwu">新增工厂</button>
+        <button class="layui-btn  layui-btn-normal" id="xinzhengrenwu">新增工厂或门店</button>
         <!--<button class="layui-btn layui-btn-danger" id="zhuanyi">删除全部</button>-->
     </div>
 
@@ -165,61 +165,61 @@
     <thead>
     <tr align="center">
         <th>编号</th>
-        <th>工厂名称</th>
+        <th>工厂或门店</th>
         <th>工厂地址</th>
         <th>是否可用</th>
         <th>操作</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>0245</td>
-        <td>鞋子</td>
-        <td>
-            江苏省常州市新北区世贸广场7号楼-2414室
-        </td>
-        <td>是</td>
-        <td>
-            <button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
-            <button class="layui-btn layui-btn-xs changeBtn">修改</button>
-        </td>
-    </tr>
-    <tr>
-        <td>0245</td>
-        <td>鞋子</td>
-        <td>
-            江苏省常州市新北区世贸广场7号楼-2414室
-        </td>
-        <td>是</td>
-        <td>
-            <button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
-            <button class="layui-btn layui-btn-xs changeBtn">修改</button>
-        </td>
-    </tr>
-    <tr>
-        <td>0245</td>
-        <td>鞋子</td>
-        <td>
-            江苏省常州市新北区世贸广场7号楼-2414室
-        </td>
-        <td>是</td>
-        <td>
-            <button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
-            <button class="layui-btn layui-btn-xs changeBtn">修改</button>
-        </td>
-    </tr>
-    <tr>
-        <td>0245</td>
-        <td>鞋子</td>
-        <td>
-            江苏省常州市新北区世贸广场7号楼-2414室
-        </td>
-        <td>是</td>
-        <td>
-            <button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
-            <button class="layui-btn layui-btn-xs changeBtn">修改</button>
-        </td>
-    </tr>
+    <!--<tr>-->
+        <!--<td>0245</td>-->
+        <!--<td>鞋子</td>-->
+        <!--<td>-->
+            <!--江苏省常州市新北区世贸广场7号楼-2414室-->
+        <!--</td>-->
+        <!--<td>是</td>-->
+        <!--<td>-->
+            <!--<button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>-->
+            <!--<button class="layui-btn layui-btn-xs changeBtn">修改</button>-->
+        <!--</td>-->
+    <!--</tr>-->
+    <!--<tr>-->
+        <!--<td>0245</td>-->
+        <!--<td>鞋子</td>-->
+        <!--<td>-->
+            <!--江苏省常州市新北区世贸广场7号楼-2414室-->
+        <!--</td>-->
+        <!--<td>是</td>-->
+        <!--<td>-->
+            <!--<button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>-->
+            <!--<button class="layui-btn layui-btn-xs changeBtn">修改</button>-->
+        <!--</td>-->
+    <!--</tr>-->
+    <!--<tr>-->
+        <!--<td>0245</td>-->
+        <!--<td>鞋子</td>-->
+        <!--<td>-->
+            <!--江苏省常州市新北区世贸广场7号楼-2414室-->
+        <!--</td>-->
+        <!--<td>是</td>-->
+        <!--<td>-->
+            <!--<button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>-->
+            <!--<button class="layui-btn layui-btn-xs changeBtn">修改</button>-->
+        <!--</td>-->
+    <!--</tr>-->
+    <!--<tr>-->
+        <!--<td>0245</td>-->
+        <!--<td>鞋子</td>-->
+        <!--<td>-->
+            <!--江苏省常州市新北区世贸广场7号楼-2414室-->
+        <!--</td>-->
+        <!--<td>是</td>-->
+        <!--<td>-->
+            <!--<button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>-->
+            <!--<button class="layui-btn layui-btn-xs changeBtn">修改</button>-->
+        <!--</td>-->
+    <!--</tr>-->
 
     </tbody>
 </table>
@@ -232,11 +232,11 @@
         <div class="layui-row">
             <form class="layui-form bombBox" id="updateForm">
                 <div class="layui-form-item">
-                    <p class="bombBoxTitle">增加工厂</p>
+                    <!--<p class="bombBoxTitle">增加工厂或门店</p>-->
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">工厂名称</label>
+                    <label class="layui-form-label">工厂或门店</label>
                     <div class="layui-input-block">
                         <input class="layui-input shopName" type="text" value="" placeholder="请输入工厂名称"
                                autocomplete="off">
@@ -270,11 +270,26 @@
                                autocomplete="off">
                     </div>
                 </div>
+
                 <div class="layui-form-item layui-inline">
-                    <label class="layui-form-label">可用</label>
+                    <label class="layui-form-label">是否可用</label>
                     <div class="layui-input-block">
                         <input type="radio" name="status" value="0" title="是" checked="">
                         <input type="radio" name="status" value="1" title="否">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">距离配置</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input circleArea" type="number" value="" placeholder="距离单位 m" autocomplete="off">
+                        <!--<div style="position: absolute;width:30px;height: 30px;">km</div>-->
+                    </div>
+                </div>
+                <div class="layui-form-item layui-inline">
+                    <label class="layui-form-label">启用自配</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="wl" value="1" title="是">
+                        <input type="radio" name="wl" value="0" title="否" checked>
                     </div>
                 </div>
                 <div class="layui-form-item funBtn">
@@ -354,6 +369,8 @@
                 var city = $("select[name=C1]").val();
                 var district = $("select[name=A1]").val();
                 formData.append("region", province + "-" + city + "-" + district);
+                formData.append("shopDistance",$(".circleArea").val());
+                formData.append("autoGamy", $("input[name=wl]:checked").val());
                 $.ajax({
                     type: "post",
                     url: globalUrl + "shop/putShop",
@@ -367,6 +384,10 @@
                     },
                     crossDomain: true,
                     success: function (res) {
+                        if(res.code==-1){
+                            layer.msg(res.message);
+                            return;
+                        }
                         document.getElementById("updateForm").reset();
                         form.render();
                         $(".mask").fadeOut();
@@ -392,7 +413,8 @@
                 var district = $("select[name=A1]").val();
                 formData.append("region", province + "-" + city + "-" + district);
                 formData.append("id", id);
-
+                formData.append("shopDistance",$(".circleArea").val());
+                formData.append("autoGamy", $("input[name=wl]:checked").val());
                 $.ajax({
                     type: "post",
                     url: globalUrl + "shop/updateShop",
@@ -410,7 +432,10 @@
                             document.getElementById("updateForm").reset();
                             form.render();
                             $(".mask").fadeOut();
+                            layer.msg(res.message);
                             getShopList(page1, pageSize);
+                        }else if(res.code==-1){
+                            layer.msg(res.message);
                         }
                     },
                     error: function (err) {
@@ -444,12 +469,20 @@
                     var district = res.data.region.split("-")[2];
                     initRegion('select[name=P1]', 'select[name=C1]', 'select[name=A1]', province, city, district);
                     if (res.data.status == 0) {
-                        $("input[name=status]").removeAttr("checked")
+                        $("input[name=status]").removeAttr("checked");
                         $("input[name=status]").eq(0).prop("checked", true);
 
                     } else {
-                        $("input[name=status]").removeAttr("checked")
+                        $("input[name=status]").removeAttr("checked");
                         $("input[name=status]").eq(1).attr("checked", true);
+                    }
+                    $(".circleArea").val(res.data.shopDistance);
+                    if(res.data.autoGamy==0){
+                        $("input[name=wl]").removeAttr("checked");
+                        $("input[name=wl]").eq(1).prop("checked", true);
+                    }else{
+                        $("input[name=wl]").removeAttr("checked");
+                        $("input[name=wl]").eq(0).prop("checked", true);
                     }
                     form.render();
                 },
@@ -487,17 +520,17 @@
 
         $("#shopList button.changeBtn").live("click", function () {
             //根据id对数据渲染
-            $(".mask").fadeIn()
+            $(".mask").fadeIn();
             $(".sureBtn").hide();
             $(".sureBtn_change").show();
             var id = $(this).parent().attr("data-id");
             getDataById(id);
 
-        })
+        });
 
         $("#shopList .deleteBtn").live("click", function () {
             var id = $(this).parent().attr("data-id");
-            layer.confirm("要删除该商品吗？", {
+            layer.confirm("要删除该工厂或门店吗？", {
                 btn: ['确定', '取消']
             }, function (index) {
                 layer.close(index);
@@ -586,6 +619,7 @@
 
 
     $("#xinzhengrenwu").click(function () {
+        clearInput();
         $(".mask").fadeIn();
         $(".sureBtn").show();
         $(".sureBtn_change").hide();
@@ -650,6 +684,20 @@
                     })
                 }
             }
+        })
+    }
+
+    function clearInput(){
+        layui.use('form',function(){
+            var form=layui.form;
+            $(".shopAddress").val("");
+            $(".shopName").val("");
+            $(".circleArea").val();
+            $("input[name=status]").removeAttr("checked");
+            $("input[name=status]").eq(0).prop("checked", true);
+            $("input[name=wl]").removeAttr("checked");
+            $("input[name=wl]").eq(0).prop("checked", true);
+            form.render();
         })
     }
 

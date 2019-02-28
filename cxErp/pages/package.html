@@ -213,9 +213,13 @@
 							<input type="tel" id="address" readonly autocomplete="off" class="layui-input">
 						</div>
 					</div>
-					<!--<button type="button" class="layui-btn layui-btn-normal" id="print" style="float: right;">打印发货清单</button>-->
+					<button type="button" class="layui-btn layui-btn-normal" id="print" style="float: right;">打印发货清单</button>
 					<button type="button" class="layui-btn layui-btn-normal" id="print2" style="float: right;margin-right: 20px;">顺丰打印</button>
 					<button type="button" class="layui-btn layui-btn-normal" id="print3" style="float: right;margin-right: 20px;">自配打印</button>
+				</div>
+				<div class="layui-inline" style="display: flex;justify-content: flex-end;margin-right: 0;">
+					<input style="width: 200px;" type="text" id="supplement" autocomplete="off" class="layui-input" placeholder="输入需要补打的订单号">
+					<button type="button" class="layui-btn layui-btn-normal" id="suppBtn">补打订单</button>
 				</div>
 			  </div>
 
@@ -224,12 +228,12 @@
 		<table class="layui-table" lay-skin="line" align="center" id="table1">
 			<thead>
 				<tr align="center">
-					<th>条码号</th>
+					<th width="200">条码号</th>
 					<th>衣物名称</th>
 					<th>颜色</th>
 					<td>上架状态</td>
 					<td>核对状态</td>
-					<td>包装时间</td>
+					<!--<td width="200">包装时间</td>-->
 				</tr>
 			</thead>
 			<tbody></tbody>
@@ -318,7 +322,20 @@
     <div style="width: 200px;height: 200px;margin: auto;">
         <img id="printImg" src="" alt="">
     </div>
-
+</div>
+<div id="goodsList" style="display: none;padding: 10px;">
+	<table class="layui-table">
+		<thead>
+			<tr>
+				<th>名称</th>
+				<th>颜色</th>
+				<th>条码号</th>
+				<th>状态</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+	<!--<button class="layui-btn" style="float: right;margin-bottom: 10px;" id="listPrint">打印</button>-->
 </div>
 <script src='./js/jquery.min.js'></script>
 <script type="text/javascript" src="../resource/layui/layui.js"></script>
@@ -369,61 +386,25 @@
     });
 
     $("#print").click(function(){
-		if($("#table1 tbody").html()==""){
-		    layer.msg("请录入订单信息")
+		if($("#table1 tbody").html()==""&&$("#supplement").val()==""){
+		    layer.msg("请录入订单信息");
 			return false
 		}
-        for(var i=0;i<$("#table1 tbody tr").length;i++){
-            if($("#table1 tbody tr").eq(i).find($(".check")).html()=='未核对'){
-                layer.msg('请核对完所有商品才能打印清单');
-                return false;
-			}
+		if($("#table1 tbody").html()!=""&&$("#supplement").val()==""){
+            for(var i=0;i<$("#table1 tbody tr").length;i++){
+                if($("#table1 tbody tr").eq(i).find($(".check")).html()=='未核对'){
+                    layer.msg('请核对完所有商品才能打印清单');
+                    return false;
+                }
+            }
+		}
+		if($("#table1 tbody").html()==""&&$("#supplement").val()!=""){
+		    orderNo=$("#supplement").val();
 		}
 
-		$(".tit-msg p").eq(0).find("span").html(orderNo);
-        $(".tit-msg p").eq(1).find("span").html(codeNo);
-        $(".td-name").html($("#name").val());
-        $(".td-phone").html($("#phone").val());
-        $(".td-orderNo").html(orderNo);
-        $(".td-address").html($("#address").val());
-        $(".td-num").html($("#num").val());
-        $.ajax({
-            url: globalUrl + "api/deliver/packScan;jsessionid=" + $.cookie("token"),
-            type: 'get',
-            data: {barCode:codeNo},
-			async:false,
-            crossDomain: true,
-            beforeSend: function (request) {
-                request.setRequestHeader("JSESSIONID", $.cookie("token"));
-            },
-			success:function(data){
-				if(data.status==200){
-                    $("#table2 tbody").html("");
-                    for(var i=0;i<data.data.washItems.length;i++){
-                        var tab=data.data.washItems[i].tab?'已核对':'未核对';
-                        var item='<tr>' +
-                            '<td>'+data.data.washItems[i].barCode+'</td>' +
-                            '<td>'+data.data.washItems[i].afterName+'</td>' +
-                            '<td>'+data.data.washItems[i].colour+'</td>' +
-                            '<td>已上架</td>' +
-                            '<td class="check">'+tab+'</td>' +
-                            '<td>'+timestampToTime(data.data.washItems[i].updateTime)+'</td>' +
-                            '</tr>';
-                        $(item).appendTo($("#table2 tbody"));
-                    }
-                    layui.use('layer',function(){
-                        var layer=layui.layer;
-                        layer.open({
-                            title:'打印清单',
-                            type:1,
-                            content:$("#printPage"),
-                            area:['60%']
-                        })
-                    })
-				}else{
-				    layer.msg(data.msg);
-				}
-			}
+		layer.confirm('请先打印物流单，确保发货清单准确无误',{btn:['已打印','未打印']},function(){
+		    layer.closeAll();
+            getLists(orderNo);
 		});
 	});
 
@@ -449,7 +430,9 @@
             layer.msg('请录入订单');
             return;
 		}
-        checkPrint();
+        if(!checkPrint()){
+            return;
+        }
 		layui.use('layer',function(){
 		   	var layer=layui.layer;
 		   	layer.open({
@@ -469,6 +452,7 @@
                         },
                         success:function(data){
 							if(data.status==200){
+                                layer.closeAll();
                                 printOrder([data.data]);
 							}
                         }
@@ -482,7 +466,9 @@
             layer.msg('请录入订单');
             return;
         }
-        checkPrint();
+        if(!checkPrint()){
+            return;
+        }
         layui.use('layer',function(){
             var layer=layui.layer;
             var choseFac=layer.open({
@@ -537,6 +523,10 @@
                                     title:'自配订单',
                                     type:1,
                                     content:$("#printOrder2"),
+									btn:['打印'],
+									yes:function(){
+                                        $("#printOrder2").jqprint();
+									}
                                 });
                             }
                         }
@@ -545,6 +535,120 @@
             })
         });
     });
+
+    $("#suppBtn").click(function(){
+       	var orderNo=$("#supplement").val();
+        $.ajax({
+            url: globalUrl + "api/deliver/repeatPrint;jsessionid=" + $.cookie("token"),
+            type: 'get',
+            data: {orderNo:orderNo},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success:function(data){
+                if(data.status==200){
+                    if(data.data.type==1){
+                        printOrder([data.data]);
+					}else if(data.data.type==2){
+                        var shopName=data.data.address.shopName?data.data.address.shopName:'';
+                        if(!shopName){
+                            $(".pLine").eq(2).hide();
+                        }
+                        var userName="";
+                        if(data.data.address.userName){
+                            userName=data.data.address.userName;
+                        }
+                        if(data.data.address.consumerName){
+                            userName=data.data.address.consumerName;
+                        }
+                        var tel1=data.data.address.tel?data.data.address.tel:data.data.address.phone;
+                        var time1=data.data.address.startTime?timestampToTime(data.data.address.startTime):"";
+                        var dAddress1=data.data.address.shopAddress?data.data.address.shopAddress:data.data.address.detailAddress;
+                        $("#pWlNo").html(data.data.codeNo);
+                        $("#wlNum").val(data.data.codeNo);
+                        $("#pOrderNo").html(data.data.orderNo);
+                        $("#pShop").html(shopName);
+                        $("#pName").html(userName);
+                        $("#pTel").html(tel1);
+                        $("#pAddress").html(data.data.address.region+"-"+dAddress1);
+                        $("#pTime").html(time1);
+
+                        $("#pShop2").html(data.data.shopManager.shopName);
+                        $("#pName2").html(data.data.shopManager.userName);
+                        $("#pTel2").html(data.data.shopManager.phone);
+                        $("#pAddress2").html(data.data.shopManager.region+"-"+data.data.shopManager.shopAddress);
+                        $("#pTime2").html(timestampToTime(data.data.shopManager.createTime));
+                        $("#printImg").attr("src","http://"+data.data.codePic);
+                        layer.open({
+                            title:'自配订单',
+                            type:1,
+                            content:$("#printOrder2"),
+                            btn:['打印'],
+                            yes:function(){
+                                $("#printOrder2").jqprint();
+                                layer.closeAll();
+                            }
+                        });
+					}
+
+                }
+            }
+        })
+
+//       	$.ajax({
+//            url: globalUrl + "api/deliver/repeatPrint;jsessionid=" + $.cookie("token"),
+//            type: 'get',
+//            data: {orderNo:orderNo},
+//            crossDomain: true,
+//            beforeSend: function (request) {
+//                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+//            },
+//			success:function(data){
+//				if(data.status==200){
+//                    var shopName=data.data.address.shopName?data.data.address.shopName:'';
+//                    if(!shopName){
+//                        $(".pLine").eq(2).hide();
+//                    }
+//                    var userName="";
+//                    if(data.data.address.userName){
+//                        userName=data.data.address.userName;
+//                    }
+//                    if(data.data.address.consumerName){
+//                        userName=data.data.address.consumerName;
+//                    }
+//                    var tel1=data.data.address.tel?data.data.address.tel:data.data.address.phone;
+//                    var time1=data.data.address.startTime?timestampToTime(data.data.address.startTime):"";
+//                    var dAddress1=data.data.address.shopAddress?data.data.address.shopAddress:data.data.address.detailAddress;
+//                    $("#pWlNo").html(data.data.codeNo);
+//                    $("#wlNum").val(data.data.codeNo);
+//                    $("#pOrderNo").html(data.data.orderNo);
+//                    $("#pShop").html(shopName);
+//                    $("#pName").html(userName);
+//                    $("#pTel").html(tel1);
+//                    $("#pAddress").html(data.data.address.region+"-"+dAddress1);
+//                    $("#pTime").html(time1);
+//
+//                    $("#pShop2").html(data.data.shopManager.shopName);
+//                    $("#pName2").html(data.data.shopManager.userName);
+//                    $("#pTel2").html(data.data.shopManager.phone);
+//                    $("#pAddress2").html(data.data.shopManager.region+"-"+data.data.shopManager.shopAddress);
+//                    $("#pTime2").html(timestampToTime(data.data.shopManager.createTime));
+//                    $("#printImg").attr("src","http://"+data.data.codePic);
+//                    layer.open({
+//                        title:'自配订单',
+//                        type:1,
+//                        content:$("#printOrder2"),
+//                        btn:['打印'],
+//                        yes:function(){
+//                            $("#printOrder2").jqprint();
+//                        }
+//                    });
+//				}
+//			}
+//		})
+
+	});
 
     function getOrderMsg(code){
         $.ajax({
@@ -570,13 +674,14 @@
 					for(var i=0;i<data.data.washItems.length;i++){
                         var colour=data.data.washItems[i].colour?data.data.washItems[i].colour:'';
 					    var tab=data.data.washItems[i].tab?'已核对':'未核对';
+//					    var time=data.data.washItems[i].updateTime?timestampToTime(data.data.washItems[i].updateTime):"";
 						var item='<tr>' +
 							'<td>'+data.data.washItems[i].barCode+'</td>' +
 							'<td>'+data.data.washItems[i].beforeName+'</td>' +
                             '<td>'+colour+'</td>' +
                             '<td>已上架</td>' +
                             '<td class="check">'+tab+'</td>' +
-                            '<td>'+timestampToTime(data.data.washItems[i].updateTime)+'</td>' +
+//                            '<td>'+time+'</td>'+
 							'</tr>';
 						$(item).appendTo($("#table1 tbody"));
 					}
@@ -610,13 +715,56 @@
     }
 
     function checkPrint(){
+        var go=true;
         for(var i=0;i<$("#table1 tbody tr").length;i++){
             if($("#table1 tbody tr").eq(i).find($(".check")).html()=='未核对'){
+                go=false;
                 layer.msg('还有商品未审核');
-                return;
 			}
 		}
+        return go;
 	}
 
+	function getLists(orderNo){
+        $.ajax({
+            type: "get",
+			async:false,
+            url: globalUrl + "api/deliver/printBill;jsessionid=" + $.cookie("token"),
+            data: {orderNo:orderNo},
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success: function (data) {
+				if(data.status==200){
+				    $("#goodsList table tbody").html("");
+				    for(var i=0;i<data.data.washItems.length;i++){
+				        var colour=data.data.washItems[i].colour?data.data.washItems[i].colour:'';
+				        var send=data.data.washItems[i].sendUser==1?'<p style="color:green;">已发货</p>':'<p style="color:red;">未发货</p>';
+				        var item='<tr goodsId="'+data.data.washItems[i].id+'">' +
+							'<td>'+data.data.washItems[i].beforeName+'</td>' +
+							'<td>'+colour+'</td>' +
+							'<td>'+data.data.washItems[i].barCode+'</td>' +
+							'<td>'+send+'</td>' +
+							'</tr>';
+				        $(item).appendTo($("#goodsList table tbody"));
+					}
+					layui.use('layer',function(){
+					    var layer=layui.layer;
+					    layer.open({
+							title:'发货清单',
+							type:1,
+							area:['600px','400px'],
+							content:$("#goodsList"),
+							btn:['打印','取消'],
+							yes:function(){
+                                $("#goodsList").jqprint();
+							}
+						})
+					})
+				}
+            }
+        })
+	}
 </script>
 </html>

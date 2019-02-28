@@ -138,7 +138,7 @@
 					  	$.cookie("data",encodeURI(JSON.stringify(res.data.userInfo)));
 					  	$.cookie("token",res.data.jsessionid);
 						layer.msg("登陆成功");
-						$.cookie("userName",EncodeUtf8(res.data.userInfo.username));
+						$.cookie("userName",res.data.userInfo.username);
 						$.cookie("userCode",res.data.userInfo.usercode);
 						window.location.href="index.html";
 					  }else{

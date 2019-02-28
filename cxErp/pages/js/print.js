@@ -28,7 +28,7 @@ function myPrintA(list, currentIndex, totalList) {
     var OrderResponse=list.parse.Response.Body.OrderResponse;
     var detail=OrderResponse.rls_info.rls_detail;
     var receiver=list.sfReceiver;
-    var sender=list.sfSender
+    var sender=list.sfSender;
   var printNo = currentIndex+'-'+totalList,
     printNum = 1,
     printDate = getTimeString(),
@@ -67,7 +67,7 @@ function myPrintA(list, currentIndex, totalList) {
     // }
   //定义Icon路径
   // var printIcony = "<img border='0' src='./static/sui.png' />";
-  var printIcony =''
+  var printIcony ='';
   var printIcond = "<img border='0' src='../img/boss_color.jpg' />";
 
 
@@ -158,11 +158,11 @@ function CreateFullBill2(m,printNo, printNum, printDate, mailno, children_nos, t
   LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
   LODOP.SET_PRINT_STYLEA(0, "TextFrame", 11);
 //取destTeamCode值
-	LODOP.ADD_PRINT_TEXT(192, 149, 93, 36, destTeamCode);
-	LODOP.SET_PRINT_STYLEA(0, "FontName", "Arial");
-	LODOP.SET_PRINT_STYLEA(0, "FontSize", 30);
-	LODOP.SET_PRINT_STYLEA(0, "FontColor", "#C0C0C0");
-	LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
+// 	LODOP.ADD_PRINT_TEXT(192, 149, 93, 36, destTeamCode);
+// 	LODOP.SET_PRINT_STYLEA(0, "FontName", "Arial");
+// 	LODOP.SET_PRINT_STYLEA(0, "FontSize", 30);
+// 	LODOP.SET_PRINT_STYLEA(0, "FontColor", "#C0C0C0");
+// 	LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
 //付款方式
   LODOP.ADD_PRINT_TEXT(245, 23, 85, 20, pay_method);
   LODOP.SET_PRINT_STYLEA(0, "FontName", "黑体");

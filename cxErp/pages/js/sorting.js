@@ -252,6 +252,7 @@ $(".clothesName").live("click", function () {
     $(".colorOperation").fadeOut();
     $(".spotOperation").fadeOut();
     $(".effectOperation").fadeOut();
+    pageScrollBottom();
 });
 
 //    获取所有衣服名称
@@ -405,6 +406,7 @@ $(".brand").live("click", function () {
     $(".colorOperation").fadeOut();
     $(".spotOperation").fadeOut();
     $(".effectOperation").fadeOut();
+    pageScrollBottom();
 });
 
 //	加载所有品牌
@@ -421,7 +423,7 @@ function getAllBrands(con) {
         },
         success: function (data) {
             console.log(data);
-            con.html(" ");
+            con.html("");
             for (var i = 0; i < data.data.length; i++) {
                 var item = '<div class="brandLi" brandName="' + data.data[i].id + '">' +
                     '<p>' + data.data[i].paramName + '</p>' +
@@ -535,6 +537,7 @@ $(".color").live("click", function () {
     $(".brandOperation").fadeOut();
     $(".spotOperation").fadeOut();
     $(".effectOperation").fadeOut();
+    pageScrollBottom();
 });
 //	点击确定颜色
 $("#colorPicker .colorLi").live("click", function () {
@@ -591,6 +594,7 @@ $("#spotBtn").live("click", function () {
             console.log(data);
             if (data.status == 200) {
                 allClothesBug($("#clothesBug"));
+                $("#inSpot").val("").focus();
             } else if (data.status == 210) {
                 layer.msg(data.msg);
             } else {
@@ -693,6 +697,7 @@ $(".spot").live("click", function () {
     $(".colorOperation").fadeOut();
     $(".brandOperation").fadeOut();
     $(".effectOperation").fadeOut();
+    pageScrollBottom();
 });
 
 //	所有洗后效果
@@ -736,7 +741,8 @@ $("#effectBtn").live("click", function () {
         success: function (data) {
             console.log(data);
             if (data.status == 200) {
-                allEffect($("#effectCon"))
+                allEffect($("#effectCon"));
+                $("#addEffect").val("").focus();
             } else if (data.status == 210) {
                 layer.msg(data.msg);
             } else {
@@ -841,6 +847,7 @@ $(".effect").live("click", function () {
     $(".colorOperation").fadeOut();
     $(".spotOperation").fadeOut();
     $(".brandOperation").fadeOut();
+    pageScrollBottom();
 });
 //	点击拍照
 $(".takePhoto button").live("click", function () {
@@ -860,7 +867,6 @@ $(".takePhoto button").live("click", function () {
                 layer.close(animate);
                 console.log(data);
                 photos.html(data.data);
-
                 layer.msg(data.message);
             }
         })
@@ -870,6 +876,10 @@ $(".takePhoto button").live("click", function () {
 //	点击重置
 $(".clear").live("click", function () {
     var clear = $(this).parent().parent();
+    if(clear.find($(".barcode")).html()){
+        layer.msg('已保存，无法重置');
+        return;
+    }
     clear.find($(".clothesName")).html("");
     clear.find($(".price2")).html("");
     clear.find($(".fjNum div input")).val("");
@@ -882,6 +892,7 @@ $(".clear").live("click", function () {
 
 //	保存单条数据
 $(".pre-one").live("click", function () {
+    var data={};
     var pre = $(this).parent().parent();
     var nowTime = new Date();
     var orderNo = $("#orderNo").val();
@@ -903,6 +914,23 @@ $(".pre-one").live("click", function () {
     var picture = pre.find($(".takePhoto .photos")).html();
     var fillPrice = pre.find($(".diffPrice")).html();
     var startTime = timestampToTime(nowTime);
+    data.orderNo=orderNo;
+    data.beforeName=beforeName;
+    data.beforePrice=beforePrice;
+    data.afterName=afterName;
+    data.afterPrice=afterPrice;
+    data.modeNum=modeNum;
+    data.brand=brand;
+    data.colour=colour;
+    data.flaw=flaw;
+    data.effect=effect;
+    data.fillPrice=fillPrice;
+    data.startTime=startTime;
+    data.picture=picture;
+
+    if(pre.find($(".barcode")).html()){
+        data.barCode=pre.find($(".barcode")).html();
+    }
     layui.use('layer', function () {
         var layer = layui.layer;
         animate = layer.load();
@@ -911,21 +939,7 @@ $(".pre-one").live("click", function () {
                 url: globalUrl + "api/work/sortSave;jsessionid=" + $.cookie("token"),
                 type: 'post',
                 crossDomain: true,
-                data: {
-                    orderNo: orderNo,
-                    beforeName: beforeName,
-                    beforePrice: beforePrice,
-                    afterName: afterName,
-                    afterPrice: afterPrice,
-                    modeNum: modeNum,
-                    brand: brand,
-                    colour: colour,
-                    flaw: flaw,
-                    effect: effect,
-                    picture: picture,
-                    fillPrice: fillPrice,
-                    startTime: startTime
-                },
+                data: data,
                 beforeSend: function (request) {
                     request.setRequestHeader("JSESSIONID", $.cookie("token"));
                 },
@@ -976,15 +990,15 @@ function print(barCode,name,color) {
                     $(item).appendTo($("#codeBox"));
                 } else {
                     for (var i = 0; i < data.data.images.length; i++) {
-                        var item = '<div class="printCode" style="display: flex;justify-content: space-between;margin-bottom: 10px;">' +
-                            '<div class="mainCode" style="width:50%;height: 100px;margin-left: 15px;">' +
+                        var item = '<div class="printCode" style="display: flex;justify-content:flex-start;margin-bottom: 40px;">' +
+                            '<div class="mainCode" style="width:50%;height: 100px;">' +
                             '<img style="width: 80%; height: 100%;" src="http://' + data.data.images[i] + '" alt="">' +
-                            '<div class="code2" style="font-size:30px; margin-top: 40px;">' + data.data.barCodes[i] + '</div>' +
+                            '<div class="code2" style="font-size: 30px;">' + data.data.barCodes[i] + '</div>' +
                             '</div>' +
-                            '<div style="width: 50%;">' +
-                            '<p class="orderNo" style="margin-top: 0;font-size:30px;">订单号：<span>' + data.data.orderNo + '</span></p>' +
-                            '<p style="margin-top: 0;font-size:30px;">名称:<span>'+name+'</span></p>' +
-                            '<p style="margin-top: 0;font-size:30px;">颜色:<span>'+color+'</span></p>' +
+                            '<div style="50%;margin-left: 50px;">' +
+                            '<p class="orderNo" style="text-align:left;font-size:30px;">订单号：<span>' + data.data.orderNo + '</span></p>' +
+                            '<p style="text-align:left;font-size:30px;">名称:<span>'+name+'</span></p>' +
+                            '<p style="text-align:left;font-size:30px;">颜色:<span>'+color+'</span></p>' +
                             '</div>' +
                             '</div>';
                         $(item).appendTo($("#codeBox"));
@@ -1040,7 +1054,7 @@ $(".layui-tab-title li").live("click", function () {
     $(".layui-tab-title li").eq(i).addClass("layui-this");
     $(".layui-tab-content .layui-tab-item").removeClass("layui-show");
     $(".layui-tab-content .layui-tab-item").eq(i).addClass("layui-show");
-    if (i = 1) {
+    if (i == 1) {
         backCheckMsg(1);
     }
 });
@@ -1548,12 +1562,12 @@ function backCheckMsg(page, time) {
                 } else {
                     effect2 = ""
                 }
-                var afterPrice = data.data.list[i].afterPrice ? data.data.list[i].afterPrice : "";
+                var afterPrice = data.data.list[i].afterPrice ? data.data.list[i].afterPrice : data.data.list[i].beforePrice;
                 var brand = data.data.list[i].brand ? data.data.list[i].brand : "";
                 var colour = data.data.list[i].colour ? data.data.list[i].colour : "";
                 var item = '<tr id="' + data.data.list[i].id + '">' +
                     '<td class="backCode">' + data.data.list[i].barCode + '</td>' +
-                    '<td class="backName">' + data.data.list[i].afterName + '</td>' +
+                    '<td class="backName">' + data.data.list[i].beforeName + '</td>' +
                     '<td class="backPrice">' + afterPrice + '</td>' +
                     '<td class="backBrand">' + brand + '</td>' +
                     '<td class="backColor">' + colour + '</td>' +
@@ -1656,11 +1670,10 @@ function getNoFinish() {
                             '<td>' +
                             '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs pre-one">保存</button>' +
                             '</td>' +
-
                             '</tr>';
                         $(item).appendTo($("#recording"));
                     }
-                    layer.close(animate);
+                    // layer.close(animate);
                 }
             }
         }

@@ -96,6 +96,7 @@
                 <option value="">全部</option>
                 <option value="10">未付款</option>
                 <option value="20">已付款</option>
+                <option value="22">未取件</option>
                 <option value="30">已取件</option>
                 <option value="35">清洗中</option>
                 <option value="40">待送</option>
@@ -221,7 +222,7 @@
     </div>
 </div>
 </body>
-<div id="timeBox" style="padding: 10px 20px;"><input style="padding: 5px;" id="changeTime" type="text" placeholder="选择预约时间"></div>
+<!--<div id="timeBox" style="padding: 10px 20px;"><input style="padding: 5px;" id="changeTime" type="text" placeholder="选择预约时间"></div>-->
 <script src='./js/jquery.min.js'></script>
 <script type="text/javascript" src="../resource/js/common.js"></script>
 <script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
@@ -283,6 +284,8 @@
                         str += '<td>未付款</td>'
                     } else if (value.status == "20") {
                         str += '<td>已付款</td>'
+                    }else if (value.status == "22") {
+                        str += '<td>未取件</td>'
                     } else if (value.status == "30") {
                         str += '<td>已取件</td>'
                     } else if (value.status == "35") {

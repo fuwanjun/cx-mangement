@@ -58,6 +58,7 @@
 			<th>客户姓名</th>
 			<th>电话</th>
 			<th>上道岗位</th>
+			<th>退件状态</th>
 			<th>客服处理</th>
 			<th>操作</th>
 		</tr>
@@ -151,6 +152,7 @@
 					for(var i=0;i<data.data.list.length;i++){
 					    var clotheName=data.data.list[i].afterName?data.data.list[i].afterName:data.data.list[i].beforeName;
 					    var color=data.data.list[i].colour?data.data.list[i].colour:'';
+					    var backType=data.data.list[i].washFault?"事故退件":"正常退件";
 					    var item='<tr backId="'+data.data.list[i].id+'">' +
 							'<td><input type="checkbox"></td>' +
 							'<td>'+data.data.list[i].orderNo+'</td>' +
@@ -160,6 +162,7 @@
 							'<td>'+data.data.list[i].userName+'</td>' +
                             '<td>'+data.data.list[i].phone+'</td>' +
                             '<td>'+data.data.list[i].previousWork+'</td>' +
+							'<td>'+backType+'</td>' +
 							'<td><button class="layui-btn layui-btn-sm layui-btn-normal sendBtn">发送</button></td>' +
 							'<td><button class="layui-btn layui-btn-sm layui-btn-danger backBtn">退件</button></td>' +
 							'</tr>';

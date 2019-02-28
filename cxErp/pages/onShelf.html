@@ -200,7 +200,7 @@
 		<table class="layui-table" lay-skin="line" align="center" id="table1">
 			<thead>
 				<tr align="center">
-					<th>条码号</th>
+					<th width="200">条码号</th>
 					<th>衣物名称</th>
 					<th>颜色</th>
 					<td>照片</td>
@@ -429,16 +429,18 @@
                         $('#latNum').html(data.data.washItems[i].grillageNo);
                         $("#code").html(code);
 					}
-
+//                    upper(code);
 				}else{
 				    layer.msg(data.msg);
+				    return
 				}
                 layer.close(animate)
 			},error:function(){
 			    layer.close(animate)
 			}
 		});
-        layer.close(animate)
+        layer.close(animate);
+        return false;
 	}
 
 //	确认包装
@@ -493,6 +495,7 @@
                             },
                             success:function(data){
                                 if(data.status==200){
+                                    $('#barCode').val("").focus();
 									codeWrite(code);
                                     layer.closeAll();
                                     layer.msg('上架完成');
@@ -505,7 +508,7 @@
 				})
 			})
 		}else{
-	        layer.msg('商品已处理');
+//	        layer.msg('商品已处理');
 		}
 	}
 

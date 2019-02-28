@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>客服</title>
+	<title></title>
 	<meta charset='utf-8'>
 	<meta name='renderer' content='webkit'>
 	<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -103,8 +103,9 @@
 		<tbody></tbody>
 	</table>
 	<div style="display: flex;justify-content: flex-end">
-		<p>已发货数量:<span class="pNum"></span></p>
-		<p style="margin-left: 50px;">剩余:<span class="pSurplus"></span></p>
+		<p>衣物数量:<span class="pTotal"></span></p>
+		<p style="margin-left: 50px;margin-right: 50px;">已发货数量:<span class="pNum"></span></p>
+		<p>剩余:<span class="pSurplus"></span></p>
 	</div>
 </div>
 <script src='./js/jquery.min.js'></script>
@@ -165,9 +166,11 @@
 		seeDetail(id);
 		var num=$(this).parent().parent().attr("num");
         var surplus=$(this).parent().parent().attr("surplus");
+        var total=$(this).parent().parent().attr("total");
         $(".pOrder").html(orderNo);
         $(".pNum").html(num);
         $(".pSurplus").html(surplus);
+        $(".pTotal").html(total);
 		layui.use('layer',function(){
 		    var layer=layui.layer;
 		    layer.open({
@@ -191,7 +194,7 @@
 			success:function(data){
 				if(data.status==200){
                     $("#table1 tbody").html();
-				    var item='<tr sendId="'+data.data.itemIds+'" num="'+data.data.num+'" surplus="'+data.data.surplus+'">' +
+				    var item='<tr sendId="'+data.data.itemIds+'" num="'+data.data.num+'" surplus="'+data.data.surplus+'" total="'+data.data.total+'">' +
 						'<td>'+data.data.logisticsCode+'</td>' +
                         '<td>'+data.data.orderNo+'</td>' +
                         '<td>'+data.data.packUserName+'</td>' +
@@ -262,7 +265,7 @@
 				        var item='<tr>' +
 							'<td>'+data.data[i].beforeName+'</td>' +
                             '<td>'+checkEmpty(data.data[i].colour)+'</td>' +
-                            '<td><img src="http://'+data.data[i].barImage+'" alt=""></td>' +
+                            '<td>'+data.data[i].barCode+'</td>' +
                             '<td></td>' +
 //							'<td>'+flaw+'</td>' +
 //                            '<td>'+effect+'</td>' +

@@ -186,7 +186,6 @@
 			success:function(data){
 				if(data.status==200){
                     $("#con").html("");
-				    var clotheName=data.data.afterName?data.data.afterName:data.data.beforeName;
                     var pics = data.data.picture ? data.data.picture : "";
 				    var item='<p style="text-align: center;">条码号:<span></span></p>' +
 						'<table class="layui-table" lay-skin="line" align="center" id="table1">'+
@@ -206,11 +205,11 @@
 								'<tbody>' +
 									'<tr itemId="'+data.data.id+'">' +
 										'<td>'+data.data.orderNo+'</td>' +
-                        				'<td>'+clotheName+'</td>' +
-                        				'<td>'+checkcheckEmpty(data.data.brand)+'</td>' +
-                        				'<td>'+checkcheckEmpty(data.data.colour)+'</td>' +
-                        				'<td>'+checkcheckEmpty(data.data.flaw)+'</td>' +
-                        				'<td>'+checkcheckEmpty(data.data.effect)+'</td>' +
+                        				'<td>'+data.data.beforeName+'</td>' +
+                        				'<td>'+checkEmpty(data.data.brand)+'</td>' +
+                        				'<td>'+checkEmpty(data.data.colour)+'</td>' +
+                        				'<td>'+checkEmpty(data.data.flaw)+'</td>' +
+                        				'<td>'+checkEmpty(data.data.effect)+'</td>' +
                         				'<td>' +
 										'<button class="layui-btn layui-btn-sm layui-btn-primary lookPhoto">查看图片</button>' +
 										'<p class="pics" style="display: none;">' + pics + '</p>' +

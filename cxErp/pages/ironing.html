@@ -324,11 +324,11 @@
                             '<p style="text-align: center;font-size: 16px; margin-top: 10px;">条码号：<span>' + barCode + '</span></p>' +
                             '<p style="text-align: center;font-size: 16px; margin-top: 10px; margin-bottom: 10px;">' + data.data.workName + '人：<span>' + data.data.backUser.username + ' </span> ' + data.data.backUser.usercode + '</p>',
                             area: ['360px'],
-                            btn: ['取消', '确定'],
-                            yes: layer.closeAll(),
-                            btn2: function () {
+                            btn: ['确定', '取消'],
+                            yes:  function () {
                                 backCheck(itemId, status);
-                            }
+                            },
+                            btn2:layer.closeAll()
                         })
                     })
                 } else {
@@ -349,11 +349,11 @@
             var leak = layer.open({
                 type: 1,
                 content: '<p style="margin: 10px;">确定把该商品加入事故返单？</p>',
-                btn: ['取消', '确定'],
-                yes: layer.closeAll(),
-                btn2: function () {
+                btn: ['确定', '取消'],
+                yes:function () {
                     typeError(itemId, status);
-                }
+                } ,
+                btn2:layer.closeAll()
             })
         })
     });
@@ -847,7 +847,8 @@
                 console.log(data);
                 if (data.status == 200) {
                     table1Show(tablePage1,pageSize,status,time1);
-                    layer.msg(data.msg);
+                    layer.closeAll();
+                    layer.msg('操作成功');
                 } else {
                     layer.msg(data.msg);
                 }
@@ -872,6 +873,7 @@
                 if (data.status == 200) {
                     table1Show(tablePage1,pageSize,status,time1);
                     layer.msg('事故返单成功');
+                    layer.closeAll();
                 } else {
                     layer.msg(data.msg);
                 }

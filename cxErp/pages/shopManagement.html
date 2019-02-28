@@ -644,14 +644,18 @@
             success: function (data) {
                 if (data.status == 200) {
                     var area=data.data.region.split("-");
-                    $("#shopType").val(data.data.styleId);
-                    $("#shopName").val(data.data.storeName);
-                    $("#shopAddress").val(data.data.storeAddress);
-                    $("select[name='P1']").val(area[0]);
-                    $("select[name='C1']").val(area[1]);
-                    $("select[name='A1']").val(area[2]);
-                    $("#contacts").val(data.data.consumerName);
-                    $("#shopCall").val(data.data.storePhone);
+                    layui.use('form',function(){
+                        var form=layui.form;
+                        $("#shopType").val(data.data.styleId);
+                        $("#shopName").val(data.data.storeName);
+                        $("#shopAddress").val(data.data.storeAddress);
+                        $("select[name='P1']").val(area[0]);
+                        $("select[name='C1']").val(area[1]);
+                        $("select[name='A1']").val(area[2]);
+                        $("#contacts").val(data.data.consumerName);
+                        $("#shopCall").val(data.data.storePhone);
+//                        form.render();
+                    });
                 }
             }
         })

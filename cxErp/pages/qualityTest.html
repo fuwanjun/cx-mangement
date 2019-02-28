@@ -150,11 +150,11 @@
                             '<p style="text-align: center;font-size: 16px; margin-top: 10px;">条码号：<span>' + barCode + '</span></p>' +
                             '<p style="text-align: center;font-size: 16px; margin-top: 10px; margin-bottom: 10px;">' + data.data.workName + '人：<span>' + data.data.backUser.username + ' </span> ' + data.data.backUser.usercode + '</p>',
                             area: ['360px'],
-                            btn: ['取消', '确定'],
-                            yes: layer.closeAll(),
-                            btn2: function () {
+                            btn: ['确定','取消'],
+                            yes:  function () {
                                 backCheck(itemId, status);
-                            }
+                            },
+                            btn2:layer.closeAll()
                         })
                     })
                 } else {
@@ -175,11 +175,11 @@
             var leak = layer.open({
                 type: 1,
                 content: '<p style="margin: 10px;">确定把该商品加入分类错误返单？</p>',
-                btn: ['取消', '确定'],
-                yes: layer.closeAll(),
-                btn2: function () {
+                btn: ['确定','取消'],
+                yes:  function () {
                     typeError(itemId, status);
-                }
+                },
+                btn2:layer.closeAll()
             })
         })
     });
@@ -504,14 +504,13 @@
                     $(nThead).appendTo($("#table1 thead tr"));
                     $("#table1 tbody").html("");
                     for (var i = 0; i < data.data.list.length; i++) {
-                        var afterName = data.data.list[i].afterName ? data.data.list[i].afterName : "";
                         var colour = data.data.list[i].colour ? data.data.list[i].colour : "";
                         var flaw = data.data.list[i].flaw ? data.data.list[i].flaw : "";
                         var pics = data.data.list[i].picture ? data.data.list[i].picture : "";
                         var item = '<tr itemId="' + data.data.list[i].id + '">' +
                             //                        '<td><input type="checkbox"></td>' +
                             '<td class="barCode">' + data.data.list[i].barCode + '</td>' +
-                            '<td>' + afterName + '</td>' +
+                            '<td>' + data.data.list[i].beforeName + '</td>' +
                             '<td class="color">' + colour + '</td>' +
                             '<td class="spot">' + flaw + '</td>' +
                             '<td>' +
@@ -571,8 +570,8 @@
                         var pics = data.data.list[i].picture ? data.data.list[i].picture : "";
                         var item='<tr itemId="' + data.data.list[i].id +'">' +
                             '<td>'+data.data.list[i].barCode+'</td>' +
-                            '<td>'+data.data.list[i].afterName+'</td>' +
-                            '<td>'+data.data.list[i].afterPrice+'</td>' +
+                            '<td>'+data.data.list[i].beforeName+'</td>' +
+                            '<td>'+data.data.list[i].beforePrice+'</td>' +
                             '<td>'+data.data.list[i].brand+'</td>' +
                             '<td>'+data.data.list[i].colour+'</td>' +
                             '<td>'+data.data.list[i].flaw+'</td>' +
@@ -711,6 +710,41 @@
         })
     }
 
+    $(".lookPhoto").live("click", function () {
+        var pics = $(this).next("p").html();
+        if (!pics) {
+            layer.msg("该商品无图片");
+            return
+        }
+        if (!pics.indexOf(",")) {
+            var item = '<div class="photoImg" style="float: left;">' +
+                '<img src="http://' + pics + '" alt="">' +
+                '</div>';
+            $(item).appendTo($("#photos"));
+        } else {
+            var picArr = [];
+            picArr = pics.split(',');
+            $("#photos").html("");
+            for (var i = 0; i < picArr.length; i++) {
+                var item = '<div class="photoImg" style="float: left;">' +
+                    '	<img src="http://' + picArr[i] + '" alt="">' +
+                    '</div>';
+                $(item).appendTo($("#photos"));
+            }
+        }
+
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.open({
+                title: '商品图片',
+                type: 1,
+                content: $("#photos"),
+                area: ['900px', '620px'],
+                scrollbar: false
+            })
+        })
+    });
+
     //	扫码录入整理及质检衣物信息
     function codeWrite(code) {
         $.ajax({
@@ -744,6 +778,24 @@
                         var colour = data.data.colour ? data.data.colour : "";
                         var flaw = data.data.flaw ? data.data.flaw : "";
                         var pics = data.data.picture ? data.data.picture : "";
+                        var state="";
+						if(data.data.status==101){
+							state='正常';
+						}else if(data.data.status==102){
+							state='补差价';
+						}else if(data.data.status==103){
+							state='退件';
+						}else if(data.data.status==104){
+							state='客服退件';
+						}else if(data.data.status==105){
+							state='污渍终止';
+						}else if(data.data.status==106){
+							state='外包洗涤';
+						}else if(data.data.status==108){
+							state='上架';
+						}else{
+							state='';
+						}
                         var item = '<tr itemId="' + data.data.id + '">' +
                             //                        '<td><input type="checkbox"></td>' +
                             '<td class="barCode">' + data.data.barCode + '</td>' +
@@ -756,7 +808,7 @@
                             '</td>' +
                             '<td><button class="layui-btn layui-btn-danger layui-btn-sm leak">是</button></td>' +
                             '<td><button class="layui-btn layui-btn-danger layui-btn-sm wrong">是</button></td>' +
-                            '<td><button class="layui-btn layui-btn-danger layui-btn-sm stop">是</button></td>' +
+                            '<td>'+state+'</td>' +
                             '</tr>';
                         $(item).appendTo($("#table1 tbody"));
 

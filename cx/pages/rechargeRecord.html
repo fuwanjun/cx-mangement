@@ -118,9 +118,7 @@
 	</form>
 	<!-- 下面是一些第二行的东西 -->
 	<div class="layui-row">
-		<div class="layui-inline  orderManage" style="margin-top:10px">
-			微信充值记录
-		</div>
+		<div class="layui-inline  orderManage" style="margin-top:10px">微信充值记录</div>
 		<div class="layui-inline" style="float:right;margin-right:30px;margin-top:10px">
 			<!--<button class="layui-btn layui-btn-normal" style="margin-right:30px;" id="zhuanyi">转移空托盘</button>
 			<button class="layui-btn  layui-btn-normal" id="xinzhengrenwu">新增任务</button>-->
@@ -161,17 +159,25 @@
 <script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
 <script type="text/javascript" src="../resource/layui/layui.js"></script>
 <script>
+	var rechargeType=getQueryString('rechargeType');
 	$(function(){
-        getRecord(1);
+	    if(rechargeType==1){
+            $(".orderManage").html('会员值记录');
+		}else if(rechargeType==2){
+            $(".orderManage").html('折扣卡充值记录');
+		}
+        getRecord(1,rechargeType);
 	});
 
-	function getRecord(page,condi,startTime,endTime){
+//	rechargeType==1 会员充值 	rechargeType==2 折扣卡充值
+	function getRecord(page,type,condi,startTime,endTime){
 	    $.ajax({
 			url:globalUrl+"rechargeCard/getAllRechargeList",
             type:"get",
             data:{
                 pageNum:page,
-				condi:condi,
+                userName:condi,
+                rechargeType:type,
 				startTime:startTimeCinfg(startTime),
 				endTime:endTimeCinfg(endTime)
             },
@@ -220,7 +226,7 @@
                         curr:page,
                         jump:function(obj,first){
                             if(!first){
-                                getRecord(obj.curr)
+                                getRecord(obj.curr,rechargeType);
                             }
                         }
                     })
@@ -233,7 +239,7 @@
         var searchCon=$("#criticalWord").val();
         var startTime=$("#test5").val();
         var endTime=$("#test6").val();
-        getRecord(1,searchCon,startTime,endTime);
+        getRecord(1,rechargeType,searchCon,startTime,endTime);
 	});
 
     $("#excel").click(function(){
@@ -243,8 +249,8 @@
     function getExcel(){
         var startTime=$("#test5").val();
         var endTime=$("#test6").val();
-        var condi=$("#criticalWord").val();
-        window.open(globalUrl+"rechargeCard/exportRechargeList?keyWord="+condi+"&startTime="+startTime+"&endTime="+endTime);
+        var userName=$("#criticalWord").val();
+        window.open(globalUrl+"rechargeCard/exportRechargeList?userName="+userName+"&rechargeType="+rechargeType+"&startTime="+startTime+"&endTime="+endTime);
     }
 </script>
 
