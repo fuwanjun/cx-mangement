@@ -138,7 +138,7 @@ $("#search").click(function(){
 $("#excel").click(function(){
     var startTime=$("#test5").val();
     var endTime=$("#test6").val();
-   	window.open(globalUrl+"/stat/goodsSales/exportItemStat?startTime="+startTime+"&endTime="+endTime);
+   	window.open(globalUrl+"/stat/goodsSales/exportItemStat?startTime="+startTimeCinfg(startTime)+"&endTime="+endTimeCinfg(endTime));
 });
 
 //	总计

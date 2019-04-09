@@ -213,7 +213,7 @@ $("#excel").click(function(){
 	var startTime=$("#test5").val();
 	var endTime=$("#test6").val();
 	var goodsName=$("#criticalWord").val();
-	window.open(globalUrl+"stat/goodsSales/exportGoodsSales?goodsName="+goodsName+"&startTime="+startTime+"&endTime="+endTime);
+	window.open(globalUrl+"stat/goodsSales/exportGoodsSales?goodsName="+goodsName+"&startTime="+startTimeCinfg(startTime)+"&endTime="+endTimeCinfg(endTime));
 });
 
 //	获取衣物信息数据

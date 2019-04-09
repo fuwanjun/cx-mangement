@@ -35,9 +35,17 @@
 			</div>
 		</form>
 		<form class="layui-form">
-			<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
-				<div class="layui-input-inline" style="margin:0; width: 70%;">
-					<input type="text" id="searchDate1" placeholder="选择日期" class="layui-input">
+			<!--<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">-->
+				<!--<div class="layui-input-inline" style="margin:0; width: 70%;">-->
+					<!--<input type="text" autocomplete="off" id="searchDate1" placeholder="选择日期" class="layui-input">-->
+				<!--</div>-->
+				<!--<button class="layui-btn layui-btn-normal" type="button" id="searchBtn1">查询</button>-->
+			<!--</div>-->
+			<div class="layui-form-item layui-inline" style="margin-bottom: 0;margin-top: 10px;">
+				<div class="layui-input-inline" style="margin:0; width: 80%;display: flex;">
+					<input type="text" id="searchDate1" placeholder="选择日期" autocomplete="off" class="layui-input">
+					<p class="to" style="margin: 10px 10px;">~</p>
+					<input type="text" id="searchDate1-1" placeholder="选择日期" autocomplete="off" class="layui-input">
 				</div>
 				<button class="layui-btn layui-btn-normal" type="button" id="searchBtn1">查询</button>
 			</div>
@@ -82,14 +90,33 @@
 			, layer = layui.layer;
 
 		var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
-
+        laydate.render({
+            elem: "#searchDate1"
+        });
+        laydate.render({
+            elem: "#searchDate1-1"
+        });
 		table1Show(page1,pageSize,status);
 
+	});
+
+	$("#searchBtn1").live("click",function(){
+        var startTime1 = $("#searchDate1").val();
+        var endTime1 = $("#searchDate1-1").val();
+        if(!startTime1){
+            startTime1=endTime1;
+        }
+        if(!endTime1){
+            endTime1=startTime1;
+        }
+        table1Show(page1,pageSize,status,startTime1,endTime1);
 	});
 
 	$(".yesBtn").live("click",function(){
 //	    animate=layer.load();
 	    var id=$(this).parent().parent().attr("itemId");
+        var startTime1 = $("#searchDate1").val();
+        var endTime1 = $("#searchDate1-1").val();
 	    layui.use('layer',function(){
 	        var layer=layui.layer;
 	        layer.open({
@@ -107,7 +134,7 @@
                         },
 						success:function(data){
                             if(data.status==200){
-                                table1Show(page1,pageSize,status);
+                                table1Show(page1,pageSize,status,startTime1,endTime1);
                                 layer.closeAll();
                                 layer.msg(data.msg);
 							}else{
@@ -125,6 +152,14 @@
 
     $(".noBtn").live("click",function(){
         var id=$(this).parent().parent().attr("itemId");
+        var startTime1 = $("#searchDate1").val();
+        var endTime1 = $("#searchDate1-1").val();
+        if(!startTime1){
+            startTime1=endTime1;
+        }
+        if(!endTime1){
+            endTime1=startTime1;
+        }
         layui.use('layer',function(){
             var layer=layui.layer;
             layer.open({
@@ -142,7 +177,7 @@
                         },
                         success:function(data){
                             if(data.status==200){
-                                table1Show(page1,pageSize,status);
+                                table1Show(page1,pageSize,status,startTime1,endTime1);
                                 layer.closeAll();
                                 layer.msg(data.msg);
                             }else{
@@ -158,12 +193,12 @@
         })
     });
 
-	function table1Show(page,pageSize,status,time){
+	function table1Show(page,pageSize,status,startTime,endTime){
 	    animate=layer.load();
 		$.ajax({
             url: globalUrl + "api/admin/listByStatus;jsessionid=" + $.cookie("token"),
             type: 'get',
-            data: {page:page,pageSize:pageSize,status:status,time},
+            data: {page:page,pageSize:pageSize,status:status,startTime:startTime,endTime:endTime},
             crossDomain: true,
             beforeSend: function (request) {
                 request.setRequestHeader("JSESSIONID", $.cookie("token"));

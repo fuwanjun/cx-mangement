@@ -67,7 +67,7 @@
             width: 72px;
         }
 
-        .vip-score, .vip-balance, .order-num, .order-price {
+        .vip-score, .vip-balance,.discount-balance, .order-num, .order-price {
             display: flex;
             justify-content: center;
         }
@@ -103,7 +103,38 @@
             width: auto;
             line-height: 36px;
         }
-
+        .backTit{
+            display: flex;
+            border-bottom:2px solid #e2e2e2;
+        }
+        .backTit p{
+            width:50%;
+            text-align: center;
+            height:40px;
+            line-height: 40px;
+            background: #e2e2e2;
+        }
+        .backTit .back-active{
+            background: #fff;
+        }
+        #backBox{
+            display: none;
+        }
+        #backBox .back-item{
+            padding:10px;
+            display: none;
+        }
+        #backBox .back-item p{
+            font-size:16px;
+            line-height: 30px;
+        }
+        #backBox .back-item-active{
+            display: block;
+        }
+        .btnBox{
+            display: flex;
+            justify-content: flex-end;
+        }
     </style>
 
 </head>
@@ -149,8 +180,8 @@
     <thead>
     <tr align="center">
         <th width="250px">用户</th>
-        <th>门店推广员</th>
-        <th>永久二维码</th>
+        <th>门店推广员操作</th>
+        <th>永久二维码操作</th>
         <th>等级/标签组</th>
         <th>注册时间</th>
         <th>积分/余额</th>
@@ -167,8 +198,31 @@
 <div class="bg">
 
 </div>
-
 </body>
+<div id="backBox">
+    <div class="backTit">
+        <p class="back-active">会员余额</p>
+        <p>折扣卡余额</p>
+    </div>
+    <div class="back-item back-item-activce">
+        <p>会员余额：<span class="vip-balance1"></span></p>
+        <p>赠送金额：<span class="vip-gift"></span></p>
+        <p>实际退款金额：<span class="vip-actual"></span></p>
+        <div class="btnBox">
+            <button class="layui-btn layui-btn-normal layui-btn-sm backMoneyBtn1">确定</button>
+            <button class="layui-btn layui-btn-primary layui-btn-sm cannelBtn">取消</button>
+        </div>
+    </div>
+    <div class="back-item">
+        <p>折扣卡余额：<span class="discount-balance1"></span></p>
+        <p>折扣率：<span class="discount-num"></span></p>
+        <p>实际退款金额：<span class="discount-actual"></span></p>
+        <div class="btnBox">
+            <button class="layui-btn layui-btn-normal layui-btn-sm backMoneyBtn2">确定</button>
+            <button class="layui-btn layui-btn-primary layui-btn-sm cannelBtn">取消</button>
+        </div>
+    </div>
+</div>
 <script src='./js/jquery.min.js'></script>
 <script type="text/javascript" src="../resource/js/common.js"></script>
 <script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
@@ -251,8 +305,10 @@
                     var orderNum = data.data.list[i].orderCount ? data.data.list[i].orderCount : 0;
 //					成交订单总金额
                     var okOrderPrice = data.data.list[i].payment ? data.data.list[i].payment : "0.00";
-//					余额
+//					会员余额
                     var surplus = data.data.list[i].money ? data.data.list[i].money : "0.00";
+//                  折扣卡余额
+                    var disMoney=data.data.list[i].disMoney ? data.data.list[i].disMoney : "0.00";
 //                  停用/启用
                     var stopBtn = "";
                     if (data.data.list[i].state == 'NORMAL') {
@@ -281,8 +337,12 @@
                         '<p class="text-value">' + vipScore + '</p>' +
                         '</div>' +
                         '<div class="vip-balance">' +
-                        '<p class="text-l">余额：</p>' +
+                        '<p class="text-l">会员余额：</p>' +
                         '<p class="text-value">' + surplus + '</p>' +
+                        '</div>' +
+                        '<div class="discount-balance">' +
+                        '<p class="text-l">折扣卡余额：</p>' +
+                        '<p class="text-value">' + disMoney + '</p>' +
                         '</div>' +
                         '</td>' +
                         '<td>' +
@@ -376,68 +436,107 @@
 
     //  退余额
     $(".backMoney").live("click", function () {
+        $(".back-item").eq(0).show();
         var userId = $(this).parent().parent().attr("userId");
-        $.ajax({
-            url: globalUrl + "balance/refundBefor",
-            type: "get",
-            data: {userId: userId},
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("token", $.cookie("token"));
-            },
-            crossDomain: true,
-            success: function (data) {
-                console.log(data);
-                layui.use('layer', function () {
-                    var layer = layui.layer;
-                    if (data.code == 0) {
-                        if (data.data.money != 0) {
-                            var backMoney = layer.open({
-                                content: '<p>该用户剩余余额：' + data.data.money + '元</p>' +
-                                '<p>平台赠送余额：' + data.data.giftMoney + '元</p>' +
-                                '<p>实际应退款金额：' + data.data.retreat + '元</p>',
-                                btn: ['取消', '确定'],
-                                yes: function () {
-                                    layer.close(backMoney);
-                                },
-                                btn2: function () {
-                                    $.ajax({
-                                        url: globalUrl + "balance/refund",
-                                        type: "post",
-                                        data: {userId: userId},
-                                        beforeSend: function (xhr) {
-                                            xhr.setRequestHeader("token", $.cookie("token"));
-                                        },
-                                        crossDomain: true,
-                                        success: function (data) {
-                                            console.log(data);
-                                            if (data.code == 0) {
-                                                layer.open({
-                                                    content: data.message
-                                                });
-                                                getVipMessage(nowPage);
-                                            } else {
-                                                layer.open({
-                                                    content: data.message
-                                                });
-                                            }
-                                        }
-                                    })
-                                }
-                            })
-                        } else {
-                            layer.open({
-                                content: "该用户没有余额"
-                            });
-                        }
+        getBackMoney(userId,1,function(res){
+            if(res.code==0){
+                $(".vip-balance1").html(res.data.money);
+                $(".vip-gift").html(res.data.giftMoney);
+                $(".vip-actual").html(res.data.retreat);
+                layui.use('layer',function(){
+                    var layer=layui.layer;
+                    layer.open({
+                        type:1,
+                        content:$("#backBox"),
+                        area:['300px','230px']
+                    })
+                })
+            }
+        });
+        $(".backTit p").live("click",function(){
+            var i=$(this).index();
+            $(".backTit p").removeClass("back-active");
+            $(".backTit p").eq(i).addClass("back-active");
+            $(".back-item").hide();
+            $(".back-item").eq(i).show();
+            if(i==0){
+                getBackMoney(userId,1,function(res){
+                    if(res.code==0){
+                        $(".vip-balance1").html(res.data.money);
+                        $(".vip-gift").html(res.data.giftMoney);
+                        $(".vip-actual").html(res.data.retreat);
+                    }
+                });
+            }else if(i==1){
+                getBackMoney(userId,2,function(res){
+                    if(res.code==0){
+                        $(".discount-balance1").html(res.data.money);
+                        $(".discount-num").html(res.data.discount);
+                        $(".discount-actual").html(res.data.retreat);
+                    }
+                });
+            }
+        });
+        var animate;
+        $(".backMoneyBtn1").live("click",function(){
+            animate=layer.load();
+            if($(".vip-actual").html()==0){
+                layer.close(animate);
+                layer.msg('会员余额已清空，无法继续退款');
+            }else{
+                $.ajax({
+                    url: globalUrl + "balance/refund",
+                    type: "post",
+                    data: {userId: userId,type:1},
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("token", $.cookie("token"));
+                    },
+                    crossDomain: true,
+                    success: function (data) {
+                        console.log(data);
+                        if (data.code == 0) {
+                            layer.close(animate);
+                            layer.closeAll();
+                            getVipMessage(nowPage);
+                            layer.msg(data.message);
 
-                    } else {
-                        layer.open({
-                            content: data.message
-                        })
+                        } else {
+                            layer.close(animate);
+                            layer.msg(data.message);
+                        }
                     }
                 })
             }
-        })
+        });
+        $(".backMoneyBtn2").live("click",function(){
+            animate=layer.load();
+            if($(".discount-actual").html()==0){
+                layer.close(animate);
+                layer.msg('折扣卡余额已清空，无法继续退款');
+            }else{
+                $.ajax({
+                    url: globalUrl + "balance/refund",
+                    type: "post",
+                    data: {userId: userId,type:2},
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("token", $.cookie("token"));
+                    },
+                    crossDomain: true,
+                    success: function (data) {
+                        console.log(data);
+                        if (data.code == 0) {
+                            layer.close(animate);
+                            layer.closeAll();
+                            getVipMessage(nowPage);
+                            layer.msg(data.message);
+                        } else {
+                            layer.close(animate);
+                            layer.msg(data.message);
+                        }
+                    }
+                })
+            }
+        });
     });
 
     //    停用
@@ -479,6 +578,12 @@
             })
         });
     });
+
+    $(".cannelBtn").live("click",function(){
+        layer.closeAll();
+    });
+
+
 
     //    停用
     $(".startUse").live("click", function () {
@@ -524,7 +629,7 @@
         var searchText = $("#criticalWord").val();
         var state = $("#state").val();
         window.open(globalUrl + "userInfo/exportUserAndOrderInfo?userKey=" + searchText + "&state=" + state);
-    })
+    });
 
 //  修改二维码为永久二维码
     function codeImgYes(id){
@@ -556,6 +661,19 @@
                     getVipMessage(nowPage);
                 }
             }
+        })
+    }
+
+    function getBackMoney(userId,type,success){
+        $.ajax({
+            url: globalUrl + "balance/refundBefor",
+            type: "get",
+            data: {userId:userId,type:type},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:success
         })
     }
 </script>

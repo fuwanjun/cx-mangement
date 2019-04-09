@@ -62,6 +62,13 @@
 		<div class="layui-row">
 			<div class="layui-form-item layui-inline" style="width: 20%;">
 				<div class="layui-input-inline" style="width: 100%;">
+					<input type="text" name="money" id="name" placeholder="优惠券名称" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+		</div>
+		<div class="layui-row">
+			<div class="layui-form-item layui-inline" style="width: 20%;">
+				<div class="layui-input-inline" style="width: 100%;">
 					<input type="text" name="money" id="money" placeholder="优惠券面值/元" autocomplete="off" class="layui-input">
 				</div>
 			</div>
@@ -108,11 +115,17 @@
 	function formVerify(){
 		var reg=/^[1-9]\d*$/;
 		var bol=true;
+        var name=$("#name").val();
 		var money=$("#money").val();
 		var count=$("#count").val();
 		var contentNum=$("#contentNum").val();
+        if(name==""){
+            layer.msg("请输入优惠券名称",{time:2000});
+            bol=false;
+            return bol;
+        }
 		if(money==""){
-			layer.msg("请输入充值卡面值",{time:2000});
+			layer.msg("请输入优惠券面值",{time:2000});
 			bol=false;
 			return bol;
 		}
@@ -122,7 +135,7 @@
 			return bol;
 		}
 		if(count==""){
-			layer.msg("请输入充值卡数量",{time:2000});
+			layer.msg("请输入优惠券数量",{time:2000});
 			bol=false;
 			return bol;
 		}
@@ -145,11 +158,12 @@
 		
 	}
 	$(".createBtn").click(function(){
+        var name=$("#name").val();
 		var discountNum=$("#money").val();
 		var taskNum=$("#count").val();
 		var contentNum=$("#contentNum").val();
 		if(formVerify()){	
-			window.open("http://www.changwash.com:8088/makQrcode/make?taskNum="+taskNum+"&discountNum="+discountNum+"&contentNum="+contentNum);
+			window.open("http://www.changwash.com:8088/makQrcode/make?remark="+name+"taskNum="+taskNum+"&discountNum="+discountNum+"&contentNum="+contentNum);
 		}
 	})
 </script>

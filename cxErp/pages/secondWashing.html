@@ -63,19 +63,30 @@
             </div>
         </div>
     </form>
-    <form class="layui-form">
-        <div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
-            <div class="layui-input-inline" style="margin:0; width: 70%;">
-                <input type="text" id="searchDate1" autocomplete="off" placeholder="选择时间" class="layui-input">
+    <form class="layui-form" style="display: flex;width: 100%;">
+        <div class="layui-form-item layui-inline" style="display:flex;  margin-bottom: 0;margin-top: 10px;">
+            <div class="layui-input-inline" style="margin:0;display: flex; width: 60%;">
+                <input style="width: 150px;" type="text" id="searchDate1" placeholder="选择日期" autocomplete="off" class="layui-input">
+                <p class="to" style="margin: 10px 10px;">~</p>
+                <input style="width: 150px;" type="text" id="searchDate1-1" placeholder="选择日期" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-item layui-inline" style="margin:0 10px 0 10px;width: 150px;">
+                <select name="" id="outType">
+                    <option value="">请选择物流状态</option>
+                    <option value="1">未发货</option>
+                    <option value="2">已发货</option>
+                    <option value="3">已返回</option>
+                </select>
             </div>
             <button class="layui-btn layui-btn-normal" type="button" id="searchBtn1">查询</button>
         </div>
+
         <div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
-            <div class="layui-input-inline" style="margin:0; width: 70%;">
+            <div class="layui-input-inline" style="margin:0 0 0 10px; width: 70%;">
                 <input type="text" placeholder="扫条形码" autocomplete="off" class="layui-input" id="codeIn1">
             </div>
         </div>
-        <!--<button type="button" class="layui-btn" id="addShop" style="margin-top:10px;float: right;">新增加工商</button>-->
+        <button type="button" class="layui-btn" id="noWashBtn" style="margin-top:10px;">查看外包未录入数据</button>
     </form>
 
     <table class="layui-table" lay-skin="line" align="center" id="table1">
@@ -89,8 +100,8 @@
             <th>发货时间</th>
             <th>返回时间</th>
             <th>加工费</th>
-            <th>返回</th>
-            <th>不合格</th>
+            <th>不外包</th>
+            <th>合格与否</th>
         </tr>
         </thead>
         <tbody></tbody>
@@ -98,6 +109,18 @@
     <div id="page1"></div>
 </div>
 </body>
+<div id="noWriteData" style="display: none;padding: 10px;">
+    <table class="layui-table">
+        <thead>
+        <tr align="center">
+            <th>条码号</th>
+            <th>衣物名称</th>
+            <th>外包时间</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
 <script src='./js/jquery.min.js'></script>
 <script type="text/javascript" src="../resource/layui/layui.js"></script>
 <script src="../resource/js/common.js"></script>
@@ -122,12 +145,18 @@
             elem: '#searchDate1',
             type: 'date'
         });
+        laydate.render({
+            elem: '#searchDate1-1',
+            type: 'date'
+        });
         table1Show();
     });
 
     $("#searchBtn1").click(function () {
-        var time = $("#searchDate1").val();
-        table1Show(time);
+        var time1 = $("#searchDate1").val();
+        var time2 = $("#searchDate1-1").val();
+        var outType=$("#outType").val();
+        table1Show(time1,time2,outType);
     });
 
     //	扫码录入外包衣物
@@ -262,12 +291,12 @@
     });
 
     //	外包洗涤列表
-    function table1Show(time) {
+    function table1Show(startTime,endTime,outType) {
         $.ajax({
-            url: globalUrl + "api/washOut/list;jsessionid=" + $.cookie("token"),
+            url: globalUrl + "api/washOut/search;jsessionid=" + $.cookie("token"),
             type: 'get',
             crossDomain: true,
-            data: {time: time},
+            data: {startTime:startTime,endTime:endTime,outType:outType},
             beforeSend: function (request) {
                 request.setRequestHeader("JSESSIONID", $.cookie("token"));
             },
@@ -424,6 +453,61 @@
             }
         })
     }
+
+    $("#noWashBtn").live("click",function(){
+        getNoWashClothes();
+    });
+
+    function getNoWashClothes(){
+        $.ajax({
+            url: globalUrl + "api/washOut/list4Untreated;jsessionid=" + $.cookie("token"),
+            type: 'get',
+            async:false,
+            crossDomain: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+            },
+            success: function (data) {
+                if (data.status == 200) {
+                    $("#noWriteData table tbody").html(' ');
+                    for(var i=0;i<data.data.length;i++){
+                        var item='<tr>' +
+                            '<td>'+data.data[i].barCode+'</td>' +
+                            '<td>'+data.data[i].beforeName+'</td>' +
+                            '<td>'+timestampToTime(data.data[i].createTime)+'</td>' +
+                            '</tr>';
+                        $(item).appendTo($("#noWriteData table tbody"));
+                    }
+                    layui.use('layer',function(){
+                        var layer=layui.layer;
+                        layer.open({
+                            title:'外包未录入数据',
+                            type:1,
+                            content:$("#noWriteData"),
+                            area:['500px']
+                        })
+                    })
+                } else {
+                    layer.msg(data.msg);
+                }
+            }
+        })
+    }
+
+//    function searchOut(startTime,endTime,outType) {
+//        $.ajax({
+//            url: globalUrl + "api/washOut/search;jsessionid=" + $.cookie("token"),
+//            type: 'get',
+//            crossDomain: true,
+//            data: {startTime: startTime, endTime: endTime, outType: outType},
+//            beforeSend: function (request) {
+//                request.setRequestHeader("JSESSIONID", $.cookie("token"));
+//            },
+//            success: function (data) {
+//
+//            }
+//        })
+//    }
 </script>
 
 </html>

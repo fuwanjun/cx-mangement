@@ -14,643 +14,263 @@
 	<link rel="stylesheet" href="../resource/layui/css/layui.css">
 	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
 	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
-
-
-
 	<style>
-		.cancel {
-			position: absolute;
-			top: -10px;
-			right: -10px;
-			width: 30px;
-			height: 30px;
-			background-color: #ffffff;
-			border-radius: 50%;
-			box-shadow: 0 0 2px gray;
-			cursor: pointer;
-		}
 
-		.cancel>i {
-			padding-top: 3px;
-
-			font-size: 30px;
-			line-height: 36px;
-			color: gray;
-		}
-
-
-		.details_box td {
-			width: 50% !important;
-
-		}
-		.goodsImg{
-			width: 50px;
-			height: 50px;
-		}
-		.bombBox>.layui-form-item>.layui-form-label {
-			padding: 9px 0;
-		}
-		.body{
-			width: 100%;
-			height: 100%;
-		}
-		.mask,.mask_add{
-			position: fixed;
-			top: 0;
-			left: 0;
-			bottom: 0;
-			right: 0;
-			background-color: rgba(0,0,0,.4);
-			display: none;
-		}
-		.addSort{
-			display: block;
-			width: 100%;
-			height: 100%;
-		}
-		.bombBox{
-			position: absolute;
-			margin-left: -270px;
-			top: 260px;
-			left: 50%;
-			background-color: #fff;
-			width: 540px;
-		}
-		.layui-form-item{
-			width: 60%;
-		}
-		.bombBoxTitle{
-			width: 80px;
-			text-align:right;
-			margin-top: 15px;
-		}
-		.funBtn{
-			width: 100%;
-			text-align: right;
-			padding: 0 24px;
-		}
-		.layui-upload-img{
-			width: 80px;
-			height: 80px;
-		}
-		.goodsFile,.sortFile{
-			display: inline-block;
-		    height: 38px;
-		    line-height: 38px;
-		    padding: 0 18px;
-		    background-color: #009688;
-		    color: #fff;
-		    white-space: nowrap;
-		    text-align: center;
-		    font-size: 14px;
-		    border: none;
-		    border-radius: 2px;
-		    cursor: pointer;
-		    opacity: 0;
-		    width: 92px;
-		    position: absolute;
-		    left: 0;
-		    top: 9px;
-		}
 	</style>
-
 </head>
-
 <body>
 	<!-- 下面是一些第二行的东西 -->
-
 	<div class="layui-row">
-
 		<div class="layui-inline  orderManage" style="margin-top:10px">
 			商品类别管理列表
 		</div>
-
 		<div class="layui-inline" style="float:right;margin-top:10px">
-			<button class="layui-btn  layui-btn-normal" id="xinzhengrenwu">新增商品类别</button>
-			<!--<button class="layui-btn layui-btn-danger" id="zhuanyi">删除全部</button>-->
+			<button class="layui-btn  layui-btn-normal" id="addBtn">新增商品类别</button>
 		</div>
-
 	</div>
-
-	<!-- 下面是第三行表格 -->
-
-
-	<table class="layui-table" id="goodsSortList" lay-skin="line" align="center">
-		<!-- <colgroup>
-			  <col width="150">
-			  <col width="150">
-			  <col width="200">
-			  <col>
-			</colgroup> -->
+	<table class="layui-table" id="table1">
 		<thead>
-			<tr align="center">
-				<th>编号</th>
+			<tr>
 				<th>类别名称</th>
-				<!--<th>类别图片</th>				-->
-				<!--<th>是否可用</th>-->
+				<th>状态</th>
 				<th>操作</th>
 			</tr>
 		</thead>
-		<tbody>
-			<tr>
-				<td>0245</td>
-				<td>鞋子</td>
-				<td>
-					<img src="img/boss_color.jpg" alt="" />
-				</td>
-				<td>是</td>
-				<td>
-					<button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
-					<button class="layui-btn layui-btn-xs changeBtn">修改</button>
-				</td>
-			</tr>
-			<tr>
-				<td>0245</td>
-				<td>鞋子</td>
-				<td>
-					<img src="img/boss_color.jpg" alt="" />
-				</td>
-				<td>是</td>
-				<td>
-					<button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
-					<button class="layui-btn layui-btn-xs changeBtn">修改</button>
-				</td>
-			</tr>
-			<tr>
-				<td>0245</td>
-				<td>鞋子</td>
-				<td>
-					<img src="img/boss_color.jpg" alt="" />
-				</td>
-				<td>是</td>
-				<td>
-					<button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
-					<button class="layui-btn layui-btn-xs changeBtn">修改</button>
-				</td>
-			</tr>
-			<tr>
-				<td>0245</td>
-				<td>鞋子</td>
-				<td>
-					<img src="img/boss_color.jpg" alt="" />
-				</td>
-				<td>是</td>
-				<td>
-					<button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>
-					<button class="layui-btn layui-btn-xs changeBtn">修改</button>
-				</td>
-			</tr>
-
-		</tbody>
+		<tbody></tbody>
 	</table>
-
-	<!-- 这个下面是分页 -->	
-	<div class="mask body">
-		<div class="addSort">
-			<div class="layui-row">
-				<form class="layui-form bombBox" id="updateForm">
-					<div class="layui-form-item">
-						<p class="bombBoxTitle">增加类别</p>
-					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label">
-							<button type="button" class="layui-btn" id="test1">上传图片</button>
-					  		<input class="goodsFile" name="file" lay-verify="file" type="file" value="" autocomplete="off">
-						</label>				  
-						<div class="layui-input-block">
-						    <img class="layui-upload-img" id="demo1">
-						</div>
-					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label">类别名称</label>
-						<div class="layui-input-block">
-							<input class="layui-input sortName" type="text" value="" placeholder="请输入类别名称" autocomplete="off">
-						</div>
-					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label">样式名称</label>
-						<div class="layui-input-block">
-							<input class="layui-input css" type="text" value="" placeholder="请输入样式名称" autocomplete="off">
-						</div>
-					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label">类目排序</label>
-						<div class="layui-input-block">
-							<input class="layui-input sort" type="text" value="" placeholder="请输入类目排序" autocomplete="off">
-						</div>
-					</div>
-					<div class="layui-form-item layui-inline">
-					    <label class="layui-form-label">可用</label>
-					    <div class="layui-input-block">
-					      <input type="radio" name="state" value="0" title="是" checked="">
-					      <input type="radio" name="state" value="1" title="否">
-					    </div>
-					</div>
-					<div class="layui-form-item funBtn">
-						<button class="layui-btn layui-btn-sm sureBtn" type="button">确定修改</button>
-						<button class="layui-btn layui-btn-sm layui-btn-primary cancelBtn" type="button">取消</button>
-					</div>
-					<span class="layui-layer-setwin">
-						<a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"></a>
-					</span>
-				</form>
-			</div>
-		</div>
-	</div>
-	
-	<div class="mask_add body">
-		<div class="addSort">
-			<div class="layui-row">
-				<form class="layui-form bombBox" id="addForm">
-					<div class="layui-form-item">
-						<p class="bombBoxTitle">增加类别</p>
-					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label">
-							<button type="button" class="layui-btn" id="test_add">上传图片</button>
-					  		<input class="sortFile" name="file" lay-verify="file" type="file" value="" autocomplete="off">
-						</label>				  
-						<div class="layui-input-block">
-						    <img class="layui-upload-img" id="demo2">
-						</div>
-					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label">类别名称</label>
-						<div class="layui-input-block">
-							<input class="layui-input sortName_add" type="text" value="" placeholder="请输入类别名称" autocomplete="off">
-							<input type="hidden" name="idContent" id="idContent" value="" />
-						</div>
-					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label">样式名称</label>
-						<div class="layui-input-block">
-							<input class="layui-input css_add" type="text" value="" placeholder="请输入样式名称" autocomplete="off">
-						</div>
-					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label">类目排序</label>
-						<div class="layui-input-block">
-							<input class="layui-input sort2" type="text" value="" placeholder="请输入类目排序" autocomplete="off">
-						</div>
-					</div>
-					<div class="layui-form-item layui-inline">
-					    <label class="layui-form-label">可用</label>
-					    <div class="layui-input-block">
-					      <input type="radio" name="state" value="0" title="是" checked="">
-					      <input type="radio" name="state" value="1" title="否">
-					    </div>
-					</div>
-					<div class="layui-form-item funBtn">
-						<button class="layui-btn layui-btn-sm sureBtn_add" type="button">确定新增</button>
-						<button class="layui-btn layui-btn-sm layui-btn-primary cancelBtn_add" type="button">取消</button>
-					</div>
-					<span class="layui-layer-setwin">
-						<a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"></a>
-					</span>
-				</form>
-			</div>
-		</div>
-	</div>
 </body>
+<div id="addContent" style="display:none;padding: 10px 30px 0 0;">
+	<form class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">类别名称</label>
+			<div class="layui-input-block">
+				<input class="layui-input sortName_add" id="titName" type="text" value="" placeholder="请输入类别名称" autocomplete="off">
+				<input type="hidden" name="idContent" value="" />
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">排序</label>
+			<div class="layui-input-block">
+				<input class="layui-input sortName_add" id="sort" type="number" value="" autocomplete="off">
+				<input type="hidden" name="idContent" value="" />
+			</div>
+		</div>
+		<div class="layui-form-item layui-inline">
+			<label class="layui-form-label">可用</label>
+			<div class="layui-input-block">
+				<input type="radio" name="state" value="0" title="是" checked>
+				<input type="radio" name="state" value="1" title="否">
+			</div>
+		</div>
+	</form>
+</div>
 <script src='./js/jquery.min.js'></script>
 <script type="text/javascript" src="../resource/layui/layui.js"></script>
 <script type="text/javascript" src="../resource/js/common.js"></script>
 <script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
 <script type="text/javascript">
 	layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
-		var element = layui.element
-		,laydate = layui.laydate
-		,laypage = layui.laypage
-		,form =layui.form
-		, layer = layui.layer;
+        var element = layui.element
+            , laydate = layui.laydate
+            , laypage = layui.laypage
+            , form = layui.form
+            , layer = layui.layer;
 
-		var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
-		getHeadTitle();
-		function getHeadTitle(){
-			var str="";
-			$.ajax({
-				type:"get",
-				url:globalUrl+"headTitle/getHeadTitleAll",
-				async:true,
-				beforeSend: function (xhr) {
-	                xhr.setRequestHeader("token", $.cookie("token"));
-	            },
-	            crossDomain: true,
-				success:function(res){
-					$.each(res.data, function(index,value) {
-						str+='<tr>'
-						str+='<td>'+value.id+'</td>'
-						str+='<td>'+value.titleName+'</td>'
-//						str+='<td>'
-//						str+='<img src="http://'+value.picture+'" alt="" />'
-//						str+='</td>'
-//						if(value.state==0){
-//							str+='<td>是</td>'
-//						}else if(value.state==1){
-//							str+='<td>否</td>'
-//						}
-						str+='<td data-id="'+value.id+'">'
-						str+='<button class="layui-btn layui-btn-danger layui-btn-xs deleteBtn">删除</button>'
-						str+='<button class="layui-btn layui-btn-xs changeBtn">修改</button>'
-						str+='</td></tr>'
-					});
-					$("#goodsSortList tbody").html(str);
-					//initData();
-				},
-				error:function(err){
-					
-				}
-			});
-		}
-		
-		$(".mask .goodsFile").on("change",function(){
-			this_file=this;
-			var file_input = document.getElementsByClassName("goodsFile")[0].files[0];
-			console.log(file_input);
-			var formData = new FormData();
-			if(file_input.name!=''){
-				showImg(this_file,2)
-			}
-		})
-		$(".mask_add .sortFile").on("change",function(){
-			this_file=this;
-			var file_input = document.getElementsByClassName("sortFile")[0].files[0];
-			console.log(file_input);
-			var formData = new FormData();
-			if(file_input.name!=''){
-				showImg(this_file,1)
-			}
-		})
-		//图片回显函数
-		var file;
-		function showImg(obj,type) {
-			file = obj.files[0];
-			var readerFile = new FileReader();
-			readerFile.onload = function(ev) {
-				var data = ev.target.result;
-				if(type==2){
-					$("#demo1").attr("src",data)
-				}else if(type==1){
-					$("#demo2").attr("src",data)
-				}
-			}
-			readerFile.readAsDataURL(file);
-		}
-		
-		function formVerify(){
-			var reg=/^[0-9]*$/;
-			var bol=true;
-			var name=$(".sortName").val();
-			var sort=$(".sort").val();
-			var state=$("input[name=state]:checked").val();
-			var cssId=$(".css").val();
-			var fileImg=document.getElementsByClassName("goodsFile")[0].files[0];
-			if(name==""){
-				layer.msg("请输入商品名称",{time:2000});
-				bol=false;
-				return bol;
-			}	
-			if(cssId==""){
-				layer.msg("请输入样式名称",{time:2000});
-				bol=false;
-				return bol;
-			}
-			if(sort==""){
-				layer.msg("请输入类目排序",{time:2000});
-				bol=false;
-				return bol;
-			}
-			if(fileImg==""||fileImg==null){
-				if(file_img==""){
-					layer.msg("请上传图片",{time:2000});
-					bol=false;
-					return bol;
-				}
-			}
-			return bol;
-			
-		}
-		function formVerifyAdd(){
-			var reg=/^[0-9]*$/;
-			var bol=true;
-			var name=$(".sortName_add").val();
-			var sort=$(".sort2").val();
-			var state=$(".mask_add input[name=state]:checked").val();
-			var cssId=$(".css_add").val();
-			var fileImg=document.getElementsByClassName("sortFile")[0].files[0];
-			if(name==""){
-				layer.msg("请输入商品名称",{time:2000});
-				bol=false;
-				return bol;
-			}
-			if(cssId==""){
-				layer.msg("请输入样式名称",{time:2000});
-				bol=false;
-				return bol;
-			}
-			if(sort==""){
-				layer.msg("请输入类目排序",{time:2000});
-				bol=false;
-				return bol;
-			}else if(!reg.test(sort)){
-				layer.msg("请输入类目数字",{time:2000});
-				bol=false;
-				return bol;
-			}
-			if(fileImg==""||fileImg==null){
-				layer.msg("请上传图片",{time:2000});
-				bol=false;
-				return bol;
-			}
-			return bol;
-		}
-		
-		//监听提交
-		$(".sureBtn").click(function(){
-			var canForm=formVerify();
-			if(canForm){
-				var formData=new FormData();
-				formData.append("titleName",$(".mask .sortName").val());
-				formData.append("state",$(".mask input[name=state]:checked").val());
-				formData.append("id",$("#idContent").val());
-				formData.append("cssId",$(".css").val());
-                formData.append("sort",$(".sort").val());
-				if(!document.getElementsByClassName("goodsFile")[0].files[0]){
-					//formData.append("file",file_img);
-				}else{
-					formData.append("file",document.getElementsByClassName("goodsFile")[0].files[0]);
-				}
-				
-			    $.ajax({
-					type:"post",
-					url:globalUrl+"headTitle/updateHeadTitle",
-					async:true,
-					contentType:false,
-					processData:false,
-					cache:false,
-					data:formData,
-					beforeSend: function (xhr) {
-		                xhr.setRequestHeader("token", $.cookie("token"));
-		            },
-		            crossDomain: true,
-					success:function(res){
-						document.getElementById("updateForm").reset();
-						$(".mask").fadeOut();
-						getHeadTitle();
-						//layer.close();
-					},
-					error:function(err){
-						
-					}
-				});
-			}else{
-				return false;
-			}	
-		})
-		$(".sureBtn_add").click(function(){
-			if(formVerifyAdd()){
-//			    var data={}
-				var formData=new FormData();
-//			    data.titleName=$(".mask_add .sortName_add").val();
-//			    data.state=$(".mask_add input[name=state]:checked").val();
-//			    data.cssId=$(".css_add").val();
-//			    data.file=document.getElementsByClassName("sortFile")[0].files[0];
-//			    data.sort=$(".sort2").val();
-				formData.append("titleName",$(".mask_add .sortName_add").val());
-				formData.append("state",$(".mask_add input[name=state]:checked").val());
-				formData.append("cssId",$(".css_add").val());
-				formData.append("file",document.getElementsByClassName("sortFile")[0].files[0]);
-                formData.append("sort2",$(".sort2").val());
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+        getList();
 
-			    $.ajax({
-					type:"post",
-					url:globalUrl+"headTitle/putHeadTitle",
-					async:true,
-					contentType:false,
-					processData:false,
-					cache:false,
-					data:formData,
-					beforeSend: function (xhr) {
-		                xhr.setRequestHeader("token", $.cookie("token"));
-		            },
-		            crossDomain: true,
-					success:function(res){
-						if(res.code==0){
-                            getHeadTitle();
-							document.getElementById("addForm").reset();
-							$(".mask_add").fadeOut();
-							layer.msg('新增成功');
-						}
-					},
-					error:function(err){
-						
-					}
-				});
-			}else{
-				return false;
-			}
-		})
-		
-		var file_img;
-		//获取详情
-		function getDataById(id){
-			$.ajax({
-				type:"get",
-				data:{id:id},
-				url:globalUrl+"headTitle/getHeadTitleById",
-				async:true,
-				beforeSend: function (xhr) {
-	                xhr.setRequestHeader("token", $.cookie("token"));
-	            },
-	            crossDomain: true,
-				success:function(res){
-					$("#demo1").attr("src","http://"+res.data.picture);
-					if(res.data.picture!=null&&res.data.picture!=""){
-						file_img=res.data.picture;
-					}
-					$("#idContent").val(res.data.id);
-					$(".css").val(res.data.cssId);
-					$(".sort").val(res.data.sort);
-					$(".sortName").val(res.data.titleName);
-					if(res.data.state==0){
-						$("input[name=state]").removeAttr("checked")
-						$("input[name=state]").eq(0).prop("checked",true);
-						
-					}else{
-						$("input[name=state]").removeAttr("checked")
-						$("input[name=state]").eq(1).attr("checked",true);
-					}
-					form.render();
-				},
-				error:function(err){
-					console.log(err)
+    });
+
+//	添加类别
+	$("#addBtn").click(function(){
+        clearInput();
+	    layui.use('layer',function(){
+	        var layer=layui.layer;
+	        layer.open({
+				title:'新增',
+				type:1,
+				content:$("#addContent"),
+				area:["",'270px'],
+				btn:['确定','取消'],
+				yes:function(){
+				    var titName=$("#titName").val();
+				    var sort=$("#sort").val();
+				    var state=$("input[name='state']:checked").val();
+                    addTit(titName,sort,state);
 				}
-			});
-		}
-		//删除接口
-		function deleteDataById(id){
-			$.ajax({
-				type:"post",
-				data:{id:id},
-				url:globalUrl+"headTitle/deleteHeadTitle",
-				async:true,
-				beforeSend: function (xhr) {
-	                xhr.setRequestHeader("token", $.cookie("token"));
-	            },
-	            crossDomain: true,
-				success:function(res){
-					getHeadTitle();
-				},
-				error:function(err){
-					console.log(err)
-				}
-			});
-		}
-		
-		$("#goodsSortList button.changeBtn").live("click",function(){
-			//根据id对数据渲染
-			$(".mask").fadeIn()
-			var id=$(this).parent().attr("data-id");
-			getDataById(id);
-				
-		})
-		
-		$("#goodsSortList .deleteBtn").live("click",function(){
-			var id=$(this).parent().attr("data-id");
-			layer.confirm("要删除该商品吗？",{
-				btn : [ '确定', '取消' ]
-			},function(index){
-				
-				layer.close(index);
-				//$(".mask").fadeIn()
-				deleteDataById(id);
-				//进行后台的下架请求接口
 			})
 		})
-
-
 	});
 
+//	删除类别
+	$("#table1 .delBtn").live("click",function(){
+        var id=$(this).parent().parent().attr("titId");
+        layer.confirm("要删除该类别吗？",{
+            btn : [ '确定', '取消' ]
+        },function(){
+            deleteDataById(id);
+        })
+	});
 
-	$("#xinzhengrenwu").click(function () {
-		$(".mask_add").fadeIn();
-	})
-	$(".mask .layui-layer-close").click(function(){
-		$(".mask").fadeOut()
-	})
-	$(".mask_add .layui-layer-close").click(function(){
-		$(".mask_add").fadeOut()
-	})
-	$(".cancelBtn_add").click(function(){
-		$(".mask_add").fadeOut()
-	})
-	$(".cancelBtn").click(function(){
-		$(".mask").fadeOut()
-	})
-	
-	
+//	修改类别
+    $("#table1 .changeBtn").live("click",function(){
+        var id=$(this).parent().parent().attr("titId");
+        getDataById(id);
+        layui.use('layer',function(){
+            var layer=layui.layer;
+            layer.open({
+                title:'修改',
+                type:1,
+                content:$("#addContent"),
+                area:["",'270px'],
+                btn:['确定','取消'],
+                yes:function(){
+                    var titName=$("#titName").val();
+                    var sort=$("#sort").val();
+                    var state=$("input[name='state']:checked").val();
+                    changeDataById(id,titName,sort,state);
+                }
+            })
+        })
+    });
 
+//    获取列表
+	function addTit(titName,sort,state){
+        $.ajax({
+            type:"post",
+            url:globalUrl+"headTitle/putHeadTitle",
+            data:{titleName:titName,sort:sort,state:state},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:function(res){
+                if(res.code==0){
+                    getList();
+                    layer.closeAll();
+                    layer.msg(res.message);
+				}else{
+                    layer.msg(res.message);
+				}
+			}
+        });
+	}
 
+//	获取列表
+	function getList(){
+        $.ajax({
+            type:"get",
+            url:globalUrl+"headTitle/getHeadTitleAll",
+            async:true,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:function(res){
+				if(res.code==0){
+                    $("#table1 tbody").html("");
+				    for(var i=0;i<res.data.length;i++){
+				        var state=res.data[i].state==1?"<p style='color: #f00;'>停用</p>":"<p style='color: #00d20d'>启用</p>";
+				        var item='<tr titId="'+res.data[i].id+'">' +
+							'<td>'+res.data[i].titleName+'</td>' +
+							'<td>'+state+'</td>' +
+							'<td>' +
+							'<button type="button" class="layui-btn layui-btn-danger layui-btn-sm delBtn">删除</button>' +
+                            '<button type="button" class="layui-btn layui-btn-normal layui-btn-sm changeBtn">修改</button>' +
+							'</td>' +
+							'</tr>';
+				        $(item).appendTo($("#table1 tbody"));
+					}
+				}
+            }
+        });
+	}
+
+    //删除接口
+    function deleteDataById(id){
+        $.ajax({
+            type:"post",
+            data:{id:id},
+            url:globalUrl+"headTitle/deleteHeadTitle",
+            async:true,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success:function(res){
+				if(res.code==0){
+                    getList();
+                    layer.closeAll();
+                    layer.msg(res.message);
+				}else{
+                    layer.msg(res.message);
+				}
+            }
+        });
+    }
+
+//    获取类别信息
+	function getDataById(id){
+        $.ajax({
+            type:"get",
+			url:globalUrl+"headTitle/getHeadTitleById",
+            data:{id:id},
+			async:false,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+			success:function(res){
+				if(res.code==0){
+				    layui.use('form',function(){
+				        var form=layui.form;
+                        $("#titName").val(res.data.titleName);
+                        $("#sort").val(res.data.sort);
+                        if(res.data.state==0){
+                            $("input[name='state']").eq(0).prop("checked",true);
+						}else if(res.data.state==1){
+                            $("input[name='state']").eq(1).prop("checked",true);
+						}
+
+                        form.render();
+					})
+				}
+			}
+		})
+	}
+
+//    修改类别
+	function changeDataById(id,titName,sort,state){
+		$.ajax({
+            type:"post",
+			async:false,
+            url:globalUrl+"headTitle/updateHeadTitle",
+			data:{id:id,titleName:titName,sort:sort,state:state},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+			success:function(res){
+                if(res.code==0){
+                    getList();
+                    layer.closeAll();
+                    layer.msg(res.message);
+                }else{
+                    layer.msg(res.message);
+                }
+			}
+		})
+	}
+
+	function clearInput(){
+        layui.use('form',function(){
+            var form=layui.form;
+            $("#titName").val("");
+            $("#sort").val("");
+			$("input[name='state']").eq(0).prop("checked",true);
+            form.render();
+        })
+	}
 </script>
 
 </html>

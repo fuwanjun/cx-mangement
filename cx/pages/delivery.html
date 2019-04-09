@@ -81,7 +81,7 @@
 			<div class="layui-input-block">
 				<select name="levelType" id="ident">
 					<option value="13">取件员</option>
-					<option value="12">门店管理员</option>
+					<option value="12">管理员</option>
 				</select>
 			</div>
 		</div>
@@ -144,7 +144,6 @@
        	$(".addStaffSub").hide();
        	$(".changeStaff").show();
        	numId=id;
-        clearMsg();
         searchUser(id);
        	layui.use('layer',function(){
        	    var layer=layui.layer;
@@ -170,7 +169,7 @@
         var sex=$("input[name='sex']:checked").val();
         var password=$("#password").val();
         var shopId=$("#factory").find("option:checked").attr("factoryId");
-        var shopName=$("#factory").val();
+        var shopName=$("#factory option:checked").html();
         var data={};
         data.id=numId;
         data.shopName=shopName;
@@ -211,6 +210,15 @@
         })
 	});
 
+	$("#table1 tbody tr .stopBtn").live("click",function(){
+	   	var id= $(this).parent().parent().attr("userId");
+        stopStart(id,1);
+	});
+    $("#table1 tbody tr .startBtn").live("click",function(){
+        var id= $(this).parent().parent().attr("userId");
+        stopStart(id,0);
+    });
+
 //	确定新增配送员
 	$(".addStaffSub").live("click",function(){
 	    var data={};
@@ -219,7 +227,7 @@
         var phone=$("#phone").val();
         var identNum=$("select[name='levelType'] option:checked").val();
         var shopId=$("#factory").find("option:checked").attr("factoryId");
-        var shopName=$("#factory").val();
+        var shopName=$("#factory").find("option:checked").html();
         var sex=$("input[name='sex']:checked").val();
         var password=$("#password").val();
         var canForm=formVerify();
@@ -255,6 +263,12 @@
 				if(data.code==0){
                     $("#table1 tbody").html("");
 				    for(var i=0;i<data.data.list.length;i++){
+				        var btn
+						if(data.data.list[i].state==0){
+				            btn='<button class="layui-btn layui-btn-sm layui-btn-danger stopBtn">禁用</button>'
+						}else if(data.data.list[i].state==1){
+                            btn='<button class="layui-btn layui-btn-sm startBtn">启用</button>'
+						}
 				        var item='<tr userId="'+data.data.list[i].id+'">' +
 							'<td>'+data.data.list[i].takerName+'</td>' +
 							'<td>'+data.data.list[i].account+'</td>' +
@@ -264,7 +278,7 @@
 							'<td>'+timestampToTime(data.data.list[i].createTime)+'</td>' +
 							'<td>' +
 							'<button class="layui-btn layui-btn-sm layui-btn-normal changeBtn">编辑</button>' +
-//                            '<button class="layui-btn layui-btn-xs layui-btn-danger delBtn">删除</button>' +
+                             btn+
 							'</td>' +
 							'</tr>';
 				        $(item).appendTo($("#table1 tbody"));
@@ -304,10 +318,20 @@
             crossDomain: true,
 			success:function(data){
 				if(data.code==0){
-				    $("#account").val(data.data.account);
-				    $("#userName").val(data.data.takerName);
-				    $("#phone").val(data.data.phone);
-				    $("input[name='sex']").val(data.data.sex);
+				    layui.use('form',function(){
+				        var form=layui.form;
+                        $("#account").val(data.data.account);
+                        $("#userName").val(data.data.takerName);
+                        $("#phone").val(data.data.phone);
+						$("#ident").val(data.data.levelType);
+						$("#factory").val(data.data.shopId);
+                        if(data.data.sex=='男'){
+                            $("input[name='sex']").eq(0).prop("checked",true);
+                        }else if(data.data.sex=='女'){
+                            $("input[name='sex']").eq(1).prop("checked",true);
+                        }
+                        form.render();
+					});
 				}
 			}
 		})
@@ -423,12 +447,29 @@
             success: function (data) {
                 if (data.code == 0) {
                     for (var i = 0; i < data.data.list.length; i++) {
-                        var item = '<option factoryId="' + data.data.list[i].id + '" value="' + data.data.list[i].shopName + '">' + data.data.list[i].shopName + '</option>';
+                        var item = '<option value="'+data.data.list[i].id+'" factoryId="' + data.data.list[i].id + '" value="' + data.data.list[i].shopName + '">' + data.data.list[i].shopName + '</option>';
                         $(item).appendTo($("#factory"));
                     }
                 }
             }
         })
     }
+
+    function stopStart(id,state){
+        $.ajax({
+            url: globalUrl + "takeUser/update4State",
+            type: "post",
+            data: {id:id,state:state},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("token", $.cookie("token"));
+            },
+            crossDomain: true,
+            success: function (data) {
+				if(data.code==0){
+                    getDelivery(page,pageSize);
+				}
+            }
+        })
+	}
 </script>
 </html>

@@ -142,24 +142,13 @@
 				<span class="headlabel"></span>员工管理列表
 			</div>
 		</div>
-		<!--<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin: 0 0 10px;">-->
-			<!--<div class="layui-input-inline" style="margin:0; width: 70%;">-->
-				<!--<input type="text" name="company" id="company"  placeholder="请输入账号" autocomplete="off" class="layui-input">-->
-			<!--</div>-->
-			<!--<button class="layui-btn layui-btn-normal" name="user" type="button">查询</button>-->
-		<!--</div>-->
+
 		<div class="layui-inline" style="float: right;margin-bottom: 10px;">
 			<button class="layui-btn layui-btn-normal" type="button" id="addOperation">新赠员工</button>
 		</div>
 	</form>
 		<!-- 下面是第三行表格 -->
 	<table class="layui-table" lay-skin="line" align="center">
-		<!-- <colgroup>
-			  <col width="150">
-			  <col width="150">
-			  <col width="200">
-			  <col>
-			</colgroup> -->
 		<thead>
 			<tr align="center">
 				<th><input type="checkbox" name="allSelect" id="allSelect" value="" /></th>
@@ -170,19 +159,7 @@
 				<th>操作</th>
 			</tr>
 		</thead>
-		<tbody>
-			<!--<tr>-->
-				<!--<td class="check"><input type="checkbox" /></td>-->
-				<!--<td class="name">老薛</td>-->
-				<!--<td class="userNum">15956892345</td>-->
-				<!--&lt;!&ndash;<td class="userpassword">123456</td>&ndash;&gt;-->
-				<!--<td class="job">精洗</td>-->
-				<!--<td class="operation">-->
-					<!--<button class="layui-btn layui-btn-normal layui-btn-xs">编辑</button>-->
-					<!--<button class="layui-btn layui-btn-primary layui-btn-xs">删除</button>-->
-				<!--</td>-->
-			<!--</tr>-->
-		</tbody>
+		<tbody></tbody>
 	</table>
 	<!-- 这个下面是分页 -->
 	<div id="page"></div>
@@ -309,11 +286,8 @@ var job="";
 		    var pop=layer.open({
 				type:1,
 				content:"<p style='margin: 10px;'>确定删除该员工？</p>",
-				btn:["取消","确定"],
+				btn:["确定","取消"],
 				yes:function(){
-                    layer.close(pop);
-				},
-				btn2:function(){
                     $.ajax({
                         url:globalUrl+"api/washUser/delete;jsessionid=" + $.cookie("token"),
                         type:'get',
@@ -327,17 +301,20 @@ var job="";
                             if(data.status==200){
                                 layui.use("layer",function(){
                                     var layer=layui.layer;
-                                    layer.alert("删除成功！");
+                                    layer.closeAll();
+                                    layer.msg("删除成功！");
                                     getStaff(1);
-								})
+                                })
 
-							}else{
+                            }else{
                                 alert(data.msg);
-							}
-
+                            }
                         }
                     })
-				}
+                },
+				btn2:function(){
+                    layer.close(pop);
+                }
 			})
 		});
 
@@ -351,11 +328,8 @@ var job="";
             var pop=layer.open({
                 type:1,
                 content:"<p style='margin: 10px;'>确定重置密码？</p>",
-                btn:["取消","确定"],
+                btn:["确定","取消"],
                 yes:function(){
-                    layer.close(pop);
-                },
-                btn2:function(){
                     animate=layer.load();
                     $.ajax({
                         url:globalUrl+"api/washUser/afresh;jsessionid=" + $.cookie("token"),
@@ -370,6 +344,9 @@ var job="";
                             layer.close(animate);
                         }
                     })
+                },
+                btn2:function(){
+                    layer.close(pop);
                 }
             })
         });
@@ -390,38 +367,7 @@ var job="";
 //			    console.log(data);
 			    $("tbody").html("");
 			    for(var i=0;i<data.data.list.length;i++){
-			        var job="";
-			        if(data.data.list[i].roles[0].id==5){
-			            job="超级管理员";
-					}else if(data.data.list[i].roles[0].id==12){
-                        job="签收";
-					}else if(data.data.list[i].roles[0].id==13){
-                        job="分拣录入";
-                    }else if(data.data.list[i].roles[0].id==14){
-                        job="精洗";
-                    }else if(data.data.list[i].roles[0].id==15){
-                        job="普洗";
-                    }else if(data.data.list[i].roles[0].id==16){
-                        job="干洗";
-                    }else if(data.data.list[i].roles[0].id==17){
-                        job="洗鞋";
-                    }else if(data.data.list[i].roles[0].id==18){
-                        job="皮具护理";
-                    }else if(data.data.list[i].roles[0].id==19){
-                        job="整理/质检";
-                    }else if(data.data.list[i].roles[0].id==20){
-                        job="熨烫";
-                    }else if(data.data.list[i].roles[0].id==21){
-                        job="客服";
-                    }else if(data.data.list[i].roles[0].id==22){
-                        job="上架";
-                    }else if(data.data.list[i].roles[0].id==23){
-                        job="包装";
-                    }else if(data.data.list[i].roles[0].id==24){
-                        job="发货";
-                    }else if(data.data.list[i].roles[0].id==25){
-                        job="管理员";
-                    }
+                    var job=data.data.list[i].roles[0].roleName;
 			        var item='<tr>' +
 								'<td class="check"><input type="checkbox" /></td>' +
 								'<td class="name">'+data.data.list[i].username+'</td>' +

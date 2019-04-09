@@ -150,6 +150,7 @@
         <th>物流</th>
         <!--<th>条件</th>-->
         <th>运费</th>
+        <th>状态</th>
         <th>操作</th>
     </tr>
     </thead>
@@ -164,7 +165,7 @@
 
 </div>
 </body>
-<div id="add-box" style="display: none;padding: 10px 20px;">
+<div id="add-box" style="display: none; padding: 10px 20px;">
     <form class="layui-form" action="">
         <div class="layui-form-item">
             <label class="layui-form-label">名称</label>
@@ -213,6 +214,7 @@
     });
 
     $("#addWl").click(function () {
+        cleanWrite();
         layui.use('layer', function () {
             var layer = layui.layer;
             layer.open({
@@ -253,12 +255,12 @@
                         $("#wlName").val(data.data.expressName);
                         $("#wlPrice").val(data.data.freight);
                         $("#sort").val(data.data.sort);
-                        if(data.data.state==1){
-                            $('#state input[name="switch"]').eq(0).prop("checked",true);
-                        }else if(data.data.state==0){
-                            $('#state input[name="switch"]').eq(1).prop("checked",true);
-                        }
-
+                        $("input[name='switch'][value='"+data.data.state+"']").prop("checked",true);
+//                        if(data.data.state==1){
+//                            $('input[name="switch"]').eq(0).prop("checked",true);
+//                        }else if(data.data.state==0){
+//                            $('input[name="switch"]').eq(1).prop("checked",true);
+//                        }
                         form.render();
                     })
 
@@ -337,8 +339,8 @@
                     for (var i = 0; i < data.data.list.length; i++) {
                         var btn = "";
                         if (data.data.list[i].state == 1) {
-                            btn = '<button class="layui-btn layui-btn-sm layui-btn-danger layui-btn-disabled" disabled>禁用</button>' +
-                                '<button class="layui-btn layui-btn-sm layui-btn-normal">启用</button>';
+//                            btn = '<button class="layui-btn layui-btn-sm layui-btn-danger layui-btn-disabled" disabled>禁用</button>' +
+//                                '<button class="layui-btn layui-btn-sm layui-btn-normal">启用</button>';
                         } else if (data.data.list[i].state == 0) {
                             btn = '<button class="layui-btn layui-btn-sm layui-btn-danger">禁用</button>' +
                                 '<button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-disabled" disabled>启用</button>';
@@ -349,10 +351,10 @@
                         var item = '<tr wlId="' + data.data.list[i].id + '">' +
                             '<td>' + data.data.list[i].expressName + '</td>' +
                             '<td>' + data.data.list[i].freight + '</td>' +
+                            '<td>'+btn+'</td>' +
                             '<td>' +
                             '<button class="layui-btn layui-btn-sm changeBtn" >编辑</button>' +
-                            btn +
-                            '<button class="layui-btn layui-btn-sm layui-btn-primary delBtn" >删除</button>'
+//                            '<button class="layui-btn layui-btn-sm layui-btn-primary delBtn" >删除</button>'
                         '</td>';
                         '</tr>';
                         $(item).appendTo($(".layui-table tbody"))
@@ -409,7 +411,7 @@
                     getLogistics();
                     layer.closeAll();
                     layer.msg(data.message);
-                    cleanWrite();
+//                    cleanWrite();
                 }
             }
         })
@@ -481,7 +483,7 @@
         $("#wlName").val("");
         $("#wlPrice").val("");
         $("#sort").val("");
-        $('#state input[name="switch"]:checked').val(0);
+        $('#state input[name="switch"]:checked').val();
     }
 </script>
 </html>

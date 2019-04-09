@@ -97,6 +97,12 @@
 					<p class="bombBoxTitle">优惠券信息</p>
 				</div>
 				<div class="layui-form-item">
+					<label class="layui-form-label">优惠券名称</label>
+					<div class="layui-input-block">
+						<input class="layui-input couponName" name="couponNum" lay-verify="discountNum" type="text" value="" placeholder="请输入优惠券名称" autocomplete="off">
+					</div>
+				</div>
+				<div class="layui-form-item">
 					<label class="layui-form-label">优惠券面值</label>
 					<div class="layui-input-block">
 						<input class="layui-input discountNum" name="discountNum" lay-verify="discountNum" type="text" value="" placeholder="请输入优惠券面值" autocomplete="off">
@@ -157,6 +163,7 @@
 		function formVerify(){
 			var reg=/^[0-9]\d*$/;
 			var bol=true;
+            var couponName=$(".couponName").val();
 			var discountNum=$(".discountNum").val();
 			var contentNum=$(".contentNum").val();
 			var couponType=$("#type").val();
@@ -195,6 +202,7 @@
 			var canForm=formVerify();
 			if(canForm){
 				var formData=new FormData();
+                formData.append("remark",$(".couponName").val());
 				formData.append("discountNum",$(".discountNum").val());
 				formData.append("contentNum",$(".contentNum").val())
 				formData.append("couponType",$("#type").val())
@@ -238,16 +246,11 @@
 		            crossDomain: true,
 					success:function(res){
 						console.log(res);
+						$(".couponName").val(res.data.remark);
 						$(".discountNum").val(res.data.discountNum);
 						$(".contentNum").val(res.data.contentNum);
 						$(".convertNum").val(res.data.storeConvert);
-						if(res.data.couponType==0){
-							$("input[name=type]").removeAttr("checked");
-							$("input[name=type]").eq(0).prop("checked",true);
-						}else{
-							$("input[name=type]").removeAttr("checked");
-							$("input[name=type]").eq(1).prop("checked",true);
-						}
+						$('#type').val(res.data.couponType);
 						form.render();
 					},
 					error:function(err){
@@ -263,11 +266,12 @@
 			var id=getQueryString("id");
 			if(canForm){
 				var formData=new FormData();
+                formData.append("remark",$(".couponName").val());
 				formData.append("discountNum",$(".discountNum").val());
 				formData.append("contentNum",$(".contentNum").val())
 				formData.append("couponType",$("#type").val())
 				formData.append("storeConvert",$(".convertNum").val())
-				formData.append("id",id)
+				formData.append("id",id);
 			    $.ajax({
 					type:"post",
 					url:globalUrl+"coupon/update",

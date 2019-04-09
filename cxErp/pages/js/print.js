@@ -81,7 +81,7 @@ function myPrintA(list, currentIndex, totalList) {
 
   LODOP = getLodop(); //获取打印驱动
   LODOP.PRINT_INITA(0, 7, 378, 790, "顺丰丰密210热敏");//预览窗口标题
-  LODOP.SET_PRINT_PAGESIZE(0, 1000, 2100, "")//设置纸张大小100mm*150mm
+  LODOP.SET_PRINT_PAGESIZE(0, 1000, 1000, "")//设置纸张大小100mm*150mm
   LODOP.SET_PRINT_MODE("PRINT_NOCOLLATE", 1);//设置以纸张边缘为基点
   // for (j = 0; j < m; j++) {
   //   children_nos = n[j];
@@ -280,7 +280,7 @@ function printTemp(m) {
 //LODOP.SET_PRINT_STYLEA(0,"FontName","宋体");
 //LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
   //新增
-  LODOP.ADD_PRINT_TEXT(590,48,311,94,"银行承兑汇票，请交于对公柜台人员签收或者由银行大堂经理协助安排该银行其他人员签收。谢谢");
+  LODOP.ADD_PRINT_TEXT(590,48,311,94,"");
   LODOP.SET_PRINT_STYLEA(0,"FontName","宋体");
   LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
   // 备注栏2

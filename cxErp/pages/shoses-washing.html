@@ -55,9 +55,17 @@
 				</div>
 			</form>
 			<form class="layui-form">
-				<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
-					<div class="layui-input-inline" style="margin:0; width: 70%;">
-						<input type="text" id="searchDate1" placeholder="选择日期" class="layui-input">
+				<!--<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">-->
+					<!--<div class="layui-input-inline" style="margin:0; width: 70%;">-->
+						<!--<input type="text" id="searchDate1" placeholder="选择日期" autocomplete="off" class="layui-input">-->
+					<!--</div>-->
+					<!--<button class="layui-btn layui-btn-normal" type="button" id="searchBtn1">查询</button>-->
+				<!--</div>-->
+				<div class="layui-form-item layui-inline" style="margin-bottom: 0;margin-top: 10px;">
+					<div class="layui-input-inline" style="margin:0; width: 80%;display: flex;">
+						<input type="text" id="searchDate1" placeholder="选择日期" autocomplete="off" class="layui-input">
+						<p class="to" style="margin: 10px 10px;">~</p>
+						<input type="text" id="searchDate1-1" placeholder="选择日期" autocomplete="off" class="layui-input">
 					</div>
 					<button class="layui-btn layui-btn-normal" type="button" id="searchBtn1">查询</button>
 				</div>
@@ -93,11 +101,19 @@
 				</div>
 			</form>
 			<form class="layui-form">
-				<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
-					<div class="layui-input-inline" style="margin:0; width: 70%;">
-						<input type="text" id="searchDate2" placeholder="选择日期" class="layui-input">
+				<!--<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">-->
+					<!--<div class="layui-input-inline" style="margin:0; width: 70%;">-->
+						<!--<input type="text" id="searchDate2" placeholder="选择日期" class="layui-input">-->
+					<!--</div>-->
+					<!--<button class="layui-btn layui-btn-normal" type="button" id="searchBtn2">查询</button>-->
+				<!--</div>-->
+				<div class="layui-form-item layui-inline" style="margin-bottom: 0;margin-top: 10px;">
+					<div class="layui-input-inline" style="margin:0; width: 80%;display: flex;">
+						<input type="text" id="searchDate2" placeholder="选择日期" autocomplete="off" class="layui-input">
+						<p class="to" style="margin: 10px 10px;">~</p>
+						<input type="text" id="searchDate2-1" placeholder="选择日期" autocomplete="off" class="layui-input">
 					</div>
-					<button class="layui-btn layui-btn-normal" type="button" id="searchBtn2">查询</button>
+					<button class="layui-btn layui-btn-normal" type="button" id="searchBtn1">查询</button>
 				</div>
 				<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
 					<div class="layui-input-inline" style="margin:0; width: 70%;">
@@ -132,9 +148,17 @@
 				</div>
 			</form>
 			<form class="layui-form">
-				<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
-					<div class="layui-input-inline" style="margin:0; width: 70%;">
-						<input type="text" id="searchDate3" placeholder="选择日期" class="layui-input">
+				<!--<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">-->
+					<!--<div class="layui-input-inline" style="margin:0; width: 70%;">-->
+						<!--<input type="text" id="searchDate3" placeholder="选择日期" class="layui-input">-->
+					<!--</div>-->
+					<!--<button class="layui-btn layui-btn-normal" type="button" id="searchBtn3">查询</button>-->
+				<!--</div>-->
+				<div class="layui-form-item layui-inline" style="margin-bottom: 0;margin-top: 10px;">
+					<div class="layui-input-inline" style="margin:0; width: 80%;display: flex;">
+						<input type="text" id="searchDate3" placeholder="选择日期" autocomplete="off" class="layui-input">
+						<p class="to" style="margin: 10px 10px;">~</p>
+						<input type="text" id="searchDate3-1" placeholder="选择日期" autocomplete="off" class="layui-input">
 					</div>
 					<button class="layui-btn layui-btn-normal" type="button" id="searchBtn3">查询</button>
 				</div>
@@ -201,6 +225,15 @@
         laydate.render({
             elem: "#searchDate3"
         });
+        laydate.render({
+            elem: "#searchDate1-1"
+        });
+        laydate.render({
+            elem: "#searchDate2-1"
+        });
+        laydate.render({
+            elem: "#searchDate3-1"
+        });
         table1Show(tablePage1, pageSize, status, time1);
     });
 
@@ -217,16 +250,19 @@
     });
 
     $("#searchBtn1").click(function () {
-        var time = $("#searchDate1").val();
-        table1Show(tablePage1, pageSize, status, time);
+        var startTime1 = $("#searchDate1").val();
+        var endTime1 = $("#searchDate1-1").val();
+        table1Show(tablePage1, pageSize, status,startTime1,endTime1);
     });
     $("#searchBtn2").click(function () {
-        var time = $("#searchDate2").val();
-        table2Show(tablePage2, pageSize, status, time);
+        var startTime2 = $("#searchDate2").val();
+        var endTime2 = $("#searchDate2-1").val();
+        table2Show(tablePage2, pageSize, status,startTime2,endTime2);
     });
     $("#searchBtn3").click(function () {
-        var time = $("#searchDate3").val();
-        table3Show(tablePage3, pageSize, status, time);
+        var startTime3 = $("#searchDate3").val();
+        var endTime3 = $("#searchDate3-1").val();
+        table3Show(tablePage3, pageSize, status,startTime3,endTime3);
     });
 
 
@@ -376,6 +412,8 @@
     //    外包1
     $(".outsource1").live("click",function(){
         var id=$(this).parent().parent().attr("itemId");
+        var startTime1 = $("#searchDate1").val();
+        var endTime1 = $("#searchDate1-1").val();
         layui.use('layer',function(){
             var layer=layui.layer;
             layer.open({
@@ -397,7 +435,7 @@
                         },
                         success:function(data){
                             if(data.status==200){
-                                table1Show(tablePage1,pageSize,status);
+                                table1Show(tablePage1,pageSize,status,startTime1,endTime1);
                                 layer.closeAll();
                                 layer.msg('已完成');
                             }else{
@@ -416,6 +454,8 @@
     //    返洗外包
     $(".outsource2").live("click",function(){
         var id=$(this).parent().parent().attr("itemId");
+        var startTime2 = $("#searchDate2").val();
+        var endTime2 = $("#searchDate2-1").val();
         layui.use('layer',function(){
             var layer=layui.layer;
             layer.open({
@@ -438,7 +478,7 @@
                         },
                         success:function(data){
                             if(data.status==200){
-                                table2Show(tablePage2,pageSize,status);
+                                table2Show(tablePage2,pageSize,status,startTime2,endTime2);
                                 layer.closeAll();
                                 layer.msg('已完成');
                             }else{
@@ -457,6 +497,8 @@
     //    事故外包
     $(".outsource3").live("click",function(){
         var id=$(this).parent().parent().attr("itemId");
+        var startTime3 = $("#searchDate3").val();
+        var endTime3 = $("#searchDate3-1").val();
         layui.use('layer',function(){
             var layer=layui.layer;
             layer.open({
@@ -479,7 +521,7 @@
                         },
                         success:function(data){
                             if(data.status==200){
-                                table3Show(tablePage3,8,status);
+                                table3Show(tablePage3,pageSize,status,startTime3,endTime3);
                                 layer.closeAll();
                                 layer.msg('已完成');
                             }else{
@@ -498,6 +540,8 @@
     //   退件1
     $(".backPiece1").live("click",function(){
         var id=$(this).parent().parent().attr("itemId");
+        var startTime1 = $("#searchDate1").val();
+        var endTime1 = $("#searchDate1-1").val();
         layui.use('layer',function(){
             var layer=layui.layer;
             layer.open({
@@ -519,7 +563,7 @@
                         },
                         success:function(data){
                             if(data.status==200){
-                                table1Show(tablePage1,pageSize,status);
+                                table1Show(tablePage1,pageSize,status,startTime1,endTime1);
                                 layer.closeAll();
                                 layer.msg('已完成');
                             }else{
@@ -538,6 +582,8 @@
     //    事故处理-退件
     $(".backPiece3").live("click",function(){
         var id=$(this).parent().parent().attr("itemId");
+        var startTime3 = $("#searchDate3").val();
+        var endTime3 = $("#searchDate3-1").val();
         layui.use('layer',function(){
             var layer=layui.layer;
             layer.open({
@@ -560,7 +606,7 @@
                         },
                         success:function(data){
                             if(data.status==200){
-                                table3Show(tablePage3,pageSize,status);
+                                table3Show(tablePage3,pageSize,status,startTime3,endTime3);
                                 layer.closeAll();
                                 layer.msg('已完成');
                             }else{
@@ -579,6 +625,8 @@
     //    返洗完成
     $(".okBtn1").live("click",function(){
         var id=$(this).parent().parent().attr("itemId");
+        var startTime2 = $("#searchDate2").val();
+        var endTime2 = $("#searchDate2-1").val();
         layui.use('layer',function(){
             var layer=layui.layer;
             layer.open({
@@ -601,7 +649,7 @@
                         },
                         success:function(data){
                             if(data.status==200){
-                                table2Show(tablePage2,pageSize,status);
+                                table2Show(tablePage2,pageSize,status,startTime2,endTime2);
                                 layer.closeAll();
                                 layer.msg('已完成');
                             }else{
@@ -621,6 +669,8 @@
     //    事故处理完成
     $(".okBtn2").live("click",function(){
         var id=$(this).parent().parent().attr("itemId");
+        var startTime3 = $("#searchDate3").val();
+        var endTime3 = $("#searchDate3-1").val();
         layui.use('layer',function(){
             var layer=layui.layer;
             layer.open({
@@ -643,7 +693,7 @@
                         },
                         success:function(data){
                             if(data.status==200){
-                                table3Show(tablePage3,pageSize,status);
+                                table3Show(tablePage3,pageSize,status,startTime3,endTime3);
                                 layer.closeAll();
                                 layer.msg('已完成');
                             }else{
@@ -665,9 +715,10 @@
      * @param page 页数
      * @param pageSize 每页数量
      * @param status 类型
-     * @param time 时间
+     * @param startTime 起始时间
+     * @param endTime 结束时间
      */
-    function table1Show(page, pageSize, status, time) {
+    function table1Show(page, pageSize, status,startTime,endTime) {
         animate = layer.load();
         $.ajax({
             url: globalUrl + "api/wash/list;jsessionid=" + $.cookie("token"),
@@ -676,7 +727,8 @@
                 page: page,
                 pageSize: pageSize,
                 status: status,
-                time: time
+                startTime: startTime,
+                endTime:endTime
             },
             crossDomain: true,
             beforeSend: function (request) {
@@ -727,7 +779,7 @@
                                 tablePage1 = obj.curr;
                                 if (!first) {
                                     animate = layer.load();
-                                    table1Show(obj.curr, pageSize, status, time1);
+                                    table1Show(obj.curr, pageSize, status,startTime,endTime);
                                 }
                             }
                         })
@@ -746,9 +798,10 @@
      * @param page 页数
      * @param pageSize 每页数量
      * @param status 类型
-     * @param time 时间
+     * @param startTime 起始时间
+     * @param endTime 结束时间
      */
-    function table2Show(page, pageSize, status, time) {
+    function table2Show(page, pageSize, status,startTime,endTime) {
         animate = layer.load();
         $.ajax({
             url: globalUrl + "api/wash/backList;jsessionid=" + $.cookie("token"),
@@ -758,7 +811,8 @@
                 pageSize: pageSize,
                 status: status,
                 style: 3,
-                time: time
+                startTime: startTime,
+                endTime:endTime
             },
             crossDomain: true,
             beforeSend: function (request) {
@@ -808,7 +862,7 @@
                             jump: function (obj, first) {
                                 tablePage2 = obj.curr;
                                 if (!first) {
-                                    table2Show(obj.curr, pageSize, status, style, time2);
+                                    table2Show(obj.curr, pageSize, status,startTime,endTime);
                                 }
                             }
                         })
@@ -821,7 +875,7 @@
         })
     }
 
-    function table3Show(page, pageSize, status, time) {
+    function table3Show(page, pageSize, status,startTime,endTime) {
         animate = layer.load();
         $.ajax({
             url: globalUrl + "api/wash/backList;jsessionid=" + $.cookie("token"),
@@ -831,7 +885,8 @@
                 pageSize: pageSize,
                 status: status,
                 style: 5,
-                time: time
+                startTime: startTime,
+				endTime:endTime
             },
             crossDomain: true,
             beforeSend: function (request) {
@@ -862,12 +917,7 @@
                             '<p class="pics" style="display: none;">' + pics + '</p>' +
                             '</td>' +
                             '<td>' + data.data.list[i].userName + '</td>' +
-                            '<td>' + data.data.list[i].backTime + '</td>' +
-                            //                            '<td>' +
-                            //                            '<button class="layui-btn layui-btn-sm layui-btn-normal okBtn2">完成</button>' +
-                            //                            '<button class="layui-btn layui-btn-sm outsource3">外包</button>' +
-                            //                            '<button class="layui-btn layui-btn-sm backPiece3">退件</button>' +
-                            //                            '</td>'+
+                            '<td>' + timestampToTime(data.data.list[i].backTime) + '</td>' +
                             '</tr>';
                         $(item).appendTo($("#table3 tbody"));
                     }
@@ -881,7 +931,7 @@
                             jump: function (obj, first) {
                                 tablePage2 = obj.curr;
                                 if (!first) {
-                                    table3Show(obj.curr, pageSize, status, time3);
+                                    table3Show(obj.curr, pageSize, status,startTime,endTime);
                                 }
                             }
                         })
@@ -900,7 +950,6 @@
         $.ajax({
             url: globalUrl + "api/wash/scan;jsessionid=" + $.cookie("token"),
             type: 'get',
-            async: false,
             data: {
                 barCode: code,
                 status: status
@@ -960,11 +1009,10 @@
     }
 
     //    table2扫码录入
-    function codeWrite2(code, status) {
+    function codeWrite2(code) {
         $.ajax({
             url: globalUrl + "api/wash/backScan;jsessionid=" + $.cookie("token"),
             type: 'get',
-            async: false,
             data: {
                 barCode: code,
                 status: status,
@@ -1022,11 +1070,10 @@
         })
     }
 
-    function codeWrite3(code, status) {
+    function codeWrite3(code) {
         $.ajax({
             url: globalUrl + "api/wash/backScan;jsessionid=" + $.cookie("token"),
             type: 'get',
-            async: false,
             data: {
                 barCode: code,
                 status: status,
@@ -1061,7 +1108,7 @@
                         '<p class="pics" style="display: none;">' + pics + '</p>' +
                         '</td>' +
                         '<td>' + data.data.userName + '</td>' +
-                        '<td>' + data.data.backTime + '</td>' +
+                        '<td>' + timestampToTime(data.data.backTime) + '</td>' +
                         '<td>' +
                         '<button class="layui-btn layui-btn-sm layui-btn-normal okBtn2">完成</button>' +
                         '<button class="layui-btn layui-btn-sm outsource3">外包</button>' +
@@ -1082,6 +1129,8 @@
 
     //table1漏检返单方法
     function backCheck(itemId, status) {
+        var startTime1 = $("#searchDate1").val();
+        var endTime1 = $("#searchDate1-1").val();
         $.ajax({
             url: globalUrl + "api/wash/back;jsessionid=" + $.cookie("token"),
             type: 'get',
@@ -1096,7 +1145,7 @@
             success: function (data) {
                 console.log(data);
                 if (data.status == 200) {
-                    table1Show(tablePage1, pageSize, status);
+                    table1Show(tablePage1, pageSize, status,startTime1,endTime1);
                     layer.msg('返单成功');
                 } else {
                     layer.msg(data.msg);
@@ -1107,6 +1156,8 @@
 
     //table1分类错误返单方法
     function typeError(itemId, status) {
+        var startTime1 = $("#searchDate1").val();
+        var endTime1 = $("#searchDate1-1").val();
         $.ajax({
             url: globalUrl + "api/wash/category;jsessionid=" + $.cookie("token"),
             type: 'get',
@@ -1120,7 +1171,7 @@
             },
             success: function (data) {
                 if (data.status == 200) {
-                    table1Show(tablePage1,pageSize,status);
+                    table1Show(tablePage1,pageSize,status,startTime1,endTime1);
                     layer.closeAll();
                     layer.msg('操做成功');
                 } else {
@@ -1131,6 +1182,8 @@
     }
 
     function stopStain(id){
+        var startTime1 = $("#searchDate1").val();
+        var endTime1 = $("#searchDate1-1").val();
         $.ajax({
             url: globalUrl + "api/wash/washStop;jsessionid=" + $.cookie("token"),
             type: 'post',
@@ -1144,7 +1197,7 @@
             },
             success:function(data){
                 if(data.status==200){
-                    table1Show(tablePage1,pageSize,status);
+                    table1Show(tablePage1,pageSize,status,startTime1,endTime1);
                     layer.closeAll();
                     layer.msg('污渍终止成功');
                 }else{

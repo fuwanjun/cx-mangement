@@ -45,9 +45,17 @@
 				</div>
 			</form>
 			<form class="layui-form">
-				<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
-					<div class="layui-input-inline" style="margin:0; width: 70%;">
-						<input type="text" id="searchDate1" placeholder="选择日期" class="layui-input">
+				<!--<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">-->
+					<!--<div class="layui-input-inline" style="margin:0; width: 70%;">-->
+						<!--<input type="text" id="searchDate1" placeholder="选择日期" autocomplete="off" class="layui-input">-->
+					<!--</div>-->
+					<!--<button class="layui-btn layui-btn-normal" type="button" id="searchBtn1">查询</button>-->
+				<!--</div>-->
+				<div class="layui-form-item layui-inline" style="margin-bottom: 0;margin-top: 10px;">
+					<div class="layui-input-inline" style="margin:0; width: 80%;display: flex;">
+						<input type="text" id="searchDate1" placeholder="选择日期" autocomplete="off" class="layui-input">
+						<p class="to" style="margin: 10px 10px;">~</p>
+						<input type="text" id="searchDate1-1" placeholder="选择日期" autocomplete="off" class="layui-input">
 					</div>
 					<button class="layui-btn layui-btn-normal" type="button" id="searchBtn1">查询</button>
 				</div>
@@ -66,6 +74,12 @@
 						<input type="text" placeholder="输入物流单号" autocomplete="off" class="layui-input" id="codeIn1">
 					</div>
 				</div>
+				<div class="layui-form-item layui-inline" style="margin-bottom: 0;margin-top: 10px;">
+					<div class="layui-input-inline" style="margin:0; width:calc(100% - 48px);display: flex;">
+						<input type="text" id="searchOrder" placeholder="输入要查询的订单号" autocomplete="off" class="layui-input">
+					</div>
+					<button class="layui-btn layui-btn-normal" type="button" id="searchOrderBtn">查询</button>
+				</div>
 			</form>
 			<table class="layui-table" lay-skin="line" align="center" id="table1">
 				<thead>
@@ -74,6 +88,7 @@
 					<th>订单号</th>
 					<th>包装人</th>
 					<th>包装时间</th>
+					<th>物流公司</th>
 					<th>发货人</th>
 					<th>发货时间</th>
 					<th>详情</th>
@@ -128,6 +143,10 @@
             elem: '#searchDate1',
             type: 'date'
         });
+        laydate.render({
+            elem: '#searchDate1-1',
+            type: 'date'
+        });
 
         var expressType = 2;
         form.on("select", function (data) {
@@ -156,9 +175,14 @@
     });
 
     $("#searchBtn1").live("click",function(){
-		var time=$("#searchDate1").val();
-		getList(time);
+		var time1=$("#searchDate1").val();
+        var time2=$("#searchDate1-1").val();
+		getList(time1,time2);
 	});
+    $("#searchOrderBtn").live("click",function(){
+        var orderNo=$("#searchOrder").val();
+        getList('','',orderNo);
+    });
 
     $(".detailBtn").live("click",function(){
 		var id=$(this).parent().parent().attr("sendId");
@@ -193,12 +217,21 @@
             },
 			success:function(data){
 				if(data.status==200){
-                    $("#table1 tbody").html();
+                    $("#table1 tbody").html("");
+                    var logisticsType=data.data.logisticsType;
+                    if(logisticsType==1){
+                        logisticsType='顺丰';
+                    }else if(logisticsType==2){
+                        logisticsType='自配';
+                    }else if(logisticsType==3){
+                        logisticsType='德邦';
+                    }
 				    var item='<tr sendId="'+data.data.itemIds+'" num="'+data.data.num+'" surplus="'+data.data.surplus+'" total="'+data.data.total+'">' +
 						'<td>'+data.data.logisticsCode+'</td>' +
                         '<td>'+data.data.orderNo+'</td>' +
                         '<td>'+data.data.packUserName+'</td>' +
                         '<td>'+timestampToTime(data.data.packTime)+'</td>' +
+						'<td>'+logisticsType+'</td>' +
                         '<td>'+data.data.sendUserName+'</td>' +
                         '<td>'+timestampToTime(data.data.sendTime)+'</td>' +
                         '<td><button class="layui-btn layui-btn-sm layui-btn-primary detailBtn">查看详情</button></td>' +
@@ -211,11 +244,11 @@
 		})
 	}
 
-	function getList(time){
+	function getList(startTime,endTime,orderNo){
         $.ajax({
             url: globalUrl + "api/deliver/list;jsessionid=" + $.cookie("token"),
             type: 'get',
-            data: {time:time},
+            data: {startTime:startTime,endTime:endTime,orderNo},
             crossDomain: true,
             beforeSend: function (request) {
                 request.setRequestHeader("JSESSIONID", $.cookie("token"));
@@ -226,11 +259,20 @@
                     for(var i=0;i<data.data.length;i++){
                         var packName=data.data[i].packUserName?data.data[i].packUserName:'';
                         var sendName=data.data[i].sendUserName?data.data[i].sendUserName:'';
+                        var logisticsType=data.data[i].logisticsType;
+                        if(logisticsType==1){
+                            logisticsType='顺丰';
+						}else if(logisticsType==2){
+                            logisticsType='自配';
+						}else if(logisticsType==3){
+						    logisticsType='德邦';
+						}
                         var item='<tr sendId="'+data.data[i].itemIds+'" num="'+data.data[i].num+'" surplus="'+data.data[i].surplus+'">' +
                             '<td>'+data.data[i].logisticsCode+'</td>' +
                             '<td>'+data.data[i].orderNo+'</td>' +
                             '<td>'+packName+'</td>' +
                             '<td>'+timestampToTime(data.data[i].packTime)+'</td>' +
+							'<td>'+logisticsType+'</td>' +
                             '<td>'+sendName+'</td>' +
                             '<td>'+timestampToTime(data.data[i].sendTime)+'</td>' +
 							'<td><button class="layui-btn layui-btn-sm layui-btn-primary detailBtn">查看详情</button></td>' +

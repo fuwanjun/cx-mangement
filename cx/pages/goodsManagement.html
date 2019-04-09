@@ -38,7 +38,6 @@
 
 		.details_box td {
 			width: 50% !important;
-
 		}
 		.goodsImg{
 			width: 50px;
@@ -68,19 +67,19 @@
 			width: 100px;
 			height: 100px;
 		}
+		#goodsNumInput{
+			display: none;
+		}
 	</style>
-
 </head>
 
 <body>
-
 	<form class="layui-form   layui-row" style="float: left; " id="search">
 
 		<div class="layui-row">
-			<div class="layui-form-item   layui-inline">
-
+			<div class="layui-form-item" style="display: flex;">
 				<button class="layui-btn" name="user" style="float: left;margin-left:14px" type="button">商品类型</button>
-				<div class="layui-input-inline">
+				<div class="layui-input-inline" style="width:150px;">
 					<!--10-未付款，20-已付款，30-已取件，35 取件完成 40-待送，45-在送，50-送件完成，60-交易成功-->
 					<select name="quiz2" id="status"></select>
 				</div>
@@ -137,7 +136,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">商品类别</label>
 			<div class="layui-input-block">
-				<select id="type" lay-verify="required"></select>
+				<select id="type" lay-filter="type"></select>
 			</div>
 		</div>
 		<div class="layui-form-item">
@@ -160,6 +159,12 @@
 			<label class="layui-form-label">商品价格</label>
 			<div class="layui-input-block">
 				<input type="number" id="goodsPrice" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item" id="goodsNumInput">
+			<label class="layui-form-label">商品数量</label>
+			<div class="layui-input-block">
+				<input type="number" id="goodsNum" autocomplete="off" class="layui-input">
 			</div>
 		</div>
 		<div class="layui-form-item">
@@ -201,6 +206,7 @@
     var editorText=window.wangEditor;
     var editor=new editorText('#goodsText');
     var category;
+	var goodsVal;
     editor.customConfig.uploadImgShowBase64 = true;
     editor.create();
 	layui.use(['element', 'form', 'layer', 'laydate', 'laypage'], function () {
@@ -238,11 +244,26 @@
 			});
 		}
 		getHeadTitle2();
+		form.on('select(type)',function(res){
+		    goodsVal=res.value;
+            if(goodsVal==9){
+                $("#goodsNumInput").show();
+            }else{
+                $("#goodsNumInput").hide();
+			}
+		})
+
 	});
 	var addGoods="";
 	var url="";
     $("#xinzhengrenwu").click(function(){
-        cleanInput()
+        goodsVal=$("#type option:checked").val();
+        if(goodsVal==9){
+            $("#goodsNumInput").show();
+		}else{
+            $("#goodsNumInput").hide();
+        }
+        cleanInput();
         url=globalUrl+"goods/putGoods"
         addGoods=layer.open({
 			title:'商品信息',
@@ -257,6 +278,7 @@
                 var goodsType=$("#type").val();
                 var goodsName=$("#goodsName").val();
                 var goodsPrice=$("#goodsPrice").val();
+                var goodsNum=$("#goodsNum").val();
                 var goodsSort=$("#goodsSort").val();
                 var goodsUp=$('#up input[name="up"]').val();
                 var goodsDis=$('#dis input[name="discount"]').val();
@@ -282,6 +304,9 @@
                     layer.msg("请选择上传图片");
                     return false
                 }
+                if($("#status option:checked").val()==9){
+                    formData.append("goodsNum",goodsNum);
+				}
                 formData.append("file",file);
                 formData.append("goodsType",goodsType);
                 formData.append("goodsName",goodsName);
@@ -441,6 +466,11 @@
 			, layer = layui.layer;
 		var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
 		$("#goodList button.operation").live("click",function(){
+            if($("#status option:checked").val()==9){
+                $("#goodsNumInput").show();
+            }else{
+                $("#goodsNumInput").hide();
+            }
 			var id=$(this).parent().attr("data-id");
 			var url=globalUrl+"goods/updateGoods";
             layui.use('form',function() {
@@ -460,6 +490,7 @@
                     var goodsType=$("#type").val();
                     var goodsName=$("#goodsName").val();
                     var goodsPrice=$("#goodsPrice").val();
+                    var goodsNum=$("#goodsNum").val();
                     var goodsSort=$("#goodsSort").val();
                     var goodsUp=$('#up input[name="up"]:checked').val();
                     var goodsDis=$('#dis input[name="discount"]:checked').val();
@@ -489,6 +520,9 @@
                     if(file){
                         formData.append("file",file);
 					}
+                    if($("#status option:checked").val()==9){
+                        formData.append("goodsNum",goodsNum);
+                    }
 
                     formData.append("goodsType",goodsType);
                     formData.append("goodsName",goodsName);
@@ -782,6 +816,7 @@ function getThisGoods(goodsId){
                 $("#goodsName").val(data.goodsName);
                 $("#goodsPrice").val(data.goodsPrice);
                 $("#goodsSort").val(data.sort);
+                $("#goodsNum").val(data.goodsNum);
                 editor.txt.html(data.content);
                 document.getElementsByClassName("goodsFile")[0].files[0]=data.goodsPicture;
                 $("#demo1").attr("src","http://"+data.goodsPicture);

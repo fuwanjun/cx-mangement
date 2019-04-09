@@ -215,7 +215,7 @@ $("#excel").click(function(){
 	var startTime=$("#test5").val();
 	var endTime=$("#test6").val();
 //	var userName=$("#criticalWord").val();
-	window.open(globalUrl+"stat/goodsSales/exportCouponStat?startTime="+startTime+"&endTime="+endTime);
+	window.open(globalUrl+"stat/goodsSales/exportCouponStat?startTime="+startTimeCinfg(startTime)+"&endTime="+endTimeCinfg(endTime));
 });
 
 //	获取用户数据

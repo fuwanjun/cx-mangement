@@ -78,8 +78,8 @@
 <table class="layui-table" id="goodList" lay-skin="line" align="center">
     <thead>
     <tr align="center">
-        <th><input type="checkbox" name="" id="" value=""/></th>
-        <th>编号</th>
+        <!--<th><input type="checkbox" name="" id="" value=""/></th>-->
+        <th>名称</th>
         <th>券面值</th>
         <th>券满减</th>
         <th>类型</th>
@@ -134,8 +134,8 @@
                             couponType = '首登福利';
                         }
                         var item = '<tr>' +
-                            '<td><input type="checkbox"></td>' +
-                            '<td>' + value.id + '</td>' +
+//                            '<td><input type="checkbox"></td>' +
+                            '<td>' + value.remark + '</td>' +
                             '<td>' + value.discountNum + '</td>' +
                             '<td>' + value.contentNum + '</td>' +
                             '<td>' + couponType + '</td>' +

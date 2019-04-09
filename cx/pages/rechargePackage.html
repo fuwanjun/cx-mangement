@@ -357,12 +357,9 @@ $(".delBtn").live("click",function(){
     layui.use('layer',function(){
         var delPop=layer.open({
 			content:"确认删除该套餐？",
-			btn:['取消','确定'],
+			btn:['确定','取消'],
 			yes:function(){
-			    layer.close(delPop);
-			},
-			btn2:function(){
-				$.ajax({
+                $.ajax({
                     url: globalUrl + "/rechargeCard/deleteDetail",
                     type: "post",
                     data:{id:packageId},
@@ -370,21 +367,24 @@ $(".delBtn").live("click",function(){
                         xhr.setRequestHeader("token", $.cookie("token"));
                     },
                     crossDomain: true,
-					success:function(data){
+                    success:function(data){
                         console.log(data);
-						if(data.code==0){
+                        if(data.code==0){
                             layer.open({
                                 content:data.message
                             });
                             getAllPackage();
-						}else{
-						    layer.open({
-								content:data.message
-							})
-						}
-					}
-				})
-			}
+                        }else{
+                            layer.open({
+                                content:data.message
+                            })
+                        }
+                    }
+                })
+            },
+			btn2:function(){
+                layer.close(delPop);
+            }
 		})
 	})
 });

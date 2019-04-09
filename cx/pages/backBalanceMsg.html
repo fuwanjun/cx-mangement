@@ -136,18 +136,15 @@
 			<input id="test6" type="text" name="title" required  lay-verify="required" placeholder="结束时间" autocomplete="off" class="layui-input">
 		</div>
 	</div>
-	<!--<div class="layui-form-item" style="display: flex;">-->
-		<!--<label class="layui-form-label" style="margin-left: 20px;">状态：</label>-->
-		<!--<div class="layui-input-block" style="margin-left: 0px;">-->
-			<!--<select name="" id="state">-->
-				<!--<option value="">全部</option>-->
-				<!--<option value="1">已通过</option>-->
-				<!--<option value="-1">未通过</option>-->
-				<!--<option value="0">待审核</option>-->
-			<!--</select>-->
-		<!--</div>-->
-
-	<!--</div>-->
+	<div class="layui-form-item" style="display: flex;">
+		<label class="layui-form-label" style="margin-left: 20px;">类型：</label>
+		<div class="layui-input-block" style="margin-left: 0px;">
+			<select name="" id="state">
+				<option value="1">会员余额</option>
+				<option value="2">折扣卡余额</option>
+			</select>
+		</div>
+	</div>
 	<button id="search" style="margin-left: 20px;" type="button" class="layui-btn">搜索</button>
 </form>
 	<!-- 下面是一些第二行的东西 -->
@@ -196,15 +193,16 @@
 <script type="text/javascript" src="../resource/layui/layui.js"></script>
 <script>
 	$(function(){
-        getBalanceMsg(1);
+        getBalanceMsg(1,1);
 	});
 
 //	查询
 $("#search").click(function(){
-	var startTime=$("#test5").val();
-	var endTime=$("#test6").val();
+	var startTime=startTimeCinfg($("#test5").val());
+	var endTime=endTimeCinfg($("#test6").val());
 	var name=$("#criticalWord").val();
-    getBalanceMsg(1,name,startTime,endTime);
+	var type=$("#state option:checked").val();
+    getBalanceMsg(1,type,name,startTime,endTime);
 });
 
 //	导出
@@ -212,16 +210,18 @@ $("#excel").click(function(){
 	var startTime=$("#test5").val();
 	var endTime=$("#test6").val();
 	var userName=$("#criticalWord").val();
-	window.open(globalUrl+"refund/exportRefundRecord?userName="+userName+"&startTime="+startTime+"&endTime="+endTime);
+    var type=$("#state option:checked").val();
+	window.open(globalUrl+"refund/exportRefundRecord?type="+type+"&userName="+userName+"&startTime="+startTimeCinfg(startTime)+"&endTime="+endTimeCinfg(endTime));
 });
 
 //	获取用户退余额数据
-function getBalanceMsg(page,userName,startTime,endTime){
+function getBalanceMsg(page,type,userName,startTime,endTime){
     $.ajax({
         url: globalUrl + "/refund/getListByParam",
         type: "get",
         data:{
 			pageNum:page,
+			type:type,
             userName:userName,
             startTime:startTimeCinfg(startTime),
             endTime:endTimeCinfg(endTime)
@@ -266,7 +266,7 @@ function getBalanceMsg(page,userName,startTime,endTime){
 						curr:page,
 						jump:function(obj,first){
 							if(!first){
-                                getBalanceMsg(obj.curr,userName,startTime,endTime);
+                                getBalanceMsg(obj.curr,type,userName,startTime,endTime);
 							}
 						}
 					})

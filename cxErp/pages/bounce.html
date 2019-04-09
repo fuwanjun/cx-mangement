@@ -34,10 +34,18 @@
 	</form>
 	<form class="layui-form">
 		<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
-			<div class="layui-input-inline" style="margin:0; width: 70%;">
-				<input type="text" id="searchDate1" autocomplete="off" placeholder="选择时间" class="layui-input">
+			<!--<div class="layui-input-inline" style="margin:0; width: 70%;">-->
+				<!--<input type="text" id="searchDate1" autocomplete="off" placeholder="选择时间" class="layui-input">-->
+			<!--</div>-->
+			<!--<button class="layui-btn layui-btn-normal" type="button" id="searchBtn1">查询</button>-->
+			<div class="layui-form-item layui-inline" style="margin-bottom: 0;margin-top: 10px;">
+				<div class="layui-input-inline" style="margin:0; width: 80%;display: flex;">
+					<input type="text" id="searchDate1" placeholder="选择日期" autocomplete="off" class="layui-input">
+					<p class="to" style="margin: 10px 10px;">~</p>
+					<input type="text" id="searchDate1-1" placeholder="选择日期" autocomplete="off" class="layui-input">
+				</div>
+				<button class="layui-btn layui-btn-normal" type="button" id="searchBtn1">查询</button>
 			</div>
-			<button class="layui-btn layui-btn-normal" type="button" id="searchBtn1">查询</button>
 		</div>
 		<!--<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">-->
 		<!--<div class="layui-input-inline" style="margin:0; width: 70%;">-->
@@ -74,6 +82,7 @@
 <script src="../resource/js/jquery.cookie.js"></script>
 <script type="text/javascript">
 	var page1=1;
+	var pageSize=8;
 	layui.use(['element', 'form', 'layer','table', 'laydate', 'laypage','colorpicker'], function () {
 		var element = layui.element;
 		var laydate = layui.laydate;
@@ -89,12 +98,23 @@
 			elem: '#searchDate1',
 			type: 'date'
 		});
-		table1Show(page1,8);
+        laydate.render({
+            elem: '#searchDate1-1',
+            type: 'date'
+        });
+		table1Show(page1,pageSize);
 	});
 
 	$("#searchBtn1").click(function(){
-		var time=$("#searchDate1").val();
-        table1Show(1,8,time);
+        var startTime1 = $("#searchDate1").val();
+        var endTime1 = $("#searchDate1-1").val();
+        if(!startTime1){
+            startTime1=endTime1;
+		}
+		if(!endTime1){
+            endTime1=startTime1;
+		}
+        table1Show(page1,pageSize,startTime1,endTime1);
 	});
 
 //	发送给客服
@@ -137,11 +157,11 @@
         })
 	});
 
-	function table1Show(page,pageSize,time){
+	function table1Show(page,pageSize,startTime,endTime){
 		$.ajax({
             url: globalUrl + "api/admin/listByStatus;jsessionid=" + $.cookie("token"),
             type: 'get',
-            data: {page:page,pageSize:pageSize,time:time,status:103},
+            data: {page:page,pageSize:pageSize,startTime:startTime,endTime:endTime,status:103},
             crossDomain: true,
             beforeSend: function (request) {
                 request.setRequestHeader("JSESSIONID", $.cookie("token"));
@@ -178,7 +198,7 @@
                             jump:function(obj,first){
                                 page1=obj.curr;
                                 if(!first){
-                                    table1Show(page1,8,time)
+                                    table1Show(page1,pageSize,startTime,endTime)
                                 }
                             }
                         })
@@ -189,6 +209,14 @@
 	}
 //	发送给客服
     function sendGoods(id){
+        var startTime1 = $("#searchDate1").val();
+        var endTime1 = $("#searchDate1-1").val();
+        if(!startTime1){
+            startTime1=endTime1;
+        }
+        if(!endTime1){
+            endTime1=startTime1;
+        }
         $.ajax({
             url: globalUrl + "api/admin/send2Custom;jsessionid=" + $.cookie("token"),
             type: 'get',
@@ -199,7 +227,7 @@
             },
             success:function(data){
                 if(data.status==200){
-                    table1Show(page1,8);
+                    table1Show(page1,pageSize,startTime1,endTime1);
                     layer.closeAll();
                     layer.msg('已发送给客服处理')
                 }else{
@@ -210,6 +238,14 @@
     }
     //	退件
     function backGoods(id){
+        var startTime1 = $("#searchDate1").val();
+        var endTime1 = $("#searchDate1-1").val();
+        if(!startTime1){
+            startTime1=endTime1;
+        }
+        if(!endTime1){
+            endTime1=startTime1;
+        }
         $.ajax({
             url: globalUrl + "api/admin/backPiece;jsessionid=" + $.cookie("token"),
             type: 'get',
@@ -220,7 +256,7 @@
             },
             success:function(data){
                 if(data.status==200){
-                    table1Show(page1,8);
+                    table1Show(page1,pageSize,startTime1,endTime1);
                     layer.closeAll();
                     layer.msg('已成功退件');
                 }else{

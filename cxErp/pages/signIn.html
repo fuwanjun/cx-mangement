@@ -102,18 +102,25 @@
         <button type="button" class="layui-btn layui-btn-normal" id="checkPackBtn">衣袋审核</button>
     </div>
     <div class="layui-row" style="display: flex">
-        <div class="layui-form-item" style="margin-bottom: 0;margin-top: 10px;">
-            <div class="layui-input-inline" style="margin:0; width: 70%;">
-                <input type="text" name="date" id="date" lay-verify="date" placeholder="选择日期" autocomplete="off"
-                       class="layui-input">
+        <div class="layui-form-item" style="margin-bottom: 0;margin-top: 10px;width: 300px;">
+            <!--<div class="layui-input-inline" style="margin:0; width: 70%;">-->
+                <!--<input type="text" name="date" id="date" lay-verify="date" placeholder="选择日期" autocomplete="off"-->
+                       <!--class="layui-input">-->
+            <!--</div>-->
+            <!--<button class="layui-btn layui-btn-normal" name="user" type="button" id="dateSearch">查询</button>-->
+            <div class="layui-form-item layui-inline" style="margin-bottom: 0;">
+                <div class="layui-input-inline" style="margin:0; width: calc(100% - 48px);display: flex;">
+                    <input type="text" id="date" placeholder="选择日期" autocomplete="off" class="layui-input">
+                    <p class="to" style="margin: 10px 10px;">~</p>
+                    <input type="text" id="date2" placeholder="选择日期" autocomplete="off" class="layui-input">
+                </div>
+                <button class="layui-btn layui-btn-normal" type="button" id="dateSearch">查询</button>
             </div>
-            <button class="layui-btn layui-btn-normal" name="user" type="button" id="dateSearch">查询</button>
         </div>
 
-        <div class="layui-form-item" id="expressType"
-             style="margin-bottom: 0;margin-top: 10px; display: flex;">
+        <div class="layui-form-item" id="expressType" style="margin-bottom: 0;margin-top: 10px; display: flex;">
             <div class="text">快递类型</div>
-            <div class="layui-form-item">
+            <div class="layui-form-item" style="width: 100px;">
                 <select name="" id="" lay-filter="wlType">
                     <option value="2">自配物流</option>
                     <option value="3">德邦物流</option>
@@ -123,7 +130,7 @@
         </div>
         <div class="layui-form-item" style="margin-bottom: 0;margin-top: 10px; display: flex;">
             <div class="text" style="line-height: 38px;height:38px;padding: 0 10px;background: #1E9FFF;color: #fff;margin-left: 20px;">装衣袋数量</div>
-            <div class="layui-input-inline">
+            <div class="layui-input-inline" style="width: 60px">
                 <input id="packNum" class="layui-input" type="number" value="1">
             </div>
         </div>
@@ -175,7 +182,9 @@
 <script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
 <script type="text/javascript">
     var today = getNowFormatDate();
+    var page=1;
     var packId="";
+    var pageSize=10;
     layui.use(['element', 'form', 'layer', 'table', 'laydate', 'laypage'], function () {
         var element = layui.element;
         var form = layui.form;
@@ -188,6 +197,10 @@
         //时间选择器
         laydate.render({
             elem: '#date',
+            type: 'date'
+        });
+        laydate.render({
+            elem: '#date2',
             type: 'date'
         });
 
@@ -313,6 +326,18 @@
     });
 
     function qs(num, num2) {
+        var date = $("#date").val();
+        var date2 = $("#date2").val();
+        if(!date&&!date2){
+            date=today;
+            date2=today;
+        }
+        if(!date){
+            date=date2;
+        }
+        if(!date2){
+            date2=date;
+        }
         $.ajax({
             url: globalUrl + "api/work/signIn;jsessionid=" + $.cookie("token"),
             type: "get",
@@ -324,7 +349,7 @@
             success: function (data) {
                 if (data.status == 200) {
                     console.log(data);
-                    todayOrders(today, 1);
+                    todayOrders(date,date2, pageSize);
                 }
                 if (data.msg) {
                     layer.msg(data.msg);
@@ -334,13 +359,30 @@
             }
         })
     }
-
-
-    todayOrders(today, 1);
+    var date = $("#date").val();
+    var date2 = $("#date2").val();
+    if(!date&&!date2){
+        date=today;
+        date2=today;
+    }
+    if(!date){
+        date=date2;
+    }
+    if(!date2){
+        date2=date;
+    }
+    todayOrders(date,date2,page);
     //	点击按日期查询
     $("#dateSearch").click(function () {
         var date = $("#date").val();
-        todayOrders(date, 1);
+        var date2 = $("#date2").val();
+        if(!date){
+            date=date2;
+        }
+        if(!date2){
+            date2=date;
+        }
+        todayOrders(date,date2,page);
     });
 
     //	点击签收按钮
@@ -368,13 +410,14 @@
     });
 
     //	查看当天签收的数据
-    function todayOrders(date, page) {
+    function todayOrders(startTime,endTime,page) {
         $.ajax({
             url: globalUrl + "api/work/signInByTime;jsessionid=" + $.cookie("token"),
             type: "get",
             data: {
                 page: page,
-                time: date,
+                startTime:startTime,
+                endTime:endTime
             },
             crossDomain: true,
             beforeSend: function (request) {
@@ -422,7 +465,7 @@
                         curr: page,
                         jump: function (obj, first) {
                             if (!first) {
-                                todayOrders(date, obj.curr);
+                                todayOrders(startTime,endTime, obj.curr);
                             }
                         }
                     })

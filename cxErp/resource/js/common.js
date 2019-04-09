@@ -2,8 +2,8 @@
 // var globalUrl="http://192.168.3.211:8080/";
 // var globalUrl="http://47.99.150.184:8089/";
 // var globalUrl="http://47.99.150.184:8091/";
-// var globalUrl="http://192.168.3.29:8080/";
-var globalUrl="http://erp.changwash.com:8086/";
+var globalUrl="http://192.168.3.29:8080/";
+// var globalUrl="http://erp.changwash.com:8086/";
 var globalUrl2="http://www.changwash.com:8088/"
 function formatDate(now) {
 	var now=new Date(now);
@@ -87,4 +87,28 @@ function EncodeUtf8(s1) {
 function pageScrollBottom(){
     var h = $(document).height()-$(window).height();
     $(document).scrollTop(h);
+}
+
+/**
+ * 开始时间设置完整日期
+ * @param val
+ * @returns {*}
+ */
+function startTimeCinfg(val) {
+    if (!val) {
+        return val;
+    }
+    return val + " 00:00:00";
+}
+
+/**
+ * 结束时间设置完整日期
+ * @param val
+ * @returns {*}
+ */
+function endTimeCinfg(val) {
+    if (!val) {
+        return val;
+    }
+    return val + " 23:59:59";
 }

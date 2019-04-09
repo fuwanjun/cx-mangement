@@ -152,6 +152,7 @@
 		<thead>
 			<tr align="center">
 				<th>用户</th>
+				<th>联系方式</th>
 				<th width="50%">意见内容</th>
 				<th>时间</th>
 				<th>操作</th>
@@ -228,6 +229,7 @@ function getCouponMsg(page,pageSize,userName,startTime,endTime){
 								'<td>' +
 									'<p class="head-name">'+name+'</p>' +
 								'</td>' +
+								'<td>'+data.data.list[i].phone+'</td>' +
 								'<td>'+data.data.list[i].content+'</td>' +
 								'<td>'+timestampToTime(data.data.list[i].createTime)+'</td>' +
 								'<td>' +

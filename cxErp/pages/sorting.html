@@ -399,10 +399,18 @@
 			<!-- 下面是一些第二行的东西 -->
 			<div class="layui-row">		
 				<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
-					<div class="layui-input-inline" style="margin:0; width: 70%;">
-						<input type="text" name="date" id="date" lay-verify="date" placeholder="选择日期" autocomplete="off" class="layui-input">
+					<!--<div class="layui-input-inline" style="margin:0; width: 70%;">-->
+						<!--<input type="text" name="date" id="date" lay-verify="date" placeholder="选择日期" autocomplete="off" class="layui-input">-->
+					<!--</div>-->
+					<!--<button class="layui-btn layui-btn-normal" name="user" type="button">查询</button>-->
+					<div class="layui-form-item layui-inline" style="margin-bottom: 0;margin-top: 10px;">
+						<div class="layui-input-inline" style="margin:0; width: 80%;display: flex;">
+							<input type="text" id="date" placeholder="选择日期" autocomplete="off" class="layui-input">
+							<p class="to" style="margin: 10px 10px;">~</p>
+							<input type="text" id="date2" placeholder="选择日期" autocomplete="off" class="layui-input">
+						</div>
+						<button class="layui-btn layui-btn-normal" type="button" name="user" id="backSearchBtn">查询</button>
 					</div>
-					<button class="layui-btn layui-btn-normal" name="user" type="button">查询</button>
 				</div>
 				<div class="layui-form-item layui-inline" style="width: 20%;margin-bottom: 0;margin-top: 10px;">
 					<div class="layui-input-inline" style="margin:0; width: 70%;">
@@ -426,23 +434,7 @@
 							<th>保存</th>
 						</tr>
 					</thead>
-					<tbody>
-						<!--<tr>-->
-							<!--<td class="backCode">TM20180907m11211</td>-->
-							<!--<td class="backName">加厚衬衣</td>-->
-							<!--<td class="backPrice">16</td>-->
-							<!--<td class="backBrand"></td>-->
-							<!--<td class="backColor"></td>-->
-							<!--<td class="backSpot"></td>-->
-							<!--<td class="backEffect"></td>-->
-							<!--<td class="backPhoto">-->
-								<!--<button type="button" class="layui-btn">上传</button>-->
-							<!--</td>-->
-							<!--<td class="save">-->
-								<!--<button type="button" class="layui-btn">保存</button>-->
-							<!--</td>-->
-						<!--</tr>-->
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 			

@@ -232,7 +232,7 @@ $("#excel").click(function(){
 	var userName=$("#criticalWord").val();
     var vip=$("#state").val();
     var orderField=$("#sort").val();
-	window.open(globalUrl+"stat/promotionUser/exportUserInfoList?userName="+userName+"&startTime="+startTime+"&endTime="+endTime+"&vip="+vip+"&orderField="+orderField);
+	window.open(globalUrl+"stat/promotionUser/exportUserInfoList?userName="+userName+"&startTime="+startTimeCinfg(startTime)+"&endTime="+endTimeCinfg(endTime)+"&vip="+vip+"&orderField="+orderField);
 });
 
 //	获取用户数据

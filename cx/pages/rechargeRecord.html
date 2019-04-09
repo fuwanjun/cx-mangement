@@ -118,7 +118,7 @@
 	</form>
 	<!-- 下面是一些第二行的东西 -->
 	<div class="layui-row">
-		<div class="layui-inline  orderManage" style="margin-top:10px">微信充值记录</div>
+		<div class="layui-inline  orderManage" style="margin-top:10px">会员充值记录</div>
 		<div class="layui-inline" style="float:right;margin-right:30px;margin-top:10px">
 			<!--<button class="layui-btn layui-btn-normal" style="margin-right:30px;" id="zhuanyi">转移空托盘</button>
 			<button class="layui-btn  layui-btn-normal" id="xinzhengrenwu">新增任务</button>-->
@@ -138,8 +138,8 @@
 		<thead>
 			<tr align="center">
 				<th width="250px">用户</th>
-				<th>金额</th>
-				<th>赠送金额</th>
+				<th>充值金额</th>
+				<th>折扣优惠</th>
 				<th>时间</th>
 			</tr>
 		</thead>
@@ -162,7 +162,8 @@
 	var rechargeType=getQueryString('rechargeType');
 	$(function(){
 	    if(rechargeType==1){
-            $(".orderManage").html('会员值记录');
+            $(".orderManage").html('会员充值记录');
+            $("#orderList thead tr th").eq(2).html('赠送金额')
 		}else if(rechargeType==2){
             $(".orderManage").html('折扣卡充值记录');
 		}
@@ -189,13 +190,19 @@
 				console.log(data);
                 $("#orderList tbody").html(" ");
 				for(var i=0;i<data.data.list.length;i++){
+				    var discount;
+				    if(rechargeType==1){
+				        discount='<td>'+data.data.list[i].giftPrice+'</td>';
+					}else if(rechargeType==2){
+                        discount='<td>'+data.data.list[i].discount+'折</td>';
+					}
 					var item='<tr>' +
 						'<td style="display: flex;justify-content: flex-start;">' +
 						'<div class="head-pic"><img src="'+data.data.list[i].userPictUre+'" alt=""></div>'+
 						'<p class="vip-name" style="line-height: 50px;margin-left: 10px;">'+data.data.list[i].userName+'</p>'+
 						'</td>' +
 						'<td>'+data.data.list[i].price+'</td>'+
-						'<td>'+data.data.list[i].giftPrice+'</td>'+
+						discount+
 						'<td>'+timestampToTime(data.data.list[i].createTime)+'</td>'+
 						'</tr>';
 					$(item).appendTo($("#orderList tbody"));

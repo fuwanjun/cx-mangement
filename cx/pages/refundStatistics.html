@@ -136,25 +136,20 @@
 			<input id="test6" type="text" name="title" required  lay-verify="required" placeholder="结束时间" autocomplete="off" class="layui-input">
 		</div>
 	</div>
-	<!--<div class="layui-form-item" style="display: flex;">-->
-		<!--<label class="layui-form-label" style="margin-left: 20px;">状态：</label>-->
-		<!--<div class="layui-input-block" style="margin-left: 0px;">-->
-			<!--<select name="" id="state">-->
-				<!--<option value="">全部</option>-->
-				<!--<option value="1">已通过</option>-->
-				<!--<option value="-1">未通过</option>-->
-				<!--<option value="0">待审核</option>-->
-			<!--</select>-->
-		<!--</div>-->
-
-	<!--</div>-->
+	<div class="layui-form-item" style="display: flex;">
+		<label class="layui-form-label" style="margin-left: 20px;">类型：</label>
+		<div class="layui-input-block" style="margin-left: 0px;">
+			<select name="" id="state">
+				<option value="1">会员余额</option>
+				<option value="2">折扣卡余额</option>
+			</select>
+		</div>
+	</div>
 	<button id="search" style="margin-left: 20px;" type="button" class="layui-btn">搜索</button>
 </form>
 	<!-- 下面是一些第二行的东西 -->
 	<div class="layui-row">
-		<div class="layui-inline  orderManage" style="margin-top:10px">
-			退款总金额统计
-		</div>
+		<div class="layui-inline  orderManage" style="margin-top:10px">退余额统计</div>
 		<div class="layui-inline" style="float:right;margin-right:30px;margin-top:10px">
 			<!--<button class="layui-btn layui-btn-normal" style="margin-right:30px;" id="zhuanyi">转移空托盘</button>
 			<button class="layui-btn  layui-btn-normal" id="xinzhengrenwu">新增任务</button>-->
@@ -196,7 +191,7 @@
 <script type="text/javascript" src="../resource/layui/layui.js"></script>
 <script>
 	$(function(){
-        getBalanceMsg(1);
+        getBalanceMsg(1,1);
 	});
 
 //	查询
@@ -204,24 +199,32 @@ $("#search").click(function(){
 	var startTime=$("#test5").val();
 	var endTime=$("#test6").val();
 	var name=$("#criticalWord").val();
-    getBalanceMsg(1,name,startTime,endTime);
+    var type=$("#state option:checked").val();
+    if(type==1){
+        $(".orderManage").html('退余额统计');
+	}else if(type==2){
+        $(".orderManage").html('折扣卡退款统计');
+	}
+    getBalanceMsg(1,type,name,startTime,endTime);
 });
 
 //	导出
 $("#excel").click(function(){
+    var type=$("#state option:checked").val();
 	var startTime=$("#test5").val();
 	var endTime=$("#test6").val();
 	var userName=$("#criticalWord").val();
-	window.open(globalUrl+"stat/goodsSales/exportRefundStat?userName="+userName+"&startTime="+startTime+"&endTime="+endTime);
+	window.open(globalUrl+"stat/goodsSales/exportRefundStat?type="+type+"&userName="+userName+"&startTime="+startTimeCinfg(startTime)+"&endTime="+endTimeCinfg(endTime));
 });
 
 //	获取用户退余额数据
-function getBalanceMsg(page,userName,startTime,endTime){
+function getBalanceMsg(page,type,userName,startTime,endTime){
     $.ajax({
         url: globalUrl + "stat/goodsSales/getRefundList",
         type: "get",
         data:{
 			pageNum:page,
+			type:type,
             userName:userName,
             startTime:startTimeCinfg(startTime),
             endTime:endTimeCinfg(endTime)
@@ -253,7 +256,7 @@ function getBalanceMsg(page,userName,startTime,endTime){
 							 '</tr>';
                     $(item).appendTo($("#orderList tbody"))
 				}
-                total(startTime,endTime);
+                total(type,userName,startTime,endTime);
                     laydate.render({
                         elem:'#test5',
                         type:'date'
@@ -269,7 +272,7 @@ function getBalanceMsg(page,userName,startTime,endTime){
 						curr:page,
 						jump:function(obj,first){
 							if(!first){
-                                getBalanceMsg(obj.curr,userName,startTime,endTime);
+                                getBalanceMsg(obj.curr,type,userName,startTime,endTime);
 							}
 						}
 					})
@@ -280,11 +283,12 @@ function getBalanceMsg(page,userName,startTime,endTime){
 }
 
 //	总计
-function total(userName,startTime,endTime){
+function total(type,userName,startTime,endTime){
 	$.ajax({
 		url: globalUrl + "stat/goodsSales/getRefundUnified",
 		type: "get",
 		data:{
+		    type:type,
             userName:userName,
 			startTime:startTimeCinfg(startTime),
 			endTime:endTimeCinfg(endTime)

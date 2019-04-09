@@ -14,9 +14,6 @@
 	<link rel="stylesheet" href="../resource/layui/css/layui.css">
 	<link rel="stylesheet" type="text/css" href='css/pageIndex.css' />
 	<link rel="stylesheet" type="text/css" href='css/orderManagement.css' />
-
-
-
 	<style>
 		.goodsImg{
 			width: 50px;
@@ -153,6 +150,19 @@
 		#table2 thead tr{
 			background-color:#fff;
 		}
+		.list-message{
+			display: flex;
+			justify-content: flex-end;
+		}
+		.list-message .list-item{
+			margin-left:25px;
+		}
+		#print2,#print3,#print4{
+			display: none;
+		}
+		.layui-table[lay-skin=line] td, .layui-table[lay-skin=line] th{
+			border: 1px solid #ccc;
+		}
 	</style>
 
 </head>
@@ -216,6 +226,8 @@
 					<button type="button" class="layui-btn layui-btn-normal" id="print" style="float: right;">打印发货清单</button>
 					<button type="button" class="layui-btn layui-btn-normal" id="print2" style="float: right;margin-right: 20px;">顺丰打印</button>
 					<button type="button" class="layui-btn layui-btn-normal" id="print3" style="float: right;margin-right: 20px;">自配打印</button>
+					<button type="button" class="layui-btn layui-btn-normal" id="print4" style="float: right;margin-right: 20px;">德邦打印</button>
+
 				</div>
 				<div class="layui-inline" style="display: flex;justify-content: flex-end;margin-right: 0;">
 					<input style="width: 200px;" type="text" id="supplement" autocomplete="off" class="layui-input" placeholder="输入需要补打的订单号">
@@ -288,39 +300,33 @@
     <div class="pLine">
         <p class="pLeft">订单号:<span id="pOrderNo"></span></p>
     </div>
+    <!--<div class="pLine">-->
+        <!--<p class="pLeft">店铺名:<span id="pShop"></span></p>-->
+    <!--</div>-->
     <div class="pLine">
-        <p class="pLeft">店铺名:<span id="pShop"></span></p>
-    </div>
-    <div class="pLine">
-        <p class="pLeft">寄件人:<span id="pName"></span></p>
+        <p class="pLeft">收件人:<span id="pName"></span></p>
     </div>
     <div class="pLine">
         <p class="pLeft">联系方式:<span id="pTel"></span></p>
     </div>
     <div class="pLine">
-        <p class="pLeft">收货地址:<span id="pAddress"></span></p>
+        <p class="pLeft">送货地址:<span id="pAddress"></span></p>
     </div>
-    <div class="pLine">
-        <p class="pLeft">时间:<span id="pTime"></span></p>
-    </div>
+    <!--<div class="pLine">-->
+        <!--<p class="pLeft">时间:<span id="pTime"></span></p>-->
+    <!--</div>-->
     <br><br>
+	<div class="pLine">
+		<p class="pLeft">送件员:<span id="taker"></span></p>
+	</div>
+	<div class="pLine">
+		<p class="pLeft">送件员电话:<span id="taker-phone"></span></p>
+	</div>
     <div class="pLine">
         <p class="pLeft">工厂名:<span id="pShop2"></span></p>
     </div>
-    <div class="pLine">
-        <p class="pLeft">收货人:<span id="pName2"></span></p>
-    </div>
-    <div class="pLine">
-        <p class="pLeft">联系方式:<span id="pTel2"></span></p>
-    </div>
-    <div class="pLine">
-        <p class="pLeft">收货地址:<span id="pAddress2"></span></p>
-    </div>
-    <div class="pLine">
-        <p class="pLeft">时间:<span id="pTime2"></span></p>
-    </div>
-    <div style="width: 200px;height: 200px;margin: auto;">
-        <img id="printImg" src="" alt="">
+    <div style="width: 100px;height: 100px;margin: auto;">
+        <img style="width: 100%; height: 100%;" id="printImg" src="" alt="">
     </div>
 </div>
 <div id="goodsList" style="display: none;padding: 10px;">
@@ -335,7 +341,233 @@
 		</thead>
 		<tbody></tbody>
 	</table>
-	<!--<button class="layui-btn" style="float: right;margin-bottom: 10px;" id="listPrint">打印</button>-->
+	<div class="list-message">
+		<p class="list-item list1">总计：<span></span></p>
+		<p class="list-item list2">实发：<span></span></p>
+		<p class="list-item list3">剩余：<span></span></p>
+	</div>
+</div>
+<div id="printContext" class="ordercontent" style="display: none; margin-top: 15px; width: 630px; height: 665px; float: left; overflow-y: auto; text-align: center; display:none">
+	<div id="expressPrintArea">
+		<style>
+			.wayBill li {
+				float: left;
+				width: 85px;
+			}
+
+			.wayBill li a:hover {
+				color: blue;
+			}
+
+			.wayBill li a {
+				color: blue;
+			}
+			#expressPrintArea {
+				width: 100mm;
+				height: 180mm;
+				margin-left: 100px;
+				/*  float: left; */
+				/* background: url('../images/order/lttBackground.jpg') no-repeat; */
+				background-size: 104mm 175mm;
+				padding: 4mm 0.5mm 0.5mm 2.3mm;
+			}
+			td {
+				border: 0.15mm solid #cecece;
+				padding-left: 1mm;
+				font-size: 12px;
+				font-family: 宋体;
+				vertical-align: middle;
+				text-align: left;
+			}
+			tr {
+				width: 100%;
+				border-left:0mm;
+				border-right:0mm;
+				border: 0.2mm solid #000000;
+			}
+			.singlePlane{
+				font-size: 7pt;
+				width:60mm;
+				font-family:黑体;
+				text-align:left;
+				valign:top;
+			}
+			.sign{
+				font-size:8pt;
+				width:60mm;
+				font-family:黑体;
+				text-align:right;
+				line-height: 5mm;
+				padding-top: 2mm;
+			}
+			.singlePlane2{
+				font-size:7pt;
+				width:99mm;
+				font-family:黑体;
+				text-align:left;
+				valign:top;
+				padding-left: 1mm;
+				padding-right: 1mm;
+			}
+			.houseCode td{
+				font-size:17px;width:20mm;font-family:黑体; font-weight:bold; text-align:center;
+			}
+			.originalNumber {
+				font-size: 15px;
+				font-weight: bold;
+			}
+
+			#cargoName {
+				font-size:  16px;
+				font-weight: bold;
+			}
+			#transNote {
+				font-weight: bold;
+			}
+			#transNote {
+				font-size:  10px;
+			}
+
+			.top-amount td span, .top-amount td strong, .outerField1, .signSheet {
+				font-size: 10px !important;
+				font-family: "黑体";
+			}
+
+		</style>
+		<%-- <div style="width: 20mm;height: 20mm;/* background-color: #fff; */text-align: center;line-height: 20mm;position: absolute; left:50mm; top:60mm;">
+		<span class="markerPenCode" style=" display: inline-block; color: #666;font-size: 40mm;font-weight: bold;transform:rotate(-30deg);opacity: 0.5;">A5</span>
+	</div> --%>
+		<span class="markerPenCode" style="
+        /*display: none;*/
+"></span>
+		<table border="2" style="width: 99mm;border-collapse:collapse;">
+			<%--==================================上联=============================================--%>
+			<tr class="tr1" style="height: 0mm; border: none;">
+				<td width="10mm"></td>
+				<td width="10mm"></td>
+				<td width="10mm"></td>
+				<td width="10mm"></td>
+				<td width="10mm"></td>
+				<td width="10mm"></td>
+				<td width="10mm"></td>
+				<td width="10mm"></td>
+				<td width="10mm"></td>
+				<td width="5mm"></td>
+			</tr>
+			<%--德邦--%>
+			<tr style="height: 14mm;">
+				<td colspan="3"></td>
+				<td valign="middle" colspan="3" style="border-top:0mm;background:white;color:black;line-height:72px;font-weight:bold; text-align:center; font-size:20px;" id="refundPaymentId">11</td>
+				<td valign="middle" colspan="2" style="border-top:0mm;background:white;color:white;line-height:72px;font-weight:bold; text-align:center; font-size:50px;" id="payTypeId">22</td>
+				<td valign="middle" colspan="2" style="border-top:0mm;background:white;color:black;line-height:72px;font-weight:bold; text-align:left; font-size:50px;" id = "transTypeId">
+					<span class=transType></span></td>
+			</tr>
+			<%--金额--%>
+			<tr style="height: 11mm;" class="top-amount">
+				<td colspan="4" style="width: 30mm; vertical-align: middle; border-right: 0px;">
+					<span style="padding-bottom: 1.5mm;"><strong>代收金额：</strong></span><span
+						class="refundPayment"></span><br/>
+				</td>
+				<td colspan="6" style="width: 50mm; vertical-align: middle; border-left: 0px;">
+					<span style="padding-bottom: 1.5mm;"><strong>保价金额：</strong></span><span
+						class="insuranceMoney"></span><br/>
+					<span style="padding-bottom: 1.5mm;"><strong>签单返回：</strong></span><span
+						class="signSheet"></span><br/>
+					<span style="padding-bottom: 1.5mm;"><strong>始发网点：</strong></span><span
+						class="outerField1" style="font-size: 8px;"></span><br/>
+				</td>
+			</tr>
+			<%--大头笔--%>
+			<tr style="height: 14mm;" >
+				<td colspan="10" style="text-align: center; line-height: 13mm; vertical-align: middle;font-size: 35px; font-weight: bold; margin: 0px; padding: 0px;" id="markerPen">
+					无大头笔信息
+				</td>
+			</tr>
+
+			<%--收件人--%>
+			<tr style="height: 14mm;">
+				<td  colspan="1"style="font-weight:bold;border-right:0mm;font-family:黑体;font-size:25px;width:10mm;text-align:center;">收</td>
+				<td colspan="9"
+					style="border-right:0mm;font-size:10pt;width:90mm;font-family:黑体;font-weight:bold;text-align:left; " id="conMsg">
+					<span class="conName">张小二</span>&nbsp;&nbsp;
+					<span class="conPhone">（优先取手机号取不到取固话）</span>&nbsp;&nbsp;&nbsp;<span class="conTel"></span><br/>
+					<span class="caddress">上海市青浦区徐泾镇明珠路10181号</span>
+				</td>
+			</tr>
+			<%--寄件人--%>
+			<tr style="height: 11mm;">
+				<td colspan="1" style="border-right:0mm;font-size:25px;width:10mm;font-family:黑体;font-weight:bold;text-align:center;">
+					寄
+				</td>
+				<td colspan="9" style="font-family:黑体;text-align:left; font-size:10px;font-weight:bold">
+					<span class="shipperName"></span>&nbsp;&nbsp;&nbsp;
+					<span class="shipperPhone"></span><br/>
+					<span class="saddress">寄件人地址</span>
+				</td>
+			</tr>
+			<%--运单号条码--%>
+			<tr style="height: 23mm;">
+				<td colspan="10"></td>
+			</tr>
+			<%--打印时间验视--%>
+			<tr style="height: 18mm; text-align: left;">
+				<td colspan="2" valign="bottom" colspan="2" style="text-align:left;font-size:12px;font-family:黑体;width:20mm;border-right:0mm;">
+                    <span class="printTime">
+                    </span><br/>
+				</td>
+				<td colspan="6">
+					<div class = "singlePlane">
+						快件送达收件人地址，经收件人或收件人（寄件人）允许的代收人签字，视为送达。您的签字代表您已经签收次包裹，并已确定商品信息无损，包装完好、没有划痕、破损等表面质量问题。
+						<br/>
+					</div>
+					<div class="sign">
+						签收栏
+					</div>
+				</td>
+				<td valign="bottom" colspan="2" style="text-align:center;font-size:12px;width:20mm;font-family:黑体;border-right:0mm;">已验视</td>
+			</tr>
+			<%--==================================下联=============================================--%>
+			<%--德邦图标--%>
+			<tr style="height: 12mm;" >
+				<td colspan="4" align="center"></td>
+				<td colspan="6" align="center">
+				</td>
+			</tr>
+			<%--收件人--%>
+			<tr style="height: 10mm;">
+				<td  colspan="1"style="font-weight:bold;border-right:0mm;font-family:黑体;font-size:25px;width:10mm;text-align:center;">收</td>
+				<td  colspan="7"style="font-family:黑体;text-align:left; font-size:10px;font-weight:bold;" id="conMsg2">
+					<span class="conName"></span>&nbsp;&nbsp;
+					<span class="conPhone"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="conTel"></span><br/><span class="caddress"></span></td>
+				<%--<td  rowspan="2" valign="bottom">  <!-- <img src="../images/order/deppon_qrcode.jpg" /> --> </td>--%>
+				<td valign="bottom" rowspan="2" style="width:180mm;border-right:0mm;">
+					<img src="qrCode.jpg" style="width: 18mm; height: 18mm" />
+				</td>
+			</tr>
+			<%--寄件人--%>
+			<tr style="height: 10mm;">
+				<td  colspan="1"style="font-weight:bold;border-right:0mm;font-family:黑体;font-size:14pt;width:10mm;text-align:center;">寄</td>
+				<td  colspan="7"style="font-family:黑体;text-align:left; font-size:10px;font-weight:bold">
+					<span class="shipperName"></span>&nbsp;&nbsp;&nbsp;
+					<span class="shipperPhone"></span><br/>
+					<span class="saddress"></span>
+			</tr>
+			<tr style="text-align: left;">
+				<td colspan="10">
+					<div class="singlePlane2" style="height: 5mm; max-height: 5mm;">
+						客户订单号：<span class="originalNumber"></span>
+					</div>
+					<div class="singlePlane2" style="height: 10mm; max-height: 10mm;">
+						货物品名:<span id="cargoName" class="cargoName"></span>
+					</div>
+					<div class="singlePlane2" style="height: 11mm; max-height: 11mm;">
+						备注：<span class="transNote" id="transNote"></span>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
 </div>
 <script src='./js/jquery.min.js'></script>
 <script type="text/javascript" src="../resource/layui/layui.js"></script>
@@ -343,9 +575,12 @@
 <script src="../resource/js/jquery.cookie.js"></script>
 <script src="js/jquery.jqprint-0.3.js"></script>
 <script src="js/print.js"></script>
+<script src="js/jquery.PrintArea.js"></script>
 <script language="javascript" src="js/LodopFuncs.js"></script>
+<script src="js/myAlert.js"></script>
+<script src="js/myPrintKit.js"></script>
 <object  id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
-	<embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
+<embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
 </object>
 <script type="text/javascript">
 	var orderNo="";
@@ -369,7 +604,6 @@
 
         $("#barCode").val("").focus();
         getShopList();
-
 	});
 
     //  扫码
@@ -454,6 +688,8 @@
 							if(data.status==200){
                                 layer.closeAll();
                                 printOrder([data.data]);
+							}else{
+							    layer.msg(data.msg);
 							}
                         }
 					})
@@ -475,9 +711,10 @@
                 title:'选择工厂',
                 type:1,
                 content:$("#fac-box"),
-                btn:['确定','取消'],
+                btn:['打印','取消'],
                 yes:function(){
                     layer.close(choseFac);
+                    layer.load();
                     var facId=$("#factory option:checked").attr("shopId");
                     $.ajax({
                         url: globalUrl + "api/deliver/printCode;jsessionid=" + $.cookie("token"),
@@ -488,6 +725,7 @@
                             request.setRequestHeader("JSESSIONID", $.cookie("token"));
                         },
                         success:function(data){
+                            layer.closeAll();
                             if(data.status==200){
                                 var shopName=data.data.address.shopName?data.data.address.shopName:'';
                                 if(!shopName){
@@ -512,12 +750,11 @@
                                 $("#pTel").html(tel1);
                                 $("#pAddress").html(data.data.address.region+"-"+dAddress1);
                                 $("#pTime").html(time1);
-
+								if(data.data.taker){
+                                    $("#taker").html(data.data.taker.takerName);
+                                    $("#taker-phone").html(data.data.taker.phone);
+								}
                                 $("#pShop2").html(data.data.shopManager.shopName);
-                                $("#pName2").html(data.data.shopManager.userName);
-                                $("#pTel2").html(data.data.shopManager.phone);
-                                $("#pAddress2").html(data.data.shopManager.region+"-"+data.data.shopManager.shopAddress);
-                                $("#pTime2").html(timestampToTime(data.data.shopManager.createTime));
                                 $("#printImg").attr("src","http://"+data.data.codePic);
                                 layer.open({
                                     title:'自配订单',
@@ -528,6 +765,49 @@
                                         $("#printOrder2").jqprint();
 									}
                                 });
+                            }else{
+                                layer.msg(data.msg);
+							}
+                        },error:function(){
+                            layer.closeAll();
+						}
+                    })
+                }
+            })
+        });
+    });
+
+    $("#print4").click(function(){
+        if(!$("#orderNo").val()){
+            layer.msg('请录入订单');
+            return;
+        }
+        if(!checkPrint()){
+            return;
+        }
+        layui.use('layer',function(){
+            var layer=layui.layer;
+            layer.open({
+                title:'选择工厂',
+                type:1,
+                content:$("#fac-box"),
+                btn:['打印','取消'],
+                yes:function(){
+                    var facId=$("#factory option:checked").attr("shopId");
+                    $.ajax({
+                        url: globalUrl + "api/deliver/printCode;jsessionid=" + $.cookie("token"),
+                        type: 'post',
+                        data: {orderNo:orderNo,factoryId:facId,type:3},
+                        crossDomain: true,
+                        beforeSend: function (request) {
+                            request.setRequestHeader("JSESSIONID", $.cookie("token"));
+                        },
+                        success:function(data){
+                            if(data.status==200){
+                                layer.closeAll();
+                                printTest(data);
+                            }else{
+                                layer.msg(data.msg);
                             }
                         }
                     })
@@ -572,13 +852,12 @@
                         $("#pName").html(userName);
                         $("#pTel").html(tel1);
                         $("#pAddress").html(data.data.address.region+"-"+dAddress1);
-                        $("#pTime").html(time1);
+						if(data.data.taker){
+                            $("#taker").html(data.data.taker.takerName);
+                            $("#taker-phone").html(data.data.taker.phone);
+						}
 
                         $("#pShop2").html(data.data.shopManager.shopName);
-                        $("#pName2").html(data.data.shopManager.userName);
-                        $("#pTel2").html(data.data.shopManager.phone);
-                        $("#pAddress2").html(data.data.shopManager.region+"-"+data.data.shopManager.shopAddress);
-                        $("#pTime2").html(timestampToTime(data.data.shopManager.createTime));
                         $("#printImg").attr("src","http://"+data.data.codePic);
                         layer.open({
                             title:'自配订单',
@@ -590,64 +869,14 @@
                                 layer.closeAll();
                             }
                         });
+					}else if(data.data.type==3){
+                        printTest(data);
 					}
-
-                }
+                }else{
+                    layer.msg(data.msg);
+				}
             }
         })
-
-//       	$.ajax({
-//            url: globalUrl + "api/deliver/repeatPrint;jsessionid=" + $.cookie("token"),
-//            type: 'get',
-//            data: {orderNo:orderNo},
-//            crossDomain: true,
-//            beforeSend: function (request) {
-//                request.setRequestHeader("JSESSIONID", $.cookie("token"));
-//            },
-//			success:function(data){
-//				if(data.status==200){
-//                    var shopName=data.data.address.shopName?data.data.address.shopName:'';
-//                    if(!shopName){
-//                        $(".pLine").eq(2).hide();
-//                    }
-//                    var userName="";
-//                    if(data.data.address.userName){
-//                        userName=data.data.address.userName;
-//                    }
-//                    if(data.data.address.consumerName){
-//                        userName=data.data.address.consumerName;
-//                    }
-//                    var tel1=data.data.address.tel?data.data.address.tel:data.data.address.phone;
-//                    var time1=data.data.address.startTime?timestampToTime(data.data.address.startTime):"";
-//                    var dAddress1=data.data.address.shopAddress?data.data.address.shopAddress:data.data.address.detailAddress;
-//                    $("#pWlNo").html(data.data.codeNo);
-//                    $("#wlNum").val(data.data.codeNo);
-//                    $("#pOrderNo").html(data.data.orderNo);
-//                    $("#pShop").html(shopName);
-//                    $("#pName").html(userName);
-//                    $("#pTel").html(tel1);
-//                    $("#pAddress").html(data.data.address.region+"-"+dAddress1);
-//                    $("#pTime").html(time1);
-//
-//                    $("#pShop2").html(data.data.shopManager.shopName);
-//                    $("#pName2").html(data.data.shopManager.userName);
-//                    $("#pTel2").html(data.data.shopManager.phone);
-//                    $("#pAddress2").html(data.data.shopManager.region+"-"+data.data.shopManager.shopAddress);
-//                    $("#pTime2").html(timestampToTime(data.data.shopManager.createTime));
-//                    $("#printImg").attr("src","http://"+data.data.codePic);
-//                    layer.open({
-//                        title:'自配订单',
-//                        type:1,
-//                        content:$("#printOrder2"),
-//                        btn:['打印'],
-//                        yes:function(){
-//                            $("#printOrder2").jqprint();
-//                        }
-//                    });
-//				}
-//			}
-//		})
-
 	});
 
     function getOrderMsg(code){
@@ -673,7 +902,7 @@
 					$("#table1 tbody").html("");
 					for(var i=0;i<data.data.washItems.length;i++){
                         var colour=data.data.washItems[i].colour?data.data.washItems[i].colour:'';
-					    var tab=data.data.washItems[i].tab?'已核对':'未核对';
+					    var tab=data.data.washItems[i].tab?'<b style="color:green;">已核对</b>':'<b style="color:red;">未核对</b>';
 //					    var time=data.data.washItems[i].updateTime?timestampToTime(data.data.washItems[i].updateTime):"";
 						var item='<tr>' +
 							'<td>'+data.data.washItems[i].barCode+'</td>' +
@@ -685,10 +914,16 @@
 							'</tr>';
 						$(item).appendTo($("#table1 tbody"));
 					}
+					if(data.data.expressStatus==1||data.data.expressStatus==3){
+					    $("#print2").show();
+                        $("#print4").show();
+					}else if(data.data.expressStatus==2){
+                        $("#print3").show();
+					}
 				}else{
 				    layer.msg(data.msg);
 				}
-//                $("#barCode").val("").focus();
+                $("#barCode").val("").focus();
 			}
 		})
 	}
@@ -717,7 +952,7 @@
     function checkPrint(){
         var go=true;
         for(var i=0;i<$("#table1 tbody tr").length;i++){
-            if($("#table1 tbody tr").eq(i).find($(".check")).html()=='未核对'){
+            if($("#table1 tbody tr").eq(i).find($(".check b")).html()=='未核对'){
                 go=false;
                 layer.msg('还有商品未审核');
 			}
@@ -737,6 +972,10 @@
             },
             success: function (data) {
 				if(data.status==200){
+
+                    $("#goodsList .list-message .list1 span").html(data.data.total);
+                    $("#goodsList .list-message .list2 span").html(data.data.num);
+                    $("#goodsList .list-message .list3 span").html(data.data.surplus);
 				    $("#goodsList table tbody").html("");
 				    for(var i=0;i<data.data.washItems.length;i++){
 				        var colour=data.data.washItems[i].colour?data.data.washItems[i].colour:'';
@@ -766,5 +1005,7 @@
             }
         })
 	}
+
+
 </script>
 </html>

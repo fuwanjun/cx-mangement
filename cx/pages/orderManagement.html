@@ -106,16 +106,16 @@
             </select>
         </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label" style="margin-left: 20px;">差价：</label>
-        <div class="layui-input-block" style="margin-left: 90px;">
-            <select name="city" lay-verify="required" id="diff">
-                <option value="">全部</option>
-                <option value="true">已补</option>
-                <option value="false">未补</option>
-            </select>
-        </div>
-    </div>
+    <!--<div class="layui-form-item">-->
+        <!--<label class="layui-form-label" style="margin-left: 20px;">差价：</label>-->
+        <!--<div class="layui-input-block" style="margin-left: 90px;">-->
+            <!--<select name="city" lay-verify="required" id="diff">-->
+                <!--<option value="">全部</option>-->
+                <!--<option value="true">已补</option>-->
+                <!--<option value="false">未补</option>-->
+            <!--</select>-->
+        <!--</div>-->
+    <!--</div>-->
     <div class="layui-form-item" style="display: flex;">
         <label class="layui-form-label" style="margin-left: 20px;">时间：</label>
         <div class="layui-input-block" style="margin-left: 0px;">
@@ -222,7 +222,7 @@
     </div>
 </div>
 </body>
-<!--<div id="timeBox" style="padding: 10px 20px;"><input style="padding: 5px;" id="changeTime" type="text" placeholder="选择预约时间"></div>-->
+<div id="timeBox" style="padding: 10px 20px;display: none;"><input style="padding: 5px;" id="changeTime" type="text" placeholder="选择预约时间"></div>
 <script src='./js/jquery.min.js'></script>
 <script type="text/javascript" src="../resource/js/common.js"></script>
 <script type="text/javascript" src="../resource/js/jquery.cookie.js"></script>
@@ -262,7 +262,11 @@
                         expressStatus='德邦';
                     }
                     var createTime = formatDate(value.createTime);
-                    var yuyueTime = value.subTime;
+                    if(value.subTime){
+                        var nextTime=parseFloat(value.subTime.substring(value.subTime.length-2))+2+":00";
+                        var yuyueTime = value.subTime+":00-"+nextTime;
+                    }
+
                     yuyueTime.lastIndexOf("-");
                     str += '<tr orderNo="'+value.orderNo+'">';
                     str += '<td>' + value.orderNo + '</td>';

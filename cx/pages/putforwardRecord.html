@@ -205,9 +205,11 @@
                     if(data.data.list[i].state=="-1"){
                         state='<td style="color: #f00;font-weight:bold;">未通过</td>';
                         btns='<button class="layui-btn layui-btn-sm layui-btn-danger stop layui-btn-disabled" disabled>拒绝</button>'+
-                            '<button class="layui-btn layui-btn-sm go" >已付款</button>'
+                            '<button class="layui-btn layui-btn-sm go layui-btn-disabled" disabled>已付款</button>'
                     }else if(data.data.list[i].state=="0"){
                         state='<td style="color: #ff6e19;font-weight:bold;">待审核</td>';
+                        btns='<button class="layui-btn layui-btn-sm layui-btn-danger stop">拒绝</button>'+
+                            '<button class="layui-btn layui-btn-sm go">已付款</button>'
                     }else if(data.data.list[i].state=="1"){
                         state='<td style="color: #0c982a;font-weight:bold;">已通过</td>';
                         btns='<button class="layui-btn layui-btn-sm layui-btn-danger stop layui-btn-disabled" disabled>拒绝</button>'+
@@ -322,7 +324,7 @@
         var endTime=$("#test6").val();
         var condi=$("#criticalWord").val();
         var state=$("#state").val();
-        window.open(globalUrl+"bonusItem/exportBonusItem?condi="+condi+"&state="+state+"&startTime="+startTime+"&endTime="+endTime);
+        window.open(globalUrl+"bonusItem/exportBonusItem?condi="+condi+"&state="+state+"&startTime="+startTimeCinfg(startTime)+"&endTime="+endTimeCinfg(endTime));
     }
 </script>
 

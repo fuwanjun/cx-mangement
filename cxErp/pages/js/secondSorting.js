@@ -3,10 +3,28 @@ var shopName2;
 $(function () {
     joinShop();
     getNoFinish();
-
 });
-layui.use('form', function () {
+layui.use(['element', 'form', 'layer', 'table', 'laydate', 'laypage', 'colorpicker'], function () {
+    var element = layui.element;
+    var laydate = layui.laydate;
     var form = layui.form;
+    var laypage = layui.laypage
+        , table = layui.table
+        , colorpicker = layui.colorpicker
+        , layer = layui.layer;
+
+    var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+    //时间选择器
+    laydate.render({
+        elem: '#date',
+        type: 'date'
+    });
+    laydate.render({
+        elem: '#date2',
+        type: 'date'
+    });
+
     form.on('select(shop)', function () {
         var shopId = $("#shopName").val();
         if (shopId) {
@@ -15,6 +33,16 @@ layui.use('form', function () {
         }
     })
 });
+// layui.use('form', function () {
+//     var form = layui.form;
+//     form.on('select(shop)', function () {
+//         var shopId = $("#shopName").val();
+//         if (shopId) {
+//             // shopName2=$("#shopName option[value='"+shopId+"']").html();
+//             thisShop(shopId);
+//         }
+//     })
+// });
 
 
 $(".layui-tab-title li").click(function () {
@@ -71,6 +99,12 @@ $("#entry").click(function () {
     saveShop(shopName, phoneName, tel, shopAddress, region, styleId);
     // $("#addClothesItem").show();
 
+});
+
+$("#backSearchBtn").live("click",function(){
+    var startTime = $("#date").val();
+    var endTime = $("#date2").val();
+    backCheckMsg(1,startTime,endTime);
 });
 
 $("#addClothesItem").click(function () {
@@ -374,6 +408,29 @@ $("#brandSearch").live("click", function () {
         }
     })
 });
+$("#brandSearch2").live("click", function () {
+    var newBrand = $("#addBrand2").val();
+    $.ajax({
+        url: globalUrl + "api/param/add;jsessionid=" + $.cookie("token"),
+        type: "post",
+        data: {paramName: newBrand, paramType: 1, statusType: 2},
+        crossDomain: true,
+        beforeSend: function (request) {
+            request.setRequestHeader("JSESSIONID", $.cookie("token"));
+        },
+        success: function (data) {
+            console.log(data);
+            if (data.status == 200) {
+                getAllBrands($("#brand2"));
+                $("#addBrand2").val("").focus();
+            } else if (data.status == 210) {
+                alert(data.msg);
+            } else {
+                alert("数据异常");
+            }
+        }
+    })
+});
 //	搜索品牌
 $("#searchBrandBtn").live("click", function () {
     var brandVal = $("#searchBrand").val();
@@ -497,6 +554,30 @@ $("#spotBtn").live("click", function () {
             if (data.status == 200) {
                 allClothesBug($("#clothesBug"));
                 $("#inSpot").val("").focus();
+            } else if (data.status == 210) {
+                alert(data.msg);
+            } else {
+                alert("数据异常");
+            }
+        }
+    })
+});
+
+$("#spotBtn2").live("click", function () {
+    var newSpot = $("#inSpot2").val();
+    $.ajax({
+        url: globalUrl + "api/param/add;jsessionid=" + $.cookie("token"),
+        type: "post",
+        data: {paramName: newSpot, paramType: 3, statusType: 2},
+        crossDomain: true,
+        beforeSend: function (request) {
+            request.setRequestHeader("JSESSIONID", $.cookie("token"));
+        },
+        success: function (data) {
+            console.log(data);
+            if (data.status == 200) {
+                allClothesBug($("#clothesBug2"));
+                $("#inSpot2").val("").focus();
             } else if (data.status == 210) {
                 alert(data.msg);
             } else {
@@ -651,6 +732,30 @@ $("#effectBtn").live("click", function () {
     })
 });
 
+$("#effectBtn2").live("click", function () {
+    var newSpot = $("#addEffect2").val();
+    $.ajax({
+        url: globalUrl + "api/param/add;jsessionid=" + $.cookie("token"),
+        type: "post",
+        data: {paramName: newSpot, paramType: 4, statusType: 2},
+        crossDomain: true,
+        beforeSend: function (request) {
+            request.setRequestHeader("JSESSIONID", $.cookie("token"));
+        },
+        success: function (data) {
+            console.log(data);
+            if (data.status == 200) {
+                allEffect($("#effectCon2"));
+                $("#addEffect2").val("").focus();
+            } else if (data.status == 210) {
+                alert(data.msg);
+            } else {
+                alert("数据异常");
+            }
+        }
+    })
+});
+
 //	删除洗后效果
 $("#effectCon .brandLi i").live("click", function (event) {
     event.stopPropagation();
@@ -752,6 +857,7 @@ $(".takePhoto button").live("click", function () {
         return;
     }
     var photos = $(this).next("div");
+
     $.ajax({
         url: "http://localhost:8010/upload/uploadImg",
         async: false,
@@ -760,12 +866,12 @@ $(".takePhoto button").live("click", function () {
         success: function (data) {
             console.log(data);
             if (data.data == "") {
-                alert("请拍摄衣物照片");
+                layer.msg("请拍摄衣物照片");
             } else {
-                layer.close(animate);
                 photos.html(data.data);
                 layer.msg(data.message);
             }
+            layer.close(animate);
         }
     })
 });
@@ -844,16 +950,18 @@ $(".pre-one").live("click", function () {
 });
 
 $("#ok").click(function () {
+    animate=layer.load();
     if (!$("#table1 tbody").html()) {
         layui.use('layer', function () {
             var layer = layui.layer;
+            layer.close(animate);
             layer.msg('没有已分拣的商品请新增');
-
         });
         return;
     } else {
         for (var i = 0; i < $("#table1 tbody tr").length; i++) {
             if ($("#table1 tbody tr").eq(i).find($(".barcode")).html() == '') {
+                layer.close(animate);
                 layer.msg('还有衣物未分拣');
                 return;
             }
@@ -872,16 +980,18 @@ $("#ok").click(function () {
                     }
                 }
                 if (code2) {
-                    alert("衣物信息未填写完整");
+                    layer.close(animate);
+                    layer.msg("衣物信息未填写完整");
                 } else {
                     $.cookie("orderNo", orderNo);
                     $.cookie("shopId", id);
-                    layer.msg('分拣完成');
-                    setTimeout(function () {
+                    layer.msg('分拣完成',function(){
+                        layer.close(animate);
                         window.location.reload();
-                    }, 1500);
+                    });
                 }
             } else {
+                layer.close(animate);
                 layer.msg("请输入运单号");
             }
         }
@@ -911,11 +1021,11 @@ function print(barCode, name, color) {
                 $("#codeBox").html("");
                 if (data.data.images.length == 1) {
                     var item = '<div class="printCode" style="display: flex;justify-content: flex-start;">' +
-                        '<div class="mainCode" style="width:50%;height: 100px;margin-left: 15px;">' +
+                        '<div class="mainCode" style="width:55%;height: 100px;margin-left: 15px;">' +
                         '<img style="width: 80%; height: 100%;" src="http://' + data.data.images[0] + '" alt="">' +
-                        '<div class="code2" style="font-size: 30px;">' + data.data.barCodes + '</div>' +
+                        '<div class="code2" style="font-size: 50px;">' + data.data.barCodes + '</div>' +
                         '</div>' +
-                        '<div>' +
+                        '<div style="width: 45%; ">' +
                         '<p style="font-size:30px;">店铺名：<span>' + shopName2 + '</span></p>' +
                         '<p class="orderNo" style="font-size:30px;">订单号：<span>' + data.data.orderNo + '</span></p>' +
                         '<p style="margin-top: 0;font-size:30px;">名称:<span>' + name + '</span></p>' +
@@ -928,11 +1038,11 @@ function print(barCode, name, color) {
                 } else {
                     for (var i = 0; i < data.data.images.length; i++) {
                         var item = '<div class="printCode" style="display: flex;justify-content:flex-start;margin-bottom: 20px;">' +
-                            '<div class="mainCode" style="width:50%;height: 100px;">' +
+                            '<div class="mainCode" style="width:55%;height: 100px;">' +
                             '<img style="width: 80%; height: 100%;" src="http://' + data.data.images[i] + '" alt="">' +
-                            '<div class="code2" style="font-size: 30px;">' + data.data.barCodes[i] + '</div>' +
+                            '<div class="code2" style="font-size: 50px;">' + data.data.barCodes[i] + '</div>' +
                             '</div>' +
-                            '<div style="50%;margin-left: 50px;">' +
+                            '<div style="45%;">' +
                             '<p style="font-size:30px;">店铺名：<span>' + shopName2 + '</span></p>' +
                             '<p class="orderNo" style="text-align:left;font-size:30px;">订单号：<span>' + data.data.orderNo + '</span></p>' +
                             '<p style="text-align:left;font-size:30px;">名称:<span>' + name + '</span></p>' +
@@ -1133,11 +1243,11 @@ function sortOver(success) {
 }
 
 //返检处理
-function backCheckMsg(page, time) {
+function backCheckMsg(page,startTime,endTime) {
     $.ajax({
         url: globalUrl + "api/work/backList;jsessionid=" + $.cookie("token"),
         type: "get",
-        data: {page: page, time: time, sortType: 1},
+        data: {page: page,startTime:startTime,endTime:endTime, sortType: 1},
         crossDomain: true,
         beforeSend: function (request) {
             request.setRequestHeader("JSESSIONID", $.cookie("token"));
@@ -1147,7 +1257,7 @@ function backCheckMsg(page, time) {
             $("#backTable tbody").html("");
             for (var i = 0; i < data.data.list.length; i++) {
                 var flaw2 = "";
-                if (data.data.list[i].flaw) {
+                if (data.data.list[i].flaw &&data.data.list[i].flaw!="null") {
                     var flaws = data.data.list[i].flaw.split(",");
                     for (var j = 0; j < flaws.length; j++) {
                         var item2 = '<p>' + flaws[j] + '</p>';
@@ -1157,7 +1267,7 @@ function backCheckMsg(page, time) {
                     flaw = "";
                 }
                 var effect2 = "";
-                if (data.data.list[i].effect) {
+                if (data.data.list[i].effect&&data.data.list[i].effect!="null") {
 
                     var effects = data.data.list[i].effect.split(",");
 
@@ -1197,7 +1307,7 @@ function backCheckMsg(page, time) {
                     curr: page,
                     jump: function (obj, first) {
                         if (!first) {
-                            backCheckMsg(obj.curr, status, time);
+                            backCheckMsg(obj.curr, status,startTime,endTime);
                         }
                     }
                 })
@@ -1220,6 +1330,7 @@ $(".backBrand").live("click", function () {
     $(".colorOperation2").fadeOut();
     $(".spotOperation2").fadeOut();
     $(".effectOperation2").fadeOut();
+    pageScrollBottom();
 });
 
 $(".backColor").live("click", function () {
@@ -1229,6 +1340,7 @@ $(".backColor").live("click", function () {
     $(".brandOperation2").fadeOut();
     $(".spotOperation2").fadeOut();
     $(".effectOperation2").fadeOut();
+    pageScrollBottom();
 });
 //	点击确定颜色(返检)
 $("#colorPicker2 .colorLi").live("click", function () {
@@ -1255,6 +1367,7 @@ $(".backSpot").live("click", function () {
     $(".colorOperation2").fadeOut();
     $(".brandOperation2").fadeOut();
     $(".effectOperation2").fadeOut();
+    pageScrollBottom();
 });
 
 $(".backEffect").live("click", function () {
@@ -1270,6 +1383,7 @@ $(".backEffect").live("click", function () {
     $(".colorOperation2").fadeOut();
     $(".spotOperation2").fadeOut();
     $(".brandOperation2").fadeOut();
+    pageScrollBottom();
 });
 
 //	点击上传照片

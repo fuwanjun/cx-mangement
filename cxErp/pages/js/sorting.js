@@ -16,6 +16,10 @@ layui.use(['element', 'form', 'layer', 'table', 'laydate', 'laypage', 'colorpick
         elem: '#date',
         type: 'date'
     });
+    laydate.render({
+        elem: '#date2',
+        type: 'date'
+    });
 
     //时间选择器
     laydate.render({
@@ -101,6 +105,12 @@ $("#codeIn1").bind("input propertychange", function () {
         excute = true;
     }
     return true
+});
+
+$("#backSearchBtn").live("click",function(){
+    var startTime = $("#date").val();
+    var endTime = $("#date2").val();
+    backCheckMsg(1,startTime,endTime);
 });
 
 //	展示分拣信息
@@ -200,6 +210,10 @@ function showOrderMsg(signNum, page) {
 
 //	配件数量加减
 $(".reduceBtn").live("click", function () {
+    if($(this).parent().parent().parent().find($(".barcode")).html()){
+        layer.msg('已保存，不能修改');
+        return;
+    }
     var val = $(this).next("input").val();
     if (val <= 0) {
         $(this).next("input").val(0);
@@ -209,6 +223,10 @@ $(".reduceBtn").live("click", function () {
 
 });
 $(".addBtn").live("click", function () {
+    if($(this).parent().parent().parent().find($(".barcode")).html()){
+        layer.msg('已保存，不能修改');
+        return;
+    }
     var val = $(this).prev("input").val();
     $(this).prev("input").val(++val);
 });
@@ -947,7 +965,7 @@ $(".pre-one").live("click", function () {
                     if (data.status == 200) {
                         pre.find($(".barcode")).html(data.data.barCode);
                         var code = pre.find($(".barcode")).html();
-                        print(code,afterName,colour);
+                        print(code,beforeName,colour);
                     } else {
                         layer.close(animate);
                         layer.msg(data.msg);
@@ -976,29 +994,31 @@ function print(barCode,name,color) {
             if (data.status == 200) {
                 $("#codeBox").html("");
                 if (data.data.images.length == 1) {
-                    var item = '<div class="printCode" style="display: flex;justify-content: space-between;margin-bottom: 10px;">' +
-                        '<div class="mainCode" style="width:50%;height: 100px;margin-left: 15px;">' +
+                    var item = '<div class="printCode" style="display: flex;justify-content: flex-start;">' +
+                        '<div class="mainCode" style="width:55%;height: 100px;">' +
                         '<img style="width: 80%; height: 100%;" src="http://' + data.data.images[0] + '" alt="">' +
-                        '<div class="code2" style="font-size: 30px;">' + data.data.barCodes + '</div>' +
+                        '<div class="code2" style="font-size: 50px;">' + data.data.barCodes + '</div>' +
                         '</div>' +
-                        '<div>' +
-                        '<p class="orderNo" style="margin-top: 0;font-size:30px;">订单号：<span>' + data.data.orderNo + '</span></p>' +
-                        '<p style="margin-top: 0;font-size:30px;">名称:<span>'+name+'</span></p>' +
-                        '<p style="margin-top: 0;font-size:30px;">颜色:<span>'+color+'</span></p>' +
+                        '<div style="width:45%;">' +
+                        '<p style="font-size:30px;">&nbsp;</p>' +
+                        '<p class="orderNo" style="font-size:30px;">订单号：<span>' + data.data.orderNo + '</span></p>' +
+                        '<p style="margin-top: 0;font-size:30px;">名称:<span>' + name + '</span></p>' +
+                        '<p style="margin-top: 0;font-size:30px;">颜色:<span>' + color + '</span></p>' +
                         '</div>' +
                         '</div>';
                     $(item).appendTo($("#codeBox"));
                 } else {
                     for (var i = 0; i < data.data.images.length; i++) {
-                        var item = '<div class="printCode" style="display: flex;justify-content:flex-start;margin-bottom: 40px;">' +
-                            '<div class="mainCode" style="width:50%;height: 100px;">' +
+                        var item = '<div class="printCode" style="display: flex;justify-content:flex-start;margin-bottom: 20px;">' +
+                            '<div class="mainCode" style="width:55%;height: 100px;">' +
                             '<img style="width: 80%; height: 100%;" src="http://' + data.data.images[i] + '" alt="">' +
-                            '<div class="code2" style="font-size: 30px;">' + data.data.barCodes[i] + '</div>' +
+                            '<div class="code2" style="font-size: 50px;">' + data.data.barCodes[i] + '</div>' +
                             '</div>' +
-                            '<div style="50%;margin-left: 50px;">' +
+                            '<div style="45%;">' +
+                            '<p style="font-size:30px;">&nbsp;</p>' +
                             '<p class="orderNo" style="text-align:left;font-size:30px;">订单号：<span>' + data.data.orderNo + '</span></p>' +
-                            '<p style="text-align:left;font-size:30px;">名称:<span>'+name+'</span></p>' +
-                            '<p style="text-align:left;font-size:30px;">颜色:<span>'+color+'</span></p>' +
+                            '<p style="text-align:left;font-size:30px;">名称:<span>' + name + '</span></p>' +
+                            '<p style="text-align:left;font-size:30px;">颜色:<span>' + color + '</span></p>' +
                             '</div>' +
                             '</div>';
                         $(item).appendTo($("#codeBox"));
@@ -1022,6 +1042,23 @@ function print(barCode,name,color) {
 }
 
 $("#ok").click(function () {
+    animate=layer.load();
+    if (!$("#recording tbody").html()) {
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.close(animate);
+            layer.msg('没有已分拣的商品请新增');
+        });
+        return;
+    } else {
+        for (var i = 0; i < $("#table1 tbody tr").length; i++) {
+            if ($("#table1 tbody tr").eq(i).find($(".barcode")).html() == '') {
+                layer.close(animate);
+                layer.msg('还有衣物未分拣');
+                return;
+            }
+        }
+    }
     sortOver(function (data) {
         if (data.status == 200) {
             var code2 = false;
@@ -1034,16 +1071,20 @@ $("#ok").click(function () {
                     }
                 }
                 if (code2) {
+                    layer.close(animate);
                     layer.msg("仍有衣物未分拣");
                 }else{
-                    layer.msg('分拣完成');
-                    setTimeout(function () {
+                    layer.alert('分拣完成',function(){
+                        layer.close(animate);
                         window.location.reload();
-                    }, 1500);
+                    });
                 }
             } else {
                 layer.msg("请输入运单号");
             }
+        }else{
+            layer.close(animate);
+            layer.msg(data.msg)
         }
     });
 });
@@ -1324,6 +1365,29 @@ $("#effectBtn").live("click", function () {
         }
     })
 });
+$("#effectBtn2").live("click", function () {
+    var newSpot = $("#addEffect2").val();
+    $.ajax({
+        url: globalUrl + "api/param/add;jsessionid=" + $.cookie("token"),
+        type: "post",
+        data: {paramName: newSpot, paramType: 4, statusType: 2},
+        crossDomain: true,
+        beforeSend: function (request) {
+            request.setRequestHeader("JSESSIONID", $.cookie("token"));
+        },
+        success: function (data) {
+            console.log(data);
+            if (data.status == 200) {
+                allEffect($("#effectCon2"));
+                $("#addEffect2").val("").focus();
+            } else if (data.status == 210) {
+                alert(data.msg);
+            } else {
+                alert("数据异常");
+            }
+        }
+    })
+});
 
 //	删除洗后效果
 $("#effectCon .brandLi i").live("click", function (event) {
@@ -1527,11 +1591,11 @@ function searchBack(code){
 }
 
 //返检处理
-function backCheckMsg(page, time) {
+function backCheckMsg(page, startTime,endTime) {
     $.ajax({
         url: globalUrl + "api/work/backList;jsessionid=" + $.cookie("token"),
         type: "get",
-        data: {page: page, time: time},
+        data: {page: page, startTime: startTime,endTime:endTime},
         crossDomain: true,
         beforeSend: function (request) {
             request.setRequestHeader("JSESSIONID", $.cookie("token"));
@@ -1591,7 +1655,7 @@ function backCheckMsg(page, time) {
                     curr: page,
                     jump: function (obj, first) {
                         if (!first) {
-                            backCheckMsg(obj.curr, status, time);
+                            backCheckMsg(obj.curr, status, startTime,endTime);
                         }
                     }
                 })
@@ -1642,6 +1706,7 @@ function getNoFinish() {
                         let effect=data.data.washItems[i].effect?data.data.washItems[i].effect:'';
                         let fillPrice=data.data.washItems[i].fillPrice?data.data.washItems[i].fillPrice:'';
                         let barCode=data.data.washItems[i].barCode?data.data.washItems[i].barCode:'';
+                        let img=data.data.washItems[i].picture?data.data.washItems[i].picture:'';
                         var item = '<tr>' +
                             '<td class="beforeName">' + beforeName + '</td>' +
                             '<td class="buyPrice">' + beforePrice + '</td>' +
@@ -1660,7 +1725,7 @@ function getNoFinish() {
                             '<td class="effect">' + effect + '</td>' +
                             '<td class="takePhoto">' +
                             '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs">上传</button>' +
-                            '<div class="photos"></div>' +
+                            '<div class="photos">'+img+'</div>' +
                             '</td>' +
                             '<td class="diffPrice">' + fillPrice + '</td>' +
                             '<td class="barcode">' + barCode + '</td>' +

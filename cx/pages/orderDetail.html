@@ -109,6 +109,12 @@
 				      <input class="layui-input status" type="text" readonly="readonly" value="" autocomplete="off">
 				    </div>
 				</div>
+				<div class="layui-form-item layui-inline">
+					<label class="layui-form-label">支付方式</label>
+					<div class="layui-input-block">
+						<input id="payType" class="layui-input status" type="text" readonly="readonly" value="" autocomplete="off">
+					</div>
+				</div>
 				<!--<div class="layui-form-item layui-inline">-->
 					<!--<label class="layui-form-label">需补差价</label>-->
 					<!--<div class="layui-input-block">-->
@@ -178,7 +184,7 @@
 					var res=data.data;
 					var str="";
 					
-					//10-未付款，20-已付款，30-已取件，35 取件完成 40-待送，45-在送，50-送件完成，60-交易成功
+					//10-未付款，20-已付款，30-已取件，35 清洗中 40-待送，45-在送，50-送件完成，60-交易成功
 					if(res.status==10){
 						$(".status").val("未支付")
 					}else if(res.status==20){
@@ -186,7 +192,7 @@
 					}else if(res.status==30){
 						$(".status").val("已取件")
 					}else if(res.status==35){
-						$(".status").val("取件完成")
+						$(".status").val("清洗中")
 					}else if(res.status==40){
 						$(".status").val("待送")
 					}else if(res.status==45){
@@ -201,6 +207,15 @@
 					}else{
 						$(".remark").val("暂无备注")
 					}
+					var payType;
+					if(data.data.paymentType==1){
+					    payType='折扣卡支付'
+					}else if(data.data.paymentType==2){
+                        payType='余额支付'
+                    }else if(data.data.paymentType==3){
+                        payType='微信支付'
+                    }
+                    $("#payType").val(payType);
 					if(res.orderItems!=null&&res.orderItems.length>0){
 						$.each(res.orderItems, function(index,value) {
 							str+='<tr><td>'+value.productName+'</td>'
